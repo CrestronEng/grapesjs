@@ -1,0 +1,75 @@
+.#{$app-prefix} {
+  &traits-label {
+    border-bottom: 1px solid $mainDkColor;
+    font-weight: lighter;
+    margin-bottom: 5px;
+    padding: 10px;
+    text-align: left;
+  }
+
+  &label {
+
+    &-wrp {
+      width: 30%;
+      min-width: 30%;
+    }
+  }
+
+  &field {
+
+    &-wrp {
+      flex-grow: 1;
+    }
+  }
+}
+
+.#{$trt-prefix}header {
+  font-weight: lighter;
+  padding: 10px;
+}
+
+.#{$trt-prefix}trait {
+  display: flex;
+  justify-content: flex-start;
+  padding: 5px 10px;
+  font-weight: lighter;
+  align-items: center;
+  text-align: left;
+
+  &s {
+    font-size: $fontSizeS;
+  }
+
+  .#{$app-prefix}label {
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+.#{$app-prefix}category {
+  width: 100%;
+
+  &.#{$app-prefix}open {
+    @extend .#{$app-prefix}category-open;
+  }
+
+  .#{$app-prefix}title {
+    @extend .#{$app-prefix}category-title;
+  }
+
+  .#{$app-prefix}caret-icon {
+    margin-right: 5px;
+  }
+}
+
+.#{$app-prefix}categories {
+  display: flex;
+  flex-direction: column;
+}
+
+.#{$app-prefix}c {
+  flex: 0 0 100%;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
