@@ -62,8 +62,13 @@ to update with the upstream repository the following needs to be done in order t
 ```sh
 git remote add upstream https://github.com/artf/grapesjs.git
 git fetch upstream
-git checkout master git merge upstream/dev
+git checkout master
+git merge upstream/dev
 
+```
+to fetch all upstream tags you can run the following:
+```sh
+git fetch upstream --tags
 ```
 
 ## Documentation
