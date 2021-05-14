@@ -5,11 +5,6 @@
 
 GrapesJS is a free and open source Web Builder Framework which helps building HTML templates, faster and easily, to be delivered in sites, newsletters or mobile apps. Mainly, GrapesJS was designed to be used inside a [CMS] to speed up the creation of dynamic templates. To better understand this concept check the image below
 
-<br/>
-<p align="center"><img src="http://grapesjs.com/img/gjs-concept.png" alt="GrapesJS - Style Manager" height="400" align="center"/></p>
-<br/>
-
-Generally any 'template system', that you'd find in various applications like CMS, is composed by the **structure** (HTML), **style** (CSS) and **variables**, which are then replaced with other templates and contents on server-side and rendered on client.
 ## Table of contents
 
 * [Features](#features)
@@ -62,7 +57,7 @@ to update with the upstream repository the following needs to be done in order t
 ```sh
 git remote add upstream https://github.com/artf/grapesjs.git
 git fetch upstream
-git checkout master
+git checkout dev
 git merge upstream/dev
 
 ```
