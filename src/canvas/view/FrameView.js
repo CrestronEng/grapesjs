@@ -377,11 +377,9 @@ export default Backbone.View.extend({
     //this.updateOffset(); // TOFIX (check if I need it)
 
     // Avoid some default behaviours
-    on(
-      body,
-      'click',
-      ev => ev && ev.target.tagName == 'A' && ev.preventDefault()
-    );
+    on(body, 'click', ev => {
+      ev && ev.target.tagName == 'A' && ev.preventDefault();
+    });
     on(body, 'submit', ev => ev && ev.preventDefault());
 
     // When the iframe is focused the event dispatcher is not the same so
