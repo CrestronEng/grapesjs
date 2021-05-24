@@ -232,7 +232,7 @@ $guide_pad: 5px;
   .#{$app-prefix}highlighter,
   .#{$app-prefix}highlighter-sel {
     position: absolute;
-    outline: 6px solid #4032a8;
+    outline: 3px solid #4032a8;
     outline-offset: -1px;
     pointer-events: none;
     width: 100%;
@@ -350,7 +350,7 @@ $guide_pad: 5px;
 .#{$app-prefix}resizer-h {
   pointer-events: all;
   position: absolute;
-  border: 6px solid #5b5b5b;
+  border: 3px solid $colorBlue;
   width: 10px;
   height: 10px;
   background-color: #fff;
