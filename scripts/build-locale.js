@@ -7,6 +7,9 @@ const copyRecursiveSync = (src, dest) => {
     const exists = fs.existsSync(src);
     const isDir = exists && fs.statSync(src).isDirectory();
 
+	//TODO - Adjust this to JavaScript
+    //rm -rf ./locale
+
     if (isDir) {
         fs.mkdirSync(dest);
         fs.readdirSync(src).forEach((file) => {

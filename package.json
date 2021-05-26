@@ -115,7 +115,7 @@
     "build": "npm run check && run-s build:*",
     "build:js": "grapesjs-cli build --targets=\"> 1%, ie 11, safari 8, not dead\" --statsOutput=\"stats.json\"",
     "build:css": "sass src/styles/scss/main.scss dist/css/grapes.min.css --no-source-map --style=compressed --load-path=node_modules",
-    "build:locale": "rm -rf ./locale && node scripts/build-locale.js && babel locale -d locale --copy-files --no-comments",
+    "build:locale": "node scripts/build-locale.js && babel locale -d locale --copy-files --no-comments",
     "start": "run-p start:*",
     "start:js": "grapesjs-cli serve",
     "start:css": "npm run build:css -- --watch",
