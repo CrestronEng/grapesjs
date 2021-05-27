@@ -17,6 +17,7 @@ const copyRecursiveSync = (src, dest) => {
     }
 };
 
+fs.rmdirSync(localeDir, {recursive: true});
 copyRecursiveSync(localeSrcDir, localeDir);
 
 // Create locale/index.js file
