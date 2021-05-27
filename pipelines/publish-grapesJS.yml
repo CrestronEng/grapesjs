@@ -38,7 +38,7 @@ jobs:
         $version = (Get-Content package.json) | ConvertFrom-Json | Select -ExpandProperty "version"
         git config user.email "kcorrado@crestron.com"
         git config user.name "kcorrado"
-        git add package.json
+        git add package.json package-lock.json
         git commit -m ("docs: update to version " + $version + " [skip ci]")
         git push origin HEAD:$(Build.SourceBranch)
 
