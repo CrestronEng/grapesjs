@@ -291,13 +291,14 @@ export default Backbone.View.extend({
     // `body {height: 100%;}`.
     // For the moment I give the priority to Firefox as it might be
     // CKEditor's issue
+    // todo: remove 0px border from dashed *[data-highlightable]
     append(
       body,
       `<style>
       ${conf.baseCss || ''}
 
       .${ppfx}dashed *[data-highlightable] {
-        outline: 3px dashed rgba(64,50,168,0.7);
+        outline: 0px dashed rgba(64,50,168,0.7);
         outline-offset: -2px;
       }
 
