@@ -17,6 +17,7 @@ export default Backbone.Model.extend({
     widthMedia: null,
 
     // Setup the order of media queries
+    priorityObjNum: null,
     priority: null
   },
 
@@ -24,8 +25,10 @@ export default Backbone.Model.extend({
     this.get('widthMedia') === null &&
       this.set('widthMedia', this.get('width'));
     this.get('width') === null && this.set('width', this.get('widthMedia'));
+    this.get('priorityObjNum') === null &&
+      this.set('priorityObjNum', this.get('objNum'));
     !this.get('priority') &&
-      this.set('priority', parseFloat(this.get('widthMedia')) || 0);
+      this.set('priority', parseFloat(this.get('priorityObjNum')) || 0);
     const toCheck = ['width', 'height', 'widthMedia'];
     toCheck.forEach(prop => this.checkUnit(prop));
   },

@@ -6,7 +6,7 @@ export default Backbone.Collection.extend({
 
   comparator: (left, right) => {
     const max = Number.MAX_VALUE;
-    return (right.get('priority') || max) - (left.get('priority') || max);
+    return (left.get('priority') || max) - (right.get('priority') || max);
   },
 
   getSorted() {

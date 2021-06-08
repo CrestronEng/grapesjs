@@ -217,25 +217,29 @@ export default {
       {
         id: 'desktop',
         name: 'Desktop',
-        width: ''
+        width: '',
+        objNum: '1'
       },
       {
         id: 'tablet',
         name: 'Tablet',
         width: '768px',
-        widthMedia: '992px'
+        widthMedia: '992px',
+        objNum: '3'
       },
       {
         id: 'mobileLandscape',
         name: 'Mobile landscape',
         width: '568px',
-        widthMedia: '768px'
+        widthMedia: '768px',
+        objNum: '2'
       },
       {
         id: 'mobilePortrait',
         name: 'Mobile portrait',
         width: '320px',
-        widthMedia: '480px'
+        widthMedia: '480px',
+        objNum: '4'
       }
     ]
   },
