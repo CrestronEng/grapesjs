@@ -225,14 +225,14 @@ export default {
         name: 'Tablet',
         width: '768px',
         widthMedia: '992px',
-        objNum: '3'
+        objNum: '2'
       },
       {
         id: 'mobileLandscape',
         name: 'Mobile landscape',
         width: '568px',
         widthMedia: '768px',
-        objNum: '2'
+        objNum: '3'
       },
       {
         id: 'mobilePortrait',
