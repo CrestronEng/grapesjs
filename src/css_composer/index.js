@@ -196,11 +196,12 @@ export default () => {
      *   color: '#fff',
      * });
      * */
-    add(selectors, state, width, opts = {}, addOpts = {}) {
+    add(selectors, state, width, height, opts = {}, addOpts = {}) {
       var s = state || '';
       var w = width || '';
+      var h = height || '';
       var opt = { ...opts };
-      var rule = this.get(selectors, s, w, opt);
+      var rule = this.get(selectors, s, w, h, opt);
 
       // do not create rules that were found before
       // unless this is a single at-rule, for which multiple declarations
@@ -236,11 +237,11 @@ export default () => {
      *   color: '#000',
      * });
      * */
-    get(selectors, state, width, ruleProps) {
+    get(selectors, state, width, height, ruleProps) {
       var rule = null;
       rules.each(m => {
         if (rule) return;
-        if (m.compare(selectors, state, width, ruleProps)) rule = m;
+        if (m.compare(selectors, state, width, height, ruleProps)) rule = m;
       });
       return rule;
     },
@@ -288,8 +289,20 @@ export default () => {
           newSels.push(selec);
         }
 
-        var modelExists = this.get(newSels, rule.state, rule.mediaText, rule);
-        var model = this.add(newSels, rule.state, rule.mediaText, rule);
+        var modelExists = this.get(
+          newSels,
+          rule.state,
+          rule.mediaText,
+          rule.mediaText,
+          rule
+        );
+        var model = this.add(
+          newSels,
+          rule.state,
+          rule.mediaText,
+          rule.mediaText,
+          rule
+        );
         var updateStyle = !modelExists || !opts.avoidUpdateStyle;
         const style = rule.style || {};
 
