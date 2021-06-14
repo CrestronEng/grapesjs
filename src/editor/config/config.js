@@ -227,7 +227,8 @@ export default {
         width: '768px',
         widthMedia: '992px',
         objNum: '2',
-        height: '720px'
+        height: '720px',
+        heightMedia: '720px'
       },
       {
         id: 'mobileLandscape',
@@ -235,7 +236,8 @@ export default {
         width: '568px',
         widthMedia: '768px',
         objNum: '3',
-        height: '375px'
+        height: '375px',
+        heightMedia: '375px'
       },
       {
         id: 'iPhone',
@@ -243,7 +245,8 @@ export default {
         width: '320px',
         widthMedia: '480px',
         objNum: '4',
-        height: '412px'
+        height: '412px',
+        heightMedia: '412px'
       }
     ]
   },

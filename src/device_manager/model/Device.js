@@ -11,6 +11,7 @@ export default Backbone.Model.extend({
 
     // Height to set for the editor iframe
     height: '',
+    heightMedia: null,
 
     // The width which will be used in media queries,
     // If empty the width will be used
@@ -24,6 +25,9 @@ export default Backbone.Model.extend({
   initialize() {
     this.get('widthMedia') === null &&
       this.set('widthMedia', this.get('width'));
+    this.get('heightMedia') === null &&
+      this.set('heightMedia', this.get('height'));
+
     this.get('width') === null && this.set('width', this.get('widthMedia'));
     this.get('priorityObjNum') === null &&
       this.set('priorityObjNum', this.get('objNum'));
