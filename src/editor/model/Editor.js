@@ -689,9 +689,14 @@ export default Backbone.Model.extend({
     const config = this.config;
     const device = this.getDeviceModel();
     const condition = config.mediaCondition;
+    const otherCondition = config.otherMediaCondition;
     const preview = config.devicePreviewMode;
     const width = device && device.get('widthMedia');
-    return device && width && !preview ? `(${condition}: ${width})` : '';
+    const height = device && device.get('height');
+    //console.log(`(${condition}: ${width}) and (${otherCondition}: ${height})`);
+    return device && width && height && !preview
+      ? `(${condition}: ${width}) and (${otherCondition}: ${height})`
+      : '';
   },
 
   /**

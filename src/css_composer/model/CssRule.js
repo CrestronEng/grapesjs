@@ -82,6 +82,7 @@ export default Backbone.Model.extend(Styleable).extend({
     const condition = this.get('mediaText');
     // Avoid breaks with the last condition
     const typeStr = type ? `@${type}` : condition ? '@media' : '';
+    console.log(condition);
 
     return typeStr + (condition && typeStr ? ` ${condition}` : '');
   },

@@ -94,6 +94,7 @@ export default {
   // THe condition to use for media queries, eg. 'max-width'
   // Comes handy for mobile-first cases
   mediaCondition: 'max-width',
+  otherMediaCondition: 'max-height',
 
   // Starting tag for variable inside scripts in Components
   tagVarStart: '{[ ',
@@ -225,21 +226,24 @@ export default {
         name: 'Tablet',
         width: '768px',
         widthMedia: '992px',
-        objNum: '2'
+        objNum: '2',
+        height: '720px'
       },
       {
         id: 'mobileLandscape',
         name: 'Mobile landscape',
         width: '568px',
         widthMedia: '768px',
-        objNum: '3'
+        objNum: '3',
+        height: '375px'
       },
       {
-        id: 'mobilePortrait',
-        name: 'Mobile portrait',
+        id: 'iPhone',
+        name: 'iPhone',
         width: '320px',
         widthMedia: '480px',
-        objNum: '4'
+        objNum: '4',
+        height: '412px'
       }
     ]
   },
