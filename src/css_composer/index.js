@@ -380,7 +380,7 @@ export default () => {
       const { atRuleType, atRuleParams } = opts;
       return (
         selector &&
-        this.get(selector, state, atRuleParams, {
+        this.get(selector, state, atRuleParams, atRuleParams, {
           selectorsAdd,
           atRule: atRuleType
         })
