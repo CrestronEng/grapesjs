@@ -196,12 +196,11 @@ export default () => {
      *   color: '#fff',
      * });
      * */
-    add(selectors, state, width, height, opts = {}, addOpts = {}) {
+    add(selectors, state, width, opts = {}, addOpts = {}) {
       var s = state || '';
       var w = width || '';
-      var h = height || '';
       var opt = { ...opts };
-      var rule = this.get(selectors, s, w, h, opt);
+      var rule = this.get(selectors, s, w, opt);
 
       // do not create rules that were found before
       // unless this is a single at-rule, for which multiple declarations
@@ -237,11 +236,11 @@ export default () => {
      *   color: '#000',
      * });
      * */
-    get(selectors, state, width, height, ruleProps) {
+    get(selectors, state, width, ruleProps) {
       var rule = null;
       rules.each(m => {
         if (rule) return;
-        if (m.compare(selectors, state, width, height, ruleProps)) rule = m;
+        if (m.compare(selectors, state, width, ruleProps)) rule = m;
       });
       return rule;
     },
@@ -289,20 +288,8 @@ export default () => {
           newSels.push(selec);
         }
 
-        var modelExists = this.get(
-          newSels,
-          rule.state,
-          rule.mediaText,
-          rule.mediaText,
-          rule
-        );
-        var model = this.add(
-          newSels,
-          rule.state,
-          rule.mediaText,
-          rule.mediaText,
-          rule
-        );
+        var modelExists = this.get(newSels, rule.state, rule.mediaText, rule);
+        var model = this.add(newSels, rule.state, rule.mediaText, rule);
         var updateStyle = !modelExists || !opts.avoidUpdateStyle;
         const style = rule.style || {};
 
@@ -342,7 +329,7 @@ export default () => {
      * // output: @media (min-width: 500px) { .class1:hover { color: red } }
      */
     setRule(selectors, style, opts = {}) {
-      const { atRuleType, atRuleParams } = opts;
+      const { atRuleType, atRuleParams, additionalSelector } = opts;
       const node = em.get('Parser').parserCss.checkNode({
         selectors,
         style
@@ -350,7 +337,7 @@ export default () => {
       const { state, selectorsAdd } = node;
       const sm = em.get('SelectorManager');
       const selector = sm.add(node.selectors);
-      const rule = this.add(selector, state, atRuleParams, {
+      const rule = this.add(selector, state, atRuleParams, additionalSelector, {
         selectorsAdd,
         atRule: atRuleType
       });
@@ -380,7 +367,7 @@ export default () => {
       const { atRuleType, atRuleParams } = opts;
       return (
         selector &&
-        this.get(selector, state, atRuleParams, atRuleParams, {
+        this.get(selector, state, atRuleParams, {
           selectorsAdd,
           atRule: atRuleType
         })

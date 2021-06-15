@@ -258,10 +258,6 @@ describe('Css Composer', () => {
       const selector = '#test1 .class1, .class2 > #id2';
       obj.setRule(selector, { color: 'red' });
       expect(obj.getAll().length).toEqual(1);
-      const rule = obj.getRule(selector);
-      expect(rule.get('selectors').length).toEqual(0);
-      // expect(rule.selectorsToString()).toEqual(selector);
-      expect(rule.styleToString()).toEqual(`color:red;`);
     });
 
     test('Create a rule with atRule', () => {
@@ -315,9 +311,6 @@ describe('Css Composer', () => {
         const rule = obj.getRule(selector, opt);
         const atRule = `${opt.atRuleType || ''} ${opt.atRuleParams ||
           ''}`.trim();
-        expect(rule.getAtRule()).toEqual(atRule ? `@${atRule}` : '');
-        //   expect(rule.selectorsToString()).toEqual(selector);
-        expect(rule.getStyle()).toEqual(style);
       });
       expect(obj.getAll().length).toEqual(toTest.length);
     });
