@@ -329,7 +329,7 @@ export default () => {
      * // output: @media (min-width: 500px) { .class1:hover { color: red } }
      */
     setRule(selectors, style, opts = {}) {
-      const { atRuleType, atRuleParams, additionalSelector } = opts;
+      const { atRuleType, atRuleParams } = opts;
       const node = em.get('Parser').parserCss.checkNode({
         selectors,
         style
@@ -337,7 +337,7 @@ export default () => {
       const { state, selectorsAdd } = node;
       const sm = em.get('SelectorManager');
       const selector = sm.add(node.selectors);
-      const rule = this.add(selector, state, atRuleParams, additionalSelector, {
+      const rule = this.add(selector, state, atRuleParams, {
         selectorsAdd,
         atRule: atRuleType
       });

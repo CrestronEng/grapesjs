@@ -51,15 +51,34 @@ describe('CssRulesView', () => {
     expect(CssRulesView).toBeTruthy();
   });
 
-  test('Devices are sorted according to the priority asssigned to them manually', () => {
+  test('Collection is empty. Styles structure bootstraped', () => {
+    expect(obj.$el.html()).toBeTruthy();
+    const foundStylesContainers = Array(obj.$el.find('div'));
+    expect(foundStylesContainers[0].length - 1).toEqual(devices.length);
+    const sortedDevicesWidthMedia = devices
+      .map(dvc => dvc.priorityObjNum)
+      .sort((left, right) => {
+        return (left || Number.MAX_VALUE) - (right || Number.MAX_VALUE);
+      })
+      .map(widthMedia => parseFloat(widthMedia));
+
+    for (let i = 1; i < foundStylesContainers.length; i++) {
+      const priority = sortedDevicesWidthMedia[i];
+      let $styleC = foundStylesContainers[i].id;
+
+      expect($styleC.id).toEqual(`${prefix}${priority ? `-${priority}` : ''}`);
+    }
+  });
+
+  test('Devices are sorted in ascending order according to the priority asssigned to them manually', () => {
     const sortedDevicesPriority = devices.sort((left, right) => {
       return (
-        (right.priorityObjNum || Number.MAX_VALUE) -
-        (left.priorityObjNum || Number.MAX_VALUE)
+        (left.priorityObjNum || Number.MAX_VALUE) -
+        (right.priorityObjNum || Number.MAX_VALUE)
       );
     });
 
-    expect(parseInt(sortedDevicesPriority[0].priorityObjNum)).toBeGreaterThan(
+    expect(parseInt(sortedDevicesPriority[0].priorityObjNum)).toBeLessThan(
       parseInt(sortedDevicesPriority[1].priorityObjNum)
     );
   });

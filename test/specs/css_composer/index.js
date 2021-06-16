@@ -246,7 +246,7 @@ describe('Css Composer', () => {
     });
 
     test('Create a rule with class-based and mixed selectors', () => {
-      const selector = '.test.test2:hover';
+      const selector = '.test.test2:hover, #test .selector';
       obj.setRule(selector, { color: 'red' });
       expect(obj.getAll().length).toEqual(1);
       const rule = obj.getRule(selector);
@@ -258,6 +258,10 @@ describe('Css Composer', () => {
       const selector = '#test1 .class1, .class2 > #id2';
       obj.setRule(selector, { color: 'red' });
       expect(obj.getAll().length).toEqual(1);
+      const rule = obj.getRule(selector);
+      expect(rule.get('selectors').length).toEqual(0);
+      expect(rule.selectorsToString()).toEqual(selector);
+      expect(rule.styleToString()).toEqual(`color:red;`);
     });
 
     test('Create a rule with atRule', () => {
@@ -297,7 +301,7 @@ describe('Css Composer', () => {
         { selector: '.class1:hover', style: { color: '#111' } },
         { selector: '.class1.class2', style: { color: '#222' } },
         { selector: '.class1, .class2 .class3', style: { color: 'red' } },
-        //  { selector: '.class1, .class2 .class4', style: { color: 'green' } },
+        { selector: '.class1, .class2 .class4', style: { color: 'green' } },
         { selector: '.class4, .class1 .class2', style: { color: 'blue' } },
         {
           selector: '.class4, .class1 .class2',
@@ -311,6 +315,9 @@ describe('Css Composer', () => {
         const rule = obj.getRule(selector, opt);
         const atRule = `${opt.atRuleType || ''} ${opt.atRuleParams ||
           ''}`.trim();
+        expect(rule.getAtRule()).toEqual(atRule ? `@${atRule}` : '');
+        expect(rule.selectorsToString()).toEqual(selector);
+        expect(rule.getStyle()).toEqual(style);
       });
       expect(obj.getAll().length).toEqual(toTest.length);
     });

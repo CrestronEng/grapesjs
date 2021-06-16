@@ -17,7 +17,7 @@ export default Backbone.Model.extend({
     // If empty the width will be used
     widthMedia: null,
 
-    // Setup the order of media queries
+    // Setup the order of devices in the dropdown menu according to their priority
     priorityObjNum: null,
     priority: null
   },
