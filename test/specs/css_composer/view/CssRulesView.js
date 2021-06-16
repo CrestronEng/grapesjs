@@ -59,8 +59,7 @@ describe('CssRulesView', () => {
       .map(dvc => dvc.priorityObjNum)
       .sort((left, right) => {
         return (left || Number.MAX_VALUE) - (right || Number.MAX_VALUE);
-      })
-      .map(widthMedia => parseFloat(widthMedia));
+      });
 
     for (let i = 1; i < foundStylesContainers.length; i++) {
       const priority = sortedDevicesWidthMedia[i];
