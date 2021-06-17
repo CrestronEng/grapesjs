@@ -146,7 +146,7 @@ describe('E2E tests', () => {
   });
 
   test('Do not extend with different selectorsAdd', () => {
-    var style1 = { color: 'red', width: '10px' };
+    var style1 = { color: 'red', width: '10px', height: '10px' };
     var style2 = { height: '20px', width: '20px' };
     var rule1 = {
       selectors: [],
@@ -167,7 +167,8 @@ describe('E2E tests', () => {
       selectorsAdd: '*',
       style: {
         color: 'red',
-        width: '10px'
+        width: '10px',
+        height: '10px'
       }
     };
     var rule2Result = {

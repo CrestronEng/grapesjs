@@ -71,7 +71,7 @@ describe('CssRule', () => {
   });
 
   test('toCSS wraps correctly inside media rule', () => {
-    const media = '(max-width: 768px)';
+    const media = '(max-width: 768px) and (max-height: 375px)';
     obj.set('atRuleType', 'media');
     obj.set('mediaText', media);
     obj.get('selectors').add({ name: 'test1' });

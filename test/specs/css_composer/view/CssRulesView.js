@@ -9,17 +9,21 @@ describe('CssRulesView', () => {
     {
       name: 'Mobile portrait',
       width: '320px',
-      widthMedia: '480px'
+      widthMedia: '480px',
+      priorityObjNum: '1'
     },
+
     {
       name: 'Tablet',
       width: '768px',
-      widthMedia: '992px'
+      widthMedia: '992px',
+      priorityObjNum: '3'
     },
     {
       name: 'Desktop',
       width: '',
-      widthMedia: ''
+      widthMedia: '',
+      priorityObjNum: '2'
     }
   ];
 
@@ -49,25 +53,34 @@ describe('CssRulesView', () => {
 
   test('Collection is empty. Styles structure bootstraped', () => {
     expect(obj.$el.html()).toBeTruthy();
-    const foundStylesContainers = obj.$el.find('div');
-    expect(foundStylesContainers.length).toEqual(devices.length);
-
+    const foundStylesContainers = Array(obj.$el.find('div'));
+    expect(foundStylesContainers[0].length - 1).toEqual(devices.length);
     const sortedDevicesWidthMedia = devices
-      .map(dvc => dvc.widthMedia)
+      .map(dvc => dvc.priorityObjNum)
       .sort((left, right) => {
-        return (
-          ((right && right.replace('px', '')) || Number.MAX_VALUE) -
-          ((left && left.replace('px', '')) || Number.MAX_VALUE)
-        );
-      })
-      .map(widthMedia => parseFloat(widthMedia));
+        return (left || Number.MAX_VALUE) - (right || Number.MAX_VALUE);
+      });
 
-    foundStylesContainers.each((idx, $styleC) => {
-      const width = sortedDevicesWidthMedia[idx];
-      expect($styleC.id).toEqual(`${prefix}${width ? `-${width}` : ''}`);
-    });
+    for (let i = 1; i < foundStylesContainers.length; i++) {
+      const priority = sortedDevicesWidthMedia[i];
+      let $styleC = foundStylesContainers[i].id;
+
+      expect($styleC.id).toEqual(`${prefix}${priority ? `-${priority}` : ''}`);
+    }
   });
 
+  test('Devices are sorted in ascending order according to the priority asssigned to them manually', () => {
+    const sortedDevicesPriority = devices.sort((left, right) => {
+      return (
+        (left.priorityObjNum || Number.MAX_VALUE) -
+        (right.priorityObjNum || Number.MAX_VALUE)
+      );
+    });
+
+    expect(parseInt(sortedDevicesPriority[0].priorityObjNum)).toBeLessThan(
+      parseInt(sortedDevicesPriority[1].priorityObjNum)
+    );
+  });
   test('Add new rule', () => {
     sinon.stub(obj, 'addToCollection');
     obj.collection.add({});
