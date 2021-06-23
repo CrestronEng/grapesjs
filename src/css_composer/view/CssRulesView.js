@@ -106,13 +106,15 @@ export default Backbone.View.extend({
     return (
       mediaText &&
       mediaText
-        .replace(`(${this.em.getConfig('mediaCondition')}: `, '')
-        .replace('and', '')
-        .replace(`(${this.em.getConfig('otherMediaCondition')}: `, '')
-        .replace(')', '')
-        .replace('px', '')
-        .replace('px', '')
-        .replace(')', '')
+        .replace(`(${this.em.getConfig('mediaConditionMaxWidth')}: `, '')
+        .replace(/and/g, '')
+        .replace(`(${this.em.getConfig('mediaConditionMaxHeight')}: `, '')
+        .replace(`(${this.em.getConfig('mediaConditionMinHeight')}: `, '')
+        .replace(`(${this.em.getConfig('mediaConditionMinWidth')}: `, '')
+
+        .replace(/\)/g, '')
+        .replace(/px/g, '')
+        .replace(/\(/g, '')
         .replace(/\s/g, '')
     );
   },

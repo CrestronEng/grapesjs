@@ -91,10 +91,13 @@ export default {
   // When enabled, on device change media rules won't be created
   devicePreviewMode: 0,
 
-  // THe condition to use for media queries, eg. 'max-width'
+  // THe conditions to use for media queries, eg. 'max-width'
   // Comes handy for mobile-first cases
-  mediaCondition: 'max-width',
-  otherMediaCondition: 'max-height',
+  mediaConditionMaxWidth: 'max-width',
+  mediaConditionMinWidth: 'min-width',
+
+  mediaConditionMaxHeight: 'max-height',
+  mediaConditionMinHeight: 'min-height',
 
   // Starting tag for variable inside scripts in Components
   tagVarStart: '{[ ',
