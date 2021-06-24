@@ -697,7 +697,6 @@ export default Backbone.Model.extend({
     const minHeight = device && parseInt(device.get('heightMedia')) - 1;
     const maxWidth = parseInt(minWidth) + 2;
     const maxHeight = parseInt(minHeight) + 2;
-    //console.log(`BreakPoint is (${conditionMinWidth}: ${minWidth}) and (${conditionMaxWidth}: ${maxWidth}px) and (${conditionMinHeight}: ${minHeight}) and (${conditionMaxHeight}: ${maxHeight}px)`);
     return device && minWidth && maxWidth && minHeight && maxHeight && !preview
       ? `(${conditionMinWidth}: ${minWidth}px) and (${conditionMaxWidth}: ${maxWidth}px) and (${conditionMinHeight}: ${minHeight}px) and (${conditionMaxHeight}: ${maxHeight}px)`
       : '';
