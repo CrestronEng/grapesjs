@@ -461,8 +461,6 @@ export default {
           startInfo.mouseY = e.clientY; // mouse Y position in Viewport
           startInfo.componentTop =  parseFloat(modelStyle.top); // component top position on canvas
           startInfo.mouseTopOffset = startInfo.mouseY - canvasTopOffset - startInfo.componentTop; // offset of mouse adjusted y position to component top position
-          console.log("Start1: (mouseX, resizerX, mouseY, resizerY): " + e.clientX + " " + modelStyle.left + " " + startInfo.mouseY + " " + modelStyle.top);
-          console.log("startInfo: (top, topOffset, height): " + startInfo.mouseY + " " + startInfo.mouseTopOffset + " " + startInfo.height);
 
           if (currentUnit) {
             config.unitHeight = getUnitFromValue(currentHeight);
@@ -506,27 +504,20 @@ export default {
           const style = {};
           const en = !store ? 1 : ''; // this will trigger the final change
 
-          console.log("resizer current pos (x,y): " + options.resizer.currentPos['x'] + " " + options.resizer.currentPos['y']);
-          console.log("rect (h,w): " + rect.h + " " + rect.w);
-
           if (!onlyHeight) {
             const bodyw = canvas.getBody().offsetWidth;
             const width = rect.w < bodyw ? rect.w : bodyw;
             style[keyWidth] = autoWidth ? 'auto' : `${width}${unitWidth}`;
             if (leftHandler) { 
               let handlerRightLimit = startInfo.mouseX + startInfo.width - minComponentWidth - startInfo.mouseLeftOffset;
-              console.log("resizer max(x): " + handlerRightLimit);
               if (width > minComponentWidth){ 
                 let resizerLeftPos = options.resizer.currentPos['x'] < handlerRightLimit ? options.resizer.currentPos['x'] : handlerRightLimit;
                 const componentleftPos = resizerLeftPos - canvasLeftOffset - startInfo.mouseLeftOffset;
-                console.log("canvasLeftOffset: " + canvasLeftOffset);
                 style['left'] = `${componentleftPos}${unitWidth}`
-                console.log("left (new): " + style['left']);
-              }
+               }
               else {
                 const leftPos = handlerRightLimit  - canvasLeftOffset;
                 style['left'] = `${leftPos}${unitWidth}`
-                console.log("max left (limit): " + style['left']);
               }
             }
 
@@ -535,7 +526,6 @@ export default {
                 let rightLimitReached = canvasWidth - rect.w - el.offsetLeft <= 0 ? true : false;
                 if (rightLimitReached) {
                   let limitWidth = canvasWidth - el.offsetLeft;
-                  console.log("**Limit right reached: " + limitWidth);
                   style[keyWidth] = `${limitWidth}${unitWidth}`;
                   }
               }
@@ -543,7 +533,6 @@ export default {
                 let leftLimitReached = el.offsetLeft <= 0 ? true : false;
                 if (leftLimitReached) {
                   let limitWidth = startInfo.componentLeft + startInfo.width;
-                  console.log("**Limit left: " + limitWidth);
                   style[keyWidth] = `${limitWidth}${unitWidth}`;
                   style['left'] = `0${unitWidth}`
                 }
@@ -554,17 +543,14 @@ export default {
             style[keyHeight] = autoHeight ? 'auto' : `${rect.h}${unitHeight}`;
             if (topHandler) { 
               let handlerBottomLimit = startInfo.mouseY - startInfo.mouseTopOffset + startInfo.height - minComponentHeight;
-              console.log("resizer max(y), rect.h: " + handlerBottomLimit + " " + rect.h);
               if (rect.h > minComponentHeight) { 
                 let resizerTopPos = options.resizer.currentPos['y'] < handlerBottomLimit ? options.resizer.currentPos['y'] : handlerBottomLimit;
                 const componentTopPos = resizerTopPos - canvasTopOffset - startInfo.mouseTopOffset; // convert from resizer Y coordinate to canvas Y coordinate
                 style['top'] = `${componentTopPos}${unitHeight}`
-                console.log("top (new): "+ " " + style['top']);
               }
               else {
                 const componentTopPos = handlerBottomLimit - canvasTopOffset; // convert from resizer Y coordinate to canvas Y coordinate
                 style['top'] = `${componentTopPos}${unitHeight}`
-                console.log("max top (limit): " + style['top']);
               }
             }
 
@@ -573,7 +559,6 @@ export default {
                 let bottomLimitReached = canvasHeight - rect.h - el.offsetTop <= 0 ? true : false;
                 if (bottomLimitReached) {
                   let limitHeight = canvaHeight - el.offsetTop;
-                  console.log("**Limit bottom reached: " + limitHeight);
                   style[keyHeight] = `${limitHeight}${unitHeight}`;
                   }
               }
@@ -581,7 +566,6 @@ export default {
                 let topLimitReached = el.offsetTop <= 0 ? true : false;
                 if (topLimitReached) {
                   let limitHeight = startInfo.componentTop + startInfo.height;
-                  console.log("**Limit top: " + limitHeight);
                   style['top'] = `0${unitHeight}`
                   style[keyHeight] = `${limitHeight}${unitHeight}`;
                 }
