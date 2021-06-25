@@ -688,14 +688,17 @@ export default Backbone.Model.extend({
   getCurrentMedia() {
     const config = this.config;
     const device = this.getDeviceModel();
-    const condition = config.mediaCondition;
-    const otherCondition = config.otherMediaCondition;
+    const conditionMinWidth = config.mediaConditionMinWidth;
+    const conditionMaxWidth = config.mediaConditionMaxWidth;
+    const conditionMaxHeight = config.mediaConditionMaxHeight;
+    const conditionMinHeight = config.mediaConditionMinHeight;
     const preview = config.devicePreviewMode;
-    const width = device && device.get('widthMedia');
-    const height = device && device.get('heightMedia');
-    //console.log(`(${condition}: ${width}) and (${otherCondition}: ${height})`);
-    return device && width && height && !preview
-      ? `(${condition}: ${width}) and (${otherCondition}: ${height})`
+    const minWidth = device && parseInt(device.get('widthMedia')) - 1;
+    const minHeight = device && parseInt(device.get('heightMedia')) - 1;
+    const maxWidth = parseInt(minWidth) + 2;
+    const maxHeight = parseInt(minHeight) + 2;
+    return device && minWidth && maxWidth && minHeight && maxHeight && !preview
+      ? `(${conditionMinWidth}: ${minWidth}px) and (${conditionMaxWidth}: ${maxWidth}px) and (${conditionMinHeight}: ${minHeight}px) and (${conditionMaxHeight}: ${maxHeight}px)`
       : '';
   },
 
