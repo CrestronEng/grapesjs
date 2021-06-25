@@ -391,14 +391,20 @@ export default {
     let options = {};
     let modelToStyle;
     let startInfo = {
-      mouseY: 0,
-      componentTop: 0,
-      mouseX: 0,
-      height: 0,
-      width: 0,
-      mouseLeftOffset: 0,
-      mouseTopOffset: 0
+      mouseX: 0, // mouse X position in Viewport
+      mouseY: 0, // mouse Y position in Viewport
+      height: 0, // component height
+      width: 0, // component width
+      componentTop: 0, // component top position on canvas
+      componentLeft: 0, // component left position on canvas
+      mouseLeftOffset: 0, // offset of mouse adjusted x position to component left position
+      mouseTopOffset: 0 // offset of mouse adjusted y position to component top position
     };
+
+    if (canvas.getElement() === 'undefined') {
+      console.error('initResize: Canvas element is undefined');
+      return;
+    }
     let canvasTopOffset = canvas.getElement().getBoundingClientRect().top;
     let canvasLeftOffset = canvas.getElement().getBoundingClientRect().left;
     let canvasHeight = canvas.getElement().offsetHeight;
@@ -456,14 +462,14 @@ export default {
 
           startInfo.height = parseFloat(currentHeight);
           startInfo.width = parseFloat(currentWidth);
-          startInfo.mouseX = e.clientX; // mouse X position in Viewport
-          startInfo.componentLeft = parseFloat(modelStyle.left); // component left position on canvas
+          startInfo.mouseX = e.clientX;
+          startInfo.componentLeft = parseFloat(modelStyle.left);
           startInfo.mouseLeftOffset =
-            startInfo.mouseX - canvasLeftOffset - startInfo.componentLeft; // offset of mouse x position to component left position
-          startInfo.mouseY = e.clientY; // mouse Y position in Viewport
-          startInfo.componentTop = parseFloat(modelStyle.top); // component top position on canvas
+            startInfo.mouseX - canvasLeftOffset - startInfo.componentLeft;
+          startInfo.mouseY = e.clientY;
+          startInfo.componentTop = parseFloat(modelStyle.top);
           startInfo.mouseTopOffset =
-            startInfo.mouseY - canvasTopOffset - startInfo.componentTop; // offset of mouse adjusted y position to component top position
+            startInfo.mouseY - canvasTopOffset - startInfo.componentTop;
 
           if (currentUnit) {
             config.unitHeight = getUnitFromValue(currentHeight);
