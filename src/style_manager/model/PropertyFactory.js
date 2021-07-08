@@ -536,7 +536,8 @@ export default () => ({
             { value: 'static' },
             { value: 'relative' },
             { value: 'absolute' },
-            { value: 'fixed' }
+            { value: 'fixed' },
+            { value: 'sticky' }
           ];
           break;
         case 'font-family':
