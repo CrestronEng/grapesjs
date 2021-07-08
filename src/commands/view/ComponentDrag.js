@@ -313,7 +313,7 @@ export default {
     const { center, onStart } = opts;
     const { Canvas } = editor;
     const style = target.getStyle();
-    const position = 'absolute';
+    const position = 'sticky';
     onStart && onStart(this._getDragData());
     if (isTran) return;
 
