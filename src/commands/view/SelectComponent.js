@@ -737,9 +737,16 @@ export default {
       topOff,
       leftOff
     });
-
-    style.top = topOff + unit;
-    style.left = leftOff + unit;
+    if (pos.rect.left >= pos.left) {
+      style.left = pos.rect.left + unit;
+    } else {
+      style.left = pos.left + unit;
+    }
+    if (pos.rect.top >= pos.top) {
+      style.top = pos.rect.top + unit;
+    } else {
+      style.top = pos.top + unit;
+    }
     style.width = pos.width + unit;
     style.height = pos.height + unit;
   },
@@ -774,8 +781,16 @@ export default {
     );
     const topOff = targetToElem.canvasOffsetTop;
     const leftOff = targetToElem.canvasOffsetLeft;
-    style.top = topOff + unit;
-    style.left = leftOff + unit;
+    if (pos.rect.left >= pos.left) {
+      style.left = pos.rect.left + unit;
+    } else {
+      style.left = pos.left + unit;
+    }
+    if (pos.rect.top >= pos.top) {
+      style.top = pos.rect.top + unit;
+    } else {
+      style.top = pos.top + unit;
+    }
     style.width = pos.width + unit;
     style.height = pos.height + unit;
 
