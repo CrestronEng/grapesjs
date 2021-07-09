@@ -535,9 +535,7 @@ export default () => ({
           obj.list = [
             { value: 'static' },
             { value: 'relative' },
-            { value: 'absolute' },
-            { value: 'fixed' },
-            { value: 'sticky' }
+            { value: 'absolute' }
           ];
           break;
         case 'font-family':
