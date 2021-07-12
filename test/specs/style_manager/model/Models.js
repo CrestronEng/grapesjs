@@ -492,8 +492,7 @@ describe('PropertyFactory', () => {
         list: [
           { value: 'static' },
           { value: 'relative' },
-          { value: 'absolute' },
-          { value: 'fixed' }
+          { value: 'absolute' }
         ]
       }
     ]);
