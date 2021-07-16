@@ -6,7 +6,7 @@ export default {
     const clp = em.get('clipboard');
 
     if (clp) {
-      clp.getSelectedAll().forEach(comp => {
+      clp.forEach(comp => {
         if (!comp) return;
         const coll = comp.collection;
         const at = coll.indexOf(comp) + 1;
