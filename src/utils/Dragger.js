@@ -357,7 +357,7 @@ export default class Dragger {
       ? getPos(ev)
       : {
           x: pEv.clientX,
-          y: pEv.clientY + 30
+          y: pEv.clientY
         };
   }
 
