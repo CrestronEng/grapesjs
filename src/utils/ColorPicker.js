@@ -1093,19 +1093,12 @@ export default function($, undefined) {
 
     offset.top += inputHeight;
 
-    offset.left -= Math.min(
-      offset.left,
-      offset.left + dpWidth > viewWidth && viewWidth > dpWidth
-        ? Math.abs(offset.left + dpWidth - viewWidth)
-        : 0
-    );
+    offset.left += input.outerWidth();
+    offset.left -= input.closest('.gjs-editor').offset().left;
+    offset.left -= dpWidth;
 
-    offset.top -= Math.min(
-      offset.top,
-      offset.top + dpHeight > viewHeight && viewHeight > dpHeight
-        ? Math.abs(dpHeight + inputHeight - extraY)
-        : extraY
-    );
+    offset.top += inputHeight;
+    offset.top -= input.closest('.gjs-editor').offset().top;
 
     return offset;
   }

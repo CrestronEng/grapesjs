@@ -6,6 +6,7 @@ export default {
     const clp = em.get('clipboard');
 
     if (clp) {
+      let currentIndex = 0;
       clp.forEach(comp => {
         if (!comp) return;
         const coll = comp.collection;
@@ -21,9 +22,13 @@ export default {
             { at }
           );
         }
+        currentIndex++;
 
         added = isArray(added) ? added : [added];
-        added.forEach(add => ed.trigger('component:paste', add));
+        added.forEach(add => {
+          add['copyIndex'] = currentIndex;
+          ed.trigger('component:paste', add);
+        });
       });
 
       for (let i = 0; i < clp.length; i++) {
