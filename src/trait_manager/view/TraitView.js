@@ -128,7 +128,7 @@ export default Backbone.View.extend({
   renderLabel() {
     const { $el } = this;
     const label = this.getLabel();
-    let tpl = this.templateLabel(this.models[0]);
+    let tpl = this.templateLabel(this.models[this.models.length - 1]);
 
     if (this.createLabel) {
       tpl =
@@ -150,7 +150,7 @@ export default Backbone.View.extend({
   getLabel() {
     const { em } = this;
     const { label, name } = this.models
-      ? this.models[0].attributes
+      ? this.models[this.models.length - 1].attributes
       : { label: '', name: '' };
     return (
       em.t(`traitManager.traits.labels.${name}`) ||
@@ -239,7 +239,7 @@ export default Backbone.View.extend({
     const { $el, appendInput, models } = this;
     const inputs = $el.find('[data-input]');
     const el = inputs[inputs.length - 1];
-    let tpl = this.models && this.models[0].el;
+    let tpl = this.models && this.models[this.models.length - 1].el;
 
     if (!tpl) {
       tpl = this.createInput
@@ -255,7 +255,7 @@ export default Backbone.View.extend({
       this.elInput = tpl;
     }
 
-    this.models[0].el = this.elInput;
+    this.models[this.models.length - 1].el = this.elInput;
   },
 
   hasLabel() {

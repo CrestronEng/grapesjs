@@ -716,8 +716,8 @@ export default {
 
     if (isNewEl && isHoverEn) {
       this.lastHovered = el;
-      this.showHighlighter(view);
-      this.showElementOffset(el, pos, { view });
+      // this.showHighlighter(view);
+      //this.showElementOffset(el, pos, { view });
     }
 
     if (this.isCompSelected(component)) {
@@ -737,15 +737,34 @@ export default {
       topOff,
       leftOff
     });
-    if (pos.rect.left >= pos.left) {
+
+    let canvasLeftScroll = this.canvas.getFramesEl().parentNode.scrollLeft;
+    let canvasTopScroll = this.canvas.getFramesEl().parentNode.scrollTop;
+
+    if (pos.rect.left >= pos.left && pos.zoom == 1) {
       style.left = pos.rect.left + unit;
-    } else {
+    } else if (pos.zoom < 1 && canvasLeftScroll == 0) {
       style.left = pos.left + unit;
+    } else if (pos.zoom > 1 && canvasLeftScroll == 0) {
+      //let scrollOffset = pos.left - canvas.getRect().leftScroll;
+      style.left = pos.left + unit;
+    } else if (pos.zoom > 1 && canvasLeftScroll > 0) {
+      //let scrollOffset = pos.left - canvas.getRect().leftScroll;
+      style.left = pos.left + canvasLeftScroll + unit;
+    } else if (pos.zoom < 1 && canvasLeftScroll > 0) {
+      style.left = pos.left + canvasLeftScroll + unit;
     }
-    if (pos.rect.top >= pos.top) {
+
+    if (pos.rect.top >= pos.top && pos.zoom == 1) {
       style.top = pos.rect.top + unit;
-    } else {
+    } else if (pos.zoom > 1 && canvasTopScroll == 0) {
       style.top = pos.top + unit;
+    } else if (pos.zoom < 1 && canvasTopScroll == 0) {
+      style.top = pos.top + unit;
+    } else if (pos.zoom < 1 && canvasTopScroll > 0) {
+      style.top = pos.top + canvasTopScroll + unit;
+    } else if (pos.zoom > 1 && canvasTopScroll > 0) {
+      style.top = pos.top + canvasTopScroll + unit;
     }
     style.width = pos.width + unit;
     style.height = pos.height + unit;
@@ -781,20 +800,39 @@ export default {
     );
     const topOff = targetToElem.canvasOffsetTop;
     const leftOff = targetToElem.canvasOffsetLeft;
-    if (pos.rect.left >= pos.left) {
+    let canvasLeftScroll = this.canvas.getFramesEl().parentNode.scrollLeft;
+    let canvasTopScroll = this.canvas.getFramesEl().parentNode.scrollTop;
+
+    if (pos.rect.left >= pos.left && pos.zoom == 1) {
       style.left = pos.rect.left + unit;
-    } else {
+    } else if (pos.zoom < 1 && canvasLeftScroll == 0) {
       style.left = pos.left + unit;
+    } else if (pos.zoom > 1 && canvasLeftScroll == 0) {
+      //let scrollOffset = pos.left - canvas.getRect().leftScroll;
+      style.left = pos.left + unit;
+    } else if (pos.zoom > 1 && canvasLeftScroll > 0) {
+      //let scrollOffset = pos.left - canvas.getRect().leftScroll;
+      style.left = pos.left + canvasLeftScroll + unit;
+    } else if (pos.zoom < 1 && canvasLeftScroll > 0) {
+      style.left = pos.left + canvasLeftScroll + unit;
     }
-    if (pos.rect.top >= pos.top) {
+
+    if (pos.rect.top >= pos.top && pos.zoom == 1) {
       style.top = pos.rect.top + unit;
-    } else {
+    } else if (pos.zoom > 1 && canvasTopScroll == 0) {
       style.top = pos.top + unit;
+    } else if (pos.zoom < 1 && canvasTopScroll == 0) {
+      style.top = pos.top + unit;
+    } else if (pos.zoom < 1 && canvasTopScroll > 0) {
+      style.top = pos.top + canvasTopScroll + unit;
+    } else if (pos.zoom > 1 && canvasTopScroll > 0) {
+      style.top = pos.top + canvasTopScroll + unit;
     }
+
     style.width = pos.width + unit;
     style.height = pos.height + unit;
 
-    this.updateToolbarPos({ top: targetToElem.top, left: targetToElem.left });
+    this.updateToolbarPos({ top: targetToElem.top, left: 0 });
   },
 
   /**
