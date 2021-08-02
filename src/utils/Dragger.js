@@ -139,7 +139,7 @@ export default class Dragger {
     if (currentPos.y > startPointer.y) {
       delta = {
         x: currentPos.x - startPointer.x + glDiff.x,
-        y: currentPos.y - startPointer.y + glDiff.y + 22
+        y: currentPos.y - startPointer.y + glDiff.y
       };
     } else if (currentPos.y < startPointer.y) {
       delta = {
