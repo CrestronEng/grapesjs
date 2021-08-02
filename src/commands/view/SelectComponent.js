@@ -743,6 +743,8 @@ export default {
 
     if (pos.rect.left >= pos.left && pos.zoom == 1) {
       style.left = pos.rect.left + unit;
+    } else if (pos.rect.left < pos.left && pos.zoom == 1) {
+      style.left = pos.left + unit;
     } else if (pos.zoom < 1 && canvasLeftScroll == 0) {
       style.left = pos.left + unit;
     } else if (pos.zoom > 1 && canvasLeftScroll == 0) {
@@ -805,6 +807,8 @@ export default {
 
     if (pos.rect.left >= pos.left && pos.zoom == 1) {
       style.left = pos.rect.left + unit;
+    } else if (pos.rect.left < pos.left && pos.zoom == 1) {
+      style.left = pos.left + unit;
     } else if (pos.zoom < 1 && canvasLeftScroll == 0) {
       style.left = pos.left + unit;
     } else if (pos.zoom > 1 && canvasLeftScroll == 0) {
