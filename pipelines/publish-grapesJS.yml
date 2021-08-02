@@ -36,8 +36,8 @@ jobs:
       targetType: 'inline'
       script: |
         $version = (Get-Content package.json) | ConvertFrom-Json | Select -ExpandProperty "version"
-        git config user.email "kcorrado@crestron.com"
-        git config user.name "kcorrado"
+        git config user.email "Mobius@crestron.com"
+        git config user.name "Mobius"
         git add package.json package-lock.json
         git commit -m ("docs: update to version " + $version + " [skip ci]")
         git push origin HEAD:$(Build.SourceBranch)
