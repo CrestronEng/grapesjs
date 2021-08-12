@@ -314,12 +314,12 @@ export default Backbone.Model.extend({
       if (model && !model.get('selectable')) return;
 
       // Hanlde multiple selection
-      if (ctrlKey && mltSel) {
+      if ((ctrlKey && mltSel) || (shiftKey && mltSel)) {
         return this.toggleSelected(model);
-      } else if (shiftKey && mltSel) {
+      } /*else if (shiftKey && mltSel) {
         return this.toggleSelected(model);
 
-        /*
+      
         this.clearSelection(this.get('Canvas').getWindow());
         const coll = model.collection;
         const index = model.index();
@@ -354,9 +354,9 @@ export default Backbone.Model.extend({
           }
         }
 
-        return this.addSelected(model);*/
+        return this.addSelected(model);
       }
-
+*/
       !multiple && this.removeSelected(selected.filter(s => s !== model));
       this.addSelected(model, opts);
       added = model;
