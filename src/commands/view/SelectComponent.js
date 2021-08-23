@@ -409,6 +409,11 @@ export default {
     let canvasLeftOffset = canvas.getElement().getBoundingClientRect().left;
     let canvasHeight = canvas.getElement().offsetHeight;
     let canvasWidth = canvas.getElement().offsetWidth;
+    let canvasFrameElementWidth = canvas.getFrameEl().clientWidth; // this is the device width
+    let canvasFrameElementWidthOffset =
+      (canvasWidth - canvasFrameElementWidth) / 2;
+    if (canvasFrameElementWidth > canvasWidth)
+      canvasFrameElementWidthOffset = 0;
     const minComponentHeight = 10;
     const minComponentWidth = 10;
 
@@ -463,14 +468,19 @@ export default {
           startInfo.height = parseFloat(currentHeight);
           startInfo.width = parseFloat(currentWidth);
           startInfo.mouseX = e.clientX;
-          startInfo.componentLeft = parseFloat(modelStyle.left);
+          startInfo.componentLeft = parseFloat(el.offsetLeft);
           startInfo.mouseLeftOffset =
-            startInfo.mouseX - canvasLeftOffset - startInfo.componentLeft;
+            startInfo.mouseX -
+            canvasLeftOffset -
+            startInfo.componentLeft -
+            canvasFrameElementWidthOffset;
           startInfo.mouseY = e.clientY;
-          startInfo.componentTop = parseFloat(modelStyle.top);
+          startInfo.componentTop = parseFloat(el.offsetTop);
           startInfo.mouseTopOffset =
-            startInfo.mouseY - canvasTopOffset - startInfo.componentTop;
-
+            startInfo.mouseY -
+            canvasTopOffset -
+            startInfo.componentTop -
+            canvasFrameElementHeightOffset;
           if (currentUnit) {
             config.unitHeight = getUnitFromValue(currentHeight);
             config.unitWidth = getUnitFromValue(currentWidth);
@@ -530,14 +540,19 @@ export default {
                     ? resizerCurrentXPosition
                     : handlerRightLimit;
                 const componentleftPos =
-                  resizerLeftPos - canvasLeftOffset - startInfo.mouseLeftOffset;
+                  resizerLeftPos -
+                  canvasleftOffset -
+                  startInfo.mouseLeftOffset -
+                  canvasFrameElementWidthOffset;
                 style['left'] = `${componentleftPos}${unitWidth}`;
               } else {
-                const leftPos = handlerRightLimit - canvasLeftOffset;
-                style['left'] = `${leftPos}${unitWidth}`;
+                const componentleftPos =
+                  handlerRightLimit -
+                  canvasLeftOffset -
+                  canvasFrameElementWidthOffset;
+                style['left'] = `${componentleftPos}${unitWidth}`;
               }
             }
-
             // limit checks
             if (rightHandler) {
               let rightLimitReached =
