@@ -409,6 +409,12 @@ export default {
     let canvasLeftOffset = canvas.getElement().getBoundingClientRect().left;
     let canvasHeight = canvas.getElement().offsetHeight;
     let canvasWidth = canvas.getElement().offsetWidth;
+    let canvasFrameElementWidth = canvas.getFrameEl().clientWidth; // this is the device width
+    let canvasFrameElementWidthOffset =
+      (canvasWidth - canvasFrameElementWidth) / 2;
+    if (canvasFrameElementWidth > canvasWidth)
+      canvasFrameElementWidthOffset = 0;
+    let canvasFrameElementHeight = canvas.getFrameEl().clientHeight; // this is the device height
     const minComponentHeight = 10;
     const minComponentWidth = 10;
 
@@ -470,7 +476,6 @@ export default {
           startInfo.componentTop = parseFloat(modelStyle.top);
           startInfo.mouseTopOffset =
             startInfo.mouseY - canvasTopOffset - startInfo.componentTop;
-
           if (currentUnit) {
             config.unitHeight = getUnitFromValue(currentHeight);
             config.unitWidth = getUnitFromValue(currentWidth);
@@ -530,7 +535,10 @@ export default {
                     ? resizerCurrentXPosition
                     : handlerRightLimit;
                 const componentleftPos =
-                  resizerLeftPos - canvasLeftOffset - startInfo.mouseLeftOffset;
+                  resizerLeftPos -
+                  canvasLeftOffset -
+                  startInfo.mouseLeftOffset -
+                  canvasFrameElementWidthOffset;
                 style['left'] = `${componentleftPos}${unitWidth}`;
               } else {
                 const leftPos = handlerRightLimit - canvasLeftOffset;
@@ -541,9 +549,11 @@ export default {
             // limit checks
             if (rightHandler) {
               let rightLimitReached =
-                canvasWidth - rect.w - el.offsetLeft <= 0 ? true : false;
+                canvasFrameElementWidth - rect.w - el.offsetLeft <= 0
+                  ? true
+                  : false;
               if (rightLimitReached) {
-                let limitWidth = canvasWidth - el.offsetLeft;
+                let limitWidth = canvasFrameElementWidth - el.offsetLeft;
                 style[keyWidth] = `${limitWidth}${unitWidth}`;
               }
             }
@@ -583,9 +593,11 @@ export default {
             // limit checks
             if (bottomHandler) {
               let bottomLimitReached =
-                canvasHeight - rect.h - el.offsetTop <= 0 ? true : false;
+                canvasFrameElementHeight - rect.h - el.offsetTop <= 0
+                  ? true
+                  : false;
               if (bottomLimitReached) {
-                let limitHeight = canvaHeight - el.offsetTop;
+                let limitHeight = canvasFrameElementHeight - el.offsetTop;
                 style[keyHeight] = `${limitHeight}${unitHeight}`;
               }
             }
