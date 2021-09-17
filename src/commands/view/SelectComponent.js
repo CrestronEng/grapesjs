@@ -469,14 +469,11 @@ export default {
           startInfo.height = parseFloat(currentHeight);
           startInfo.width = parseFloat(currentWidth);
           startInfo.mouseX = e.clientX;
-          startInfo.componentLeft = parseFloat(el.offsetLeft);
+          startInfo.componentLeft = parseFloat(modelStyle.left);
           startInfo.mouseLeftOffset =
-            startInfo.mouseX -
-            canvasLeftOffset -
-            startInfo.componentLeft -
-            canvasFrameElementWidthOffset;
+            startInfo.mouseX - canvasLeftOffset - startInfo.componentLeft;
           startInfo.mouseY = e.clientY;
-          startInfo.componentTop = parseFloat(el.offsetTop);
+          startInfo.componentTop = parseFloat(modelStyle.top);
           startInfo.mouseTopOffset =
             startInfo.mouseY - canvasTopOffset - startInfo.componentTop;
           if (currentUnit) {
@@ -544,13 +541,11 @@ export default {
                   canvasFrameElementWidthOffset;
                 style['left'] = `${componentleftPos}${unitWidth}`;
               } else {
-                const componentleftPos =
-                  handlerRightLimit -
-                  canvasLeftOffset -
-                  canvasFrameElementWidthOffset;
-                style['left'] = `${componentleftPos}${unitWidth}`;
+                const leftPos = handlerRightLimit - canvasLeftOffset;
+                style['left'] = `${leftPos}${unitWidth}`;
               }
             }
+
             // limit checks
             if (rightHandler) {
               let rightLimitReached =
