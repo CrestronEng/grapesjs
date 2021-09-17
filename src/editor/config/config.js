@@ -94,11 +94,8 @@ export default {
   // THe conditions to use for media queries, eg. 'max-width'
   // Comes handy for mobile-first cases
   mediaConditionMaxWidth: 'max-width',
-  mediaConditionMinWidth: 'min-width',
-
   mediaConditionMaxHeight: 'max-height',
-  mediaConditionMinHeight: 'min-height',
-
+  mediaConditionOrientation: 'orientation',
   // Starting tag for variable inside scripts in Components
   tagVarStart: '{[ ',
 

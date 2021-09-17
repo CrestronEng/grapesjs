@@ -78,7 +78,10 @@ export default Backbone.View.extend({
     // If the rule contains a media query it might have a different container
     // for it (eg. rules created with Device Manager)
     if (mediaText) {
-      blockId = getBlockId(clsName, this.getMediaWidthAndHeight(mediaText));
+      blockId = getBlockId(
+        clsName,
+        this.getMediaWidthAndHeightAndOrientation(mediaText)
+      );
     }
 
     if (rendered) {
@@ -102,16 +105,13 @@ export default Backbone.View.extend({
   },
 
   //return a combination of the width and height of device
-  getMediaWidthAndHeight(mediaText) {
+  getMediaWidthAndHeightAndOrientation(mediaText) {
     return (
       mediaText &&
       mediaText
         .replace(`(${this.em.getConfig('mediaConditionMaxWidth')}: `, '')
         .replace(/and/g, '')
         .replace(`(${this.em.getConfig('mediaConditionMaxHeight')}: `, '')
-        .replace(`(${this.em.getConfig('mediaConditionMinHeight')}: `, '')
-        .replace(`(${this.em.getConfig('mediaConditionMinWidth')}: `, '')
-
         .replace(/\)/g, '')
         .replace(/px/g, '')
         .replace(/\(/g, '')
