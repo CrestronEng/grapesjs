@@ -584,6 +584,30 @@ export default Backbone.Model.extend({
     return store;
   },
 
+  storeData() {
+    let result = {};
+    // Sync content if there is an active RTE
+    const editingCmp = this.getEditing();
+    editingCmp && editingCmp.trigger('sync:content', { noCount: true });
+
+    this.get('storables').forEach(m => {
+      result = { ...result, ...m.store(1) };
+    });
+    return result;
+  },
+
+  loadData(data = {}) {
+    const sm = this.get('StorageManager');
+    const result = sm.__clearKeys(data);
+
+    this.get('storables').forEach(module => {
+      module.load(result);
+      module.postLoad && module.postLoad(this);
+    });
+
+    return result;
+  },
+
   /**
    * Load data from the current storage
    * @param {Function} clb Callback function
@@ -781,6 +805,11 @@ export default Backbone.Model.extend({
     $(config.el)
       .empty()
       .attr(this.attrsOrig);
+  },
+
+  getEditing() {
+    const res = this.get('editing');
+    return (res && res.model) || null;
   },
 
   setEditing(value) {
