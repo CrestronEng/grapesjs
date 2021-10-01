@@ -405,16 +405,20 @@ export default {
       console.error('initResize: Canvas element is undefined');
       return;
     }
-    let canvasTopOffset = canvas.getElement().getBoundingClientRect().top;
-    let canvasLeftOffset = canvas.getElement().getBoundingClientRect().left;
+    // NOTE: Terminology: The outer canvas = 'canvas'. This includes the grey area when a small device is selected.
+    // NOTE: Terminology: The device canvas = 'canvasFrameElement' or 'body'. This is the white canvas area.
+    // NOTE: The resizer handle locations are in window coordinates. The component location is in canvasFrameElement coordinates.
+    let canvasTopOffset = canvas.getElement().getBoundingClientRect().top; // offset of canvas top to containing window top
+    let canvasLeftOffset = canvas.getElement().getBoundingClientRect().left; // offset of canvas left to containing window left
     let canvasHeight = canvas.getElement().offsetHeight;
     let canvasWidth = canvas.getElement().offsetWidth;
-    let canvasFrameElementWidth = canvas.getFrameEl().clientWidth; // this is the device width
+    let body = canvas.getBody(); // body = canvas frame element
+    let canvasFrameElementWidth = body.offsetWidth; // this is the device width
     let canvasFrameElementWidthOffset =
       (canvasWidth - canvasFrameElementWidth) / 2;
     if (canvasFrameElementWidth > canvasWidth)
       canvasFrameElementWidthOffset = 0;
-    let canvasFrameElementHeight = canvas.getFrameEl().clientHeight; // this is the device height
+    let canvasFrameElementHeight = body.offsetHeight; // this is the device height
     const minComponentHeight = 10;
     const minComponentWidth = 10;
 
@@ -469,11 +473,14 @@ export default {
           startInfo.height = parseFloat(currentHeight);
           startInfo.width = parseFloat(currentWidth);
           startInfo.mouseX = e.clientX;
-          startInfo.componentLeft = parseFloat(modelStyle.left);
+          startInfo.componentLeft = parseFloat(el.offsetLeft); //modelStyle.left can contain 'nan', so don't use
           startInfo.mouseLeftOffset =
-            startInfo.mouseX - canvasLeftOffset - startInfo.componentLeft;
+            startInfo.mouseX -
+            canvasLeftOffset -
+            startInfo.componentLeft -
+            canvasFrameElementWidthOffset;
           startInfo.mouseY = e.clientY;
-          startInfo.componentTop = parseFloat(modelStyle.top);
+          startInfo.componentTop = parseFloat(el.offsetTop);
           startInfo.mouseTopOffset =
             startInfo.mouseY - canvasTopOffset - startInfo.componentTop;
           if (currentUnit) {
@@ -541,7 +548,10 @@ export default {
                   canvasFrameElementWidthOffset;
                 style['left'] = `${componentleftPos}${unitWidth}`;
               } else {
-                const leftPos = handlerRightLimit - canvasLeftOffset;
+                const leftPos =
+                  handlerRightLimit -
+                  canvasLeftOffset -
+                  canvasFrameElementWidthOffset;
                 style['left'] = `${leftPos}${unitWidth}`;
               }
             }
@@ -553,7 +563,7 @@ export default {
                   ? true
                   : false;
               if (rightLimitReached) {
-                let limitWidth = canvasFrameElementWidth - el.offsetLeft;
+                let limitWidth = canvasFrameElementWidth - el.offsetLeft - 1; // -1 is to prevent scrollbar from appearing
                 style[keyWidth] = `${limitWidth}${unitWidth}`;
               }
             }
@@ -597,7 +607,7 @@ export default {
                   ? true
                   : false;
               if (bottomLimitReached) {
-                let limitHeight = canvasFrameElementHeight - el.offsetTop;
+                let limitHeight = canvasFrameElementHeight - el.offsetTop - 2; // -2 is to prevent scrollbar from appearing
                 style[keyHeight] = `${limitHeight}${unitHeight}`;
               }
             }
