@@ -97,7 +97,14 @@ export default Input.extend({
         move(color) {
           const cl = getColor(color);
           cpStyle.backgroundColor = cl;
-          model.setValueFromInput(cl, 0);
+          const undo = em.getEditor().Undo;
+          if (undo) {
+            undo.usingUndoSuppressScope(() => {
+              model.setValueFromInput(cl, 0);
+            }, 100);
+          } else {
+            model.setValueFromInput(cl, 0);
+          }
         },
         change(color) {
           changed = 1;
