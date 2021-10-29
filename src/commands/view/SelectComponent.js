@@ -763,33 +763,10 @@ export default {
     let canvasLeftScroll = this.canvas.getFramesEl().parentNode.scrollLeft;
     let canvasTopScroll = this.canvas.getFramesEl().parentNode.scrollTop;
 
-    if (pos.rect.left >= pos.left && pos.zoom == 1) {
-      style.left = pos.rect.left + unit;
-    } else if (pos.rect.left < pos.left && pos.zoom == 1) {
-      style.left = pos.left + unit;
-    } else if (pos.zoom < 1 && canvasLeftScroll == 0) {
-      style.left = pos.left + unit;
-    } else if (pos.zoom > 1 && canvasLeftScroll == 0) {
-      //let scrollOffset = pos.left - canvas.getRect().leftScroll;
-      style.left = pos.left + unit;
-    } else if (pos.zoom > 1 && canvasLeftScroll > 0) {
-      //let scrollOffset = pos.left - canvas.getRect().leftScroll;
-      style.left = pos.left + canvasLeftScroll + unit;
-    } else if (pos.zoom < 1 && canvasLeftScroll > 0) {
-      style.left = pos.left + canvasLeftScroll + unit;
-    }
+    style.top = `${parseFloat(canvasTopScroll) + parseFloat(topOff)}px`;
 
-    if (pos.rect.top >= pos.top && pos.zoom == 1) {
-      style.top = pos.rect.top + unit;
-    } else if (pos.zoom > 1 && canvasTopScroll == 0) {
-      style.top = pos.top + unit;
-    } else if (pos.zoom < 1 && canvasTopScroll == 0) {
-      style.top = pos.top + unit;
-    } else if (pos.zoom < 1 && canvasTopScroll > 0) {
-      style.top = pos.top + canvasTopScroll + unit;
-    } else if (pos.zoom > 1 && canvasTopScroll > 0) {
-      style.top = pos.top + canvasTopScroll + unit;
-    }
+    style.left = `${parseFloat(canvasLeftScroll) + parseFloat(leftOff)}px`;
+
     style.width = pos.width + unit;
     style.height = pos.height + unit;
   },
@@ -824,36 +801,13 @@ export default {
     );
     const topOff = targetToElem.canvasOffsetTop;
     const leftOff = targetToElem.canvasOffsetLeft;
+
     let canvasLeftScroll = this.canvas.getFramesEl().parentNode.scrollLeft;
     let canvasTopScroll = this.canvas.getFramesEl().parentNode.scrollTop;
 
-    if (pos.rect.left >= pos.left && pos.zoom == 1) {
-      style.left = pos.rect.left + unit;
-    } else if (pos.rect.left < pos.left && pos.zoom == 1) {
-      style.left = pos.left + unit;
-    } else if (pos.zoom < 1 && canvasLeftScroll == 0) {
-      style.left = pos.left + unit;
-    } else if (pos.zoom > 1 && canvasLeftScroll == 0) {
-      //let scrollOffset = pos.left - canvas.getRect().leftScroll;
-      style.left = pos.left + unit;
-    } else if (pos.zoom > 1 && canvasLeftScroll > 0) {
-      //let scrollOffset = pos.left - canvas.getRect().leftScroll;
-      style.left = pos.left + canvasLeftScroll + unit;
-    } else if (pos.zoom < 1 && canvasLeftScroll > 0) {
-      style.left = pos.left + canvasLeftScroll + unit;
-    }
+    style.top = `${parseFloat(canvasTopScroll) + parseFloat(topOff)}px`;
 
-    if (pos.rect.top >= pos.top && pos.zoom == 1) {
-      style.top = pos.rect.top + unit;
-    } else if (pos.zoom > 1 && canvasTopScroll == 0) {
-      style.top = pos.top + unit;
-    } else if (pos.zoom < 1 && canvasTopScroll == 0) {
-      style.top = pos.top + unit;
-    } else if (pos.zoom < 1 && canvasTopScroll > 0) {
-      style.top = pos.top + canvasTopScroll + unit;
-    } else if (pos.zoom > 1 && canvasTopScroll > 0) {
-      style.top = pos.top + canvasTopScroll + unit;
-    }
+    style.left = `${parseFloat(canvasLeftScroll) + parseFloat(leftOff)}px`;
 
     style.width = pos.width + unit;
     style.height = pos.height + unit;
