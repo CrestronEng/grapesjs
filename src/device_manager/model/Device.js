@@ -34,14 +34,14 @@ export default Backbone.Model.extend({
     this.get('width') === null && this.set('width', this.get('widthMedia'));
 
     !this.get('priority') &&
-      this.set('priority', parseFloat(this.get('widthMedia')) || 0);
+      this.set('priority', parseInt(this.get('widthMedia')) || 0);
     const toCheck = ['width', 'height', 'widthMedia'];
     toCheck.forEach(prop => this.checkUnit(prop));
   },
 
   checkUnit(prop) {
     const pr = this.get(prop) || '';
-    const noUnit = (parseFloat(pr) || 0).toString() === pr.toString();
+    const noUnit = (parseInt(pr) || 0).toString() === pr.toString();
     noUnit && this.set(prop, `${pr}px`);
   }
 });

@@ -296,12 +296,16 @@ export default Backbone.View.extend({
       body,
       `<style>
       ${conf.baseCss || ''}
-
+      html {
+        background: #B6C6D5;
+      }
       .${ppfx}dashed *[data-highlightable] {
         outline: 0px dashed rgba(64,50,168,0.7);
         outline-offset: -2px;
       }
-
+      .${ppfx}dashed {
+        overflow: visible;
+      }
       .${ppfx}selected {
         outline: 6px solid #4032a8 !important;
         outline-offset: -3px;
