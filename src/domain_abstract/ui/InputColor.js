@@ -103,7 +103,7 @@ export default Input.extend({
           cpStyle.backgroundColor = cl;
           const undo = em.getEditor().Undo;
           if (undo) {
-            undo.usingUndoSuppressScope(() => {
+            undo.scope.usingUndoSuppressScope(() => {
               model.setValueFromInput(cl, 0);
             }, 100);
           } else {
@@ -139,11 +139,11 @@ export default Input.extend({
             if (undo) {
               // if coming from selection then assign the color, otherwise suuppress
               if (isHideOnSelection) {
-                undo.usingUndoPushScope(() => {
+                undo.scope.usingUndoPushScope(() => {
                   model.setValueFromInput(previousColor, 0);
                 });
               } else {
-                undo.usingUndoSuppressScope(() => {
+                undo.scope.usingUndoSuppressScope(() => {
                   model.setValueFromInput(previousColor, 0);
                 }, 100);
               }
