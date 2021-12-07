@@ -78,7 +78,6 @@ export default Input.extend({
       };
 
       let changed = 0;
-      let changedOnMove = 0;
       let previousColor;
       let isHideOnSelection = false;
       this.$el.find(`[data-colorp-c]`).append(colorEl);
@@ -97,7 +96,6 @@ export default Input.extend({
         ...(model.get('colorPicker') || {}),
 
         move(color) {
-          changedOnMove = 1;
           changed = 0;
           const cl = getColor(color);
           cpStyle.backgroundColor = cl;
@@ -120,7 +118,6 @@ export default Input.extend({
         },
         show(color) {
           changed = 0;
-          changedOnMove = 0;
           previousColor = getColor(color);
           isHideOnSelection = false;
         },
