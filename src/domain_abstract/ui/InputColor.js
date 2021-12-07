@@ -79,6 +79,7 @@ export default Input.extend({
 
       let changed = 0;
       let previousColor;
+      let isHideOnSelection = false;
       this.$el.find(`[data-colorp-c]`).append(colorEl);
       colorEl.spectrum({
         containerClassName: `${ppfx}one-bg ${ppfx}two-color`,
@@ -95,9 +96,17 @@ export default Input.extend({
         ...(model.get('colorPicker') || {}),
 
         move(color) {
+          changed = 0;
           const cl = getColor(color);
           cpStyle.backgroundColor = cl;
-          model.setValueFromInput(cl, 0);
+          const undo = em.getEditor().Undo;
+          if (undo) {
+            undo.scope.usingUndoSuppressScope(() => {
+              model.setValueFromInput(cl, 0);
+            }, 100);
+          } else {
+            model.setValueFromInput(cl, 0);
+          }
         },
         change(color) {
           changed = 1;
@@ -110,23 +119,44 @@ export default Input.extend({
         show(color) {
           changed = 0;
           previousColor = getColor(color);
+          isHideOnSelection = false;
         },
         hide(color) {
+          const undo = em.getEditor().Undo;
           if (!changed && previousColor) {
             if (self.noneColor) {
               previousColor = '';
             }
+            // if coming from hide due to a selection event then use the color which was set
+            if (isHideOnSelection) {
+              previousColor = getColor(color);
+            }
             cpStyle.backgroundColor = previousColor;
             colorEl.spectrum('set', previousColor);
-            model.setValueFromInput(previousColor, 0);
+            if (undo) {
+              // if coming from selection then assign the color, otherwise suuppress
+              if (isHideOnSelection) {
+                undo.scope.usingUndoPushScope(() => {
+                  model.setValueFromInput(previousColor, 0);
+                });
+              } else {
+                undo.scope.usingUndoSuppressScope(() => {
+                  model.setValueFromInput(previousColor, 0);
+                }, 100);
+              }
+            } else {
+              model.setValueFromInput(previousColor, 0);
+            }
           }
         }
       });
 
       em &&
         em.on &&
-        em.on('component:selected', () => {
-          changed = 1;
+        em.on('component:selected', model => {
+          changed = 0;
+          self.noneColor = false;
+          isHideOnSelection = true;
           colorEl.spectrum('hide');
         });
 
