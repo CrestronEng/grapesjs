@@ -724,10 +724,14 @@ export default Backbone.Model.extend({
     const maxHeight = device && parseInt(device.get('heightMedia'));
     const orientation = device && device.get('orientation');
 
-    return device && maxWidth && maxHeight && orientation && !preview
-      ? `(orientation: ${orientation}) and (${conditionMaxWidth}: ${maxWidth +
-          1}px) and (${conditionMaxHeight}: ${maxHeight + 1}px)`
-      : ''; //add +1 to breakpoint values to handle offsets on certain laptop DPI
+    if (device && maxWidth && maxHeight && orientation && !preview)
+      return orientation == 'landscape'
+        ? `(orientation: ${orientation}) and (${conditionMaxWidth}: ${maxWidth +
+            1}px)`
+        : `(orientation: ${orientation}) and (${conditionMaxHeight}: ${maxHeight +
+            1}px)`;
+    else return '';
+    //add +1 to breakpoint values to handle offsets on certain laptop DPI//add +1 to breakpoint values to handle offsets on certain laptop DPI
   },
 
   /**
