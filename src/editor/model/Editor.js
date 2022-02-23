@@ -311,12 +311,13 @@ export default Backbone.Model.extend({
 
     for (var i = 0; i < els.length; i += 1) {
       const model = getModel(els[i], $);
-      if (model && !model.get('selectable')) return;
+      if (model && !model.get('selectable')) continue;
 
       // Hanlde multiple selection
+      /*
       if ((ctrlKey && mltSel) || (shiftKey && mltSel)) {
         return this.toggleSelected(model);
-      } /*else if (shiftKey && mltSel) {
+      } else if (shiftKey && mltSel) {
         return this.toggleSelected(model);
 
       
@@ -361,6 +362,10 @@ export default Backbone.Model.extend({
       models.push(model);
     }
 
+    if ((ctrlKey && mltSel) || (shiftKey && mltSel)) {
+      return this.toggleSelected(models);
+    }
+
     !multiple &&
       this.removeSelected(selected.filter(s => !models.includes(s, 0)));
     models.length > 0 && this.addSelected(models, opts);
@@ -376,12 +381,12 @@ export default Backbone.Model.extend({
     const model = getModel(el, $);
     const models = isArray(model) ? model : [model];
 
-    models.forEach(model => {
-      if (model && !model.get('selectable')) return;
+    for (let i = 0; i < models.length; i += 1) {
+      if (models[i] && !models[i].get('selectable')) return;
       const selected = this.get('selected');
-      opts.forceChange && selected.remove(model, opts);
-      selected.push(model, opts);
-    });
+      opts.forceChange && selected.remove(models[i], opts);
+      selected.add(models[i], opts);
+    }
   },
 
   /**
