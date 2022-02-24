@@ -387,6 +387,8 @@ export default Backbone.Model.extend({
       opts.forceChange && selected.remove(models[i], opts);
       selected.add(models[i], opts);
     }
+
+    this.trigger('traits:update');
   },
 
   /**
@@ -397,6 +399,7 @@ export default Backbone.Model.extend({
    */
   removeSelected(el, opts = {}) {
     this.get('selected').remove(getModel(el, $), opts);
+    this.trigger('traits:update');
   },
 
   /**

@@ -36,7 +36,7 @@ export default DomainViews.extend({
     this.catsClass = `${this.ppfx}categories`;
     this.noCatClass = `${this.ppfx}no-cat`;
     this.contClass = `${this.ppfx}c`;
-    const toListen = 'component:toggled';
+    const toListen = 'traits:update';
     this.config.catClass = 'c';
 
     this.listenTo(this.em, toListen, this.updatedCollection);
