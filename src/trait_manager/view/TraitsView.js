@@ -60,7 +60,9 @@ export default DomainViews.extend({
     const comp = this.em.getSelectedAll();
     // check if there are more than one component selected and get the last selected value (last elemented pushed)
     this.lastComp = comp.length > 0 ? comp[comp.length - 1] : undefined;
-    this.lastCompTraits = lastComp ? lastComp.get('traits') : undefined;
+    this.lastCompTraits = this.lastComp
+      ? this.lastComp.get('traits')
+      : undefined;
     this.el.className = `${this.className} ${ppfx}one-bg ${ppfx}two-color`;
     this.collection = {}; // object used as a map.
 
