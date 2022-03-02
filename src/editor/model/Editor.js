@@ -276,7 +276,8 @@ export default Backbone.Model.extend({
    * @private
    */
   getSelected() {
-    return this.get('selected').last();
+    const selected = this.get('selected');
+    return selected.length > 0 ? selected.last() : undefined;
   },
 
   /**
@@ -365,10 +366,11 @@ export default Backbone.Model.extend({
     if ((ctrlKey && mltSel) || (shiftKey && mltSel)) {
       return this.toggleSelected(models);
     }
-
+    this.trigger('select:start');
     !multiple &&
       this.removeSelected(selected.filter(s => !models.includes(s, 0)));
     models.length > 0 && this.addSelected(models, opts);
+    this.trigger('select:end');
   },
 
   /**
@@ -380,9 +382,8 @@ export default Backbone.Model.extend({
   addSelected(el, opts = {}) {
     const model = getModel(el, $);
     const models = isArray(model) ? model : [model];
-
     for (let i = 0; i < models.length; i += 1) {
-      if (models[i] && !models[i].get('selectable')) return;
+      if (models[i] && !models[i].get('selectable')) continue;
       const selected = this.get('selected');
       opts.forceChange && selected.remove(models[i], opts);
       selected.add(models[i], opts);
