@@ -65,7 +65,7 @@ export default Backbone.View.extend({
     if (!model.get('value')) {
       model.set('value', model.getDefaultValue());
     }
-
+    /*
     if (em) {
       this.listenTo(
         em,
@@ -84,7 +84,9 @@ export default Backbone.View.extend({
           this.targetUpdated
         );
       });
+      
     }
+    */
 
     this.listenTo(this.propTarget, 'update', this.targetUpdated);
     this.listenTo(model, 'destroy remove', this.remove);
