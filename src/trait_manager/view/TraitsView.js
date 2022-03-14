@@ -36,7 +36,7 @@ export default DomainViews.extend({
     this.catsClass = `${this.ppfx}categories`;
     this.noCatClass = `${this.ppfx}no-cat`;
     this.contClass = `${this.ppfx}c`;
-    const toListen = 'component:toggled';
+    const toListen = 'traits:update';
     this.config.catClass = 'c';
 
     this.listenTo(this.em, toListen, this.updatedCollection);
@@ -60,13 +60,16 @@ export default DomainViews.extend({
     const comp = this.em.getSelectedAll();
     // check if there are more than one component selected and get the last selected value (last elemented pushed)
     this.lastComp = comp.length > 0 ? comp[comp.length - 1] : undefined;
+    this.lastCompTraits = this.lastComp
+      ? this.lastComp.get('traits')
+      : undefined;
     this.el.className = `${this.className} ${ppfx}one-bg ${ppfx}two-color`;
     this.collection = {}; // object used as a map.
 
     comp.length &&
       comp.forEach(comp => {
         var self = this; // need to keep upper level scope
-        self.lastComp.get('traits').each(trait => {
+        self.lastCompTraits.each(trait => {
           var tta;
           if (
             (tta = comp.get('traits').findWhere({ name: trait.get('name') }))

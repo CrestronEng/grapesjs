@@ -762,16 +762,12 @@ export default {
 
     let canvasLeftScroll = this.canvas.getFramesEl().parentNode.scrollLeft;
     let canvasTopScroll = this.canvas.getFramesEl().parentNode.scrollTop;
-    
+
     let topCoordValue = parseFloat(canvasTopScroll);
     let leftCoordValue = parseFloat(canvasLeftScroll);
 
-    topCoordValue == NaN ? 0 + parseFloat(topOff) : topCoordValue + parseFloat(topOff);
-    leftCoordValue == NaN ? 0 + parseFloat(leftOff) : leftCoordValue + parseFloat(leftOff);
-
-    style.top = `${topCoordValue}px`;
-
-    style.left = `${leftCoordValue}px`;
+    style.top = `${parseFloat(canvasTopScroll) + parseFloat(topOff)}px`;
+    style.left = `${parseFloat(canvasLeftScroll) + parseFloat(leftOff)}px`;
 
     style.width = pos.width + unit;
     style.height = pos.height + unit;
