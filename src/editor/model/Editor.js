@@ -390,6 +390,16 @@ export default Backbone.Model.extend({
 
     this.trigger('traits:update');
   },
+  dragSelect(els, opts = {}) {
+    const selected = this.get('selected');
+    // this.removeSelected(selected.filter(s => !contains(els, s)));
+    selected.remove(selected.filter(s => !contains(els, s), opts));
+
+    for (let i = 0; i < els.length; i += 1) {
+      selected.add(els[i], opts);
+    }
+    this.trigger('traits:update');
+  },
 
   /**
    * Remove component from selection
