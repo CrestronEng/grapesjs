@@ -77,6 +77,24 @@ Object.defineProperty(exports, "pl", {
     return _pl.default;
   }
 });
+Object.defineProperty(exports, "pt", {
+  enumerable: true,
+  get: function get() {
+    return _pt.default;
+  }
+});
+Object.defineProperty(exports, "tr", {
+  enumerable: true,
+  get: function get() {
+    return _tr.default;
+  }
+});
+Object.defineProperty(exports, "zh", {
+  enumerable: true,
+  get: function get() {
+    return _zh.default;
+  }
+});
 
 var _bs = _interopRequireDefault(require("./bs"));
 
@@ -101,3 +119,9 @@ var _ko = _interopRequireDefault(require("./ko"));
 var _nl = _interopRequireDefault(require("./nl"));
 
 var _pl = _interopRequireDefault(require("./pl"));
+
+var _pt = _interopRequireDefault(require("./pt"));
+
+var _tr = _interopRequireDefault(require("./tr"));
+
+var _zh = _interopRequireDefault(require("./zh"));
