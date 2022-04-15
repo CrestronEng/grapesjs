@@ -366,6 +366,10 @@ export default (config = {}) => {
       return this;
     },
 
+    lassoSelect(el, opts) {
+      em.dragSelect(el, opts);
+      return this;
+    },
     /**
      * Add component to selection
      * @param  {Component|HTMLElement|Array} el Component to select

@@ -276,8 +276,7 @@ export default Backbone.Model.extend({
    * @private
    */
   getSelected() {
-    const selected = this.get('selected');
-    return selected.length > 0 ? selected.last() : undefined;
+    return this.get('selected').last();
   },
 
   /**
@@ -366,11 +365,10 @@ export default Backbone.Model.extend({
     if ((ctrlKey && mltSel) || (shiftKey && mltSel)) {
       return this.toggleSelected(models);
     }
-    this.trigger('select:start');
+
     !multiple &&
       this.removeSelected(selected.filter(s => !models.includes(s, 0)));
     models.length > 0 && this.addSelected(models, opts);
-    this.trigger('select:end');
   },
 
   /**
@@ -382,14 +380,23 @@ export default Backbone.Model.extend({
   addSelected(el, opts = {}) {
     const model = getModel(el, $);
     const models = isArray(model) ? model : [model];
+
     for (let i = 0; i < models.length; i += 1) {
-      if (models[i] && !models[i].get('selectable')) continue;
+      if (models[i] && !models[i].get('selectable')) return;
       const selected = this.get('selected');
       opts.forceChange && selected.remove(models[i], opts);
       selected.add(models[i], opts);
     }
 
     this.trigger('traits:update');
+  },
+  dragSelect(els, opts = {}) {
+    const selected = this.get('selected');
+    selected.remove(selected.filter(s => !contains(els, s), opts));
+
+    for (let i = 0; i < els.length; i += 1) {
+      selected.add(els[i], opts);
+    }
   },
 
   /**
