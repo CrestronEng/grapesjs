@@ -86,6 +86,9 @@ export default Backbone.View.extend({
       });
     }
 
+    this.modelValueChanged = debounce(this.modelValueChanged.bind(this), 200);
+    this.updateStatus = debounce(this.updateStatus.bind(this), 100);
+
     this.listenTo(this.propTarget, 'update', this.targetUpdated);
     this.listenTo(model, 'destroy remove', this.remove);
     this.listenTo(model, 'change:value', this.modelValueChanged);

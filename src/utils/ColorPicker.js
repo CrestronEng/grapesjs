@@ -4,9 +4,11 @@
 // https://github.com/bgrins/spectrum
 // Author: Brian Grinstead
 // License: MIT
+import { hasWin } from './mixins';
 
 export default function($, undefined) {
   'use strict';
+  if (!hasWin()) return;
 
   var defaultOpts = {
       // Callbacks
@@ -207,6 +209,7 @@ export default function($, undefined) {
       resize = throttle(reflow, 10),
       visible = false,
       isDragging = false,
+      isDefault = true,
       dragWidth = 0,
       dragHeight = 0,
       dragHelperHeight = 0,
@@ -499,7 +502,7 @@ export default function($, undefined) {
         // since the set function will not run (default color is black).
         updateUI();
         currentPreferredFormat =
-          opts.preferredFormat || tinycolor(initialColor).format;
+          opts.preferredFormat || tinycolor(initialColor).getFormat();
 
         addColorToSelectionPalette(initialColor);
       } else {
@@ -525,8 +528,8 @@ export default function($, undefined) {
               .data('color')
           );
           move();
-          updateOriginalInput(true);
           if (opts.hideAfterPaletteSelect) {
+            updateOriginalInput(true);
             hide();
           }
         }
@@ -782,6 +785,7 @@ export default function($, undefined) {
         isEmpty = true;
       } else {
         isEmpty = false;
+        isDefault = !color; // if no color is available an empty string will be passed.  tinycolor will then set it to #000
         newColor = tinycolor(color);
         newHsv = newColor.toHsv();
 
@@ -956,12 +960,12 @@ export default function($, undefined) {
     function updateOriginalInput(fireCallback) {
       var color = get(),
         displayColor = '',
-        hasChanged = !tinycolor.equals(color, colorOnShow);
+        hasChanged = isDefault ? true : !tinycolor.equals(color, colorOnShow);
 
       if (color) {
         displayColor = color.toString(currentPreferredFormat);
         // Update the selection palette with the current color
-        addColorToSelectionPalette(color);
+        !visible && addColorToSelectionPalette(color);
       }
 
       if (isInput) {
@@ -1093,12 +1097,19 @@ export default function($, undefined) {
 
     offset.top += inputHeight;
 
-    offset.left += input.outerWidth();
-    offset.left -= input.closest('.gjs-editor').offset().left;
-    offset.left -= dpWidth;
+    offset.left -= Math.min(
+      offset.left,
+      offset.left + dpWidth > viewWidth && viewWidth > dpWidth
+        ? Math.abs(offset.left + dpWidth - viewWidth)
+        : 0
+    );
 
-    offset.top += inputHeight;
-    offset.top -= input.closest('.gjs-editor').offset().top;
+    offset.top -= Math.min(
+      offset.top,
+      offset.top + dpHeight > viewHeight && viewHeight > dpHeight
+        ? Math.abs(dpHeight + inputHeight - extraY)
+        : extraY
+    );
 
     return offset;
   }

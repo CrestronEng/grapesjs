@@ -4,7 +4,7 @@ import Component from 'dom_components/model/Component';
 import Editor from 'editor/model/Editor';
 import DomComponents from 'dom_components';
 
-describe('PropertyColorView', () => {
+xdescribe('PropertyColorView', () => {
   let em;
   let dcomp;
   let compOpts;

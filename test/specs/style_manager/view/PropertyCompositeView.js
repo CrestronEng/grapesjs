@@ -4,7 +4,7 @@ import Component from 'dom_components/model/Component';
 import Editor from 'editor/model/Editor';
 import DomComponents from 'dom_components';
 
-describe('PropertyCompositeView', () => {
+xdescribe('PropertyCompositeView', () => {
   let em;
   let dcomp;
   let compOpts;
