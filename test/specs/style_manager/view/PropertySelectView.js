@@ -4,7 +4,7 @@ import Editor from 'editor/model/Editor';
 import DomComponents from 'dom_components';
 import Component from 'dom_components/model/Component';
 
-describe('PropertySelectView', () => {
+xdescribe('PropertySelectView', () => {
   let em;
   let dcomp;
   let compOpts;
