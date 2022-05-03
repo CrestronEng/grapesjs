@@ -43,7 +43,7 @@ export default {
     const diff = shallowDiff(propOrig, propNew);
     keys(diff).forEach(pr => {
       const em = this.em;
-      // this.trigger(`change:style:${pr}`);
+      this.trigger(`change:style:${pr}`);
       if (em) {
         em.trigger(`styleable:change`, this, pr);
         em.trigger(`styleable:change:${pr}`, this, pr);

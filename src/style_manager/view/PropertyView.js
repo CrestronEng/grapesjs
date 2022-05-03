@@ -76,14 +76,14 @@ export default Backbone.View.extend({
 
       // Listening to changes of properties in this.requires, so that styleable
       // changes based on other properties are propagated
-      // const requires = model.get('requires') || {};
-      // Object.keys(requires).forEach(property => {
-      //   this.listenTo(
-      //     em,
-      //     `component:styleUpdate:${property}`,
-      //     this.targetUpdated
-      //   );
-      // });
+      const requires = model.get('requires') || {};
+      Object.keys(requires).forEach(property => {
+        this.listenTo(
+          em,
+          `component:styleUpdate:${property}`,
+          this.targetUpdated
+        );
+      });
     }
 
     this.modelValueChanged = debounce(this.modelValueChanged.bind(this));
@@ -436,12 +436,12 @@ export default Backbone.View.extend({
       const { em } = this.config;
       if (!em) return;
       const prop = model.get('property');
-      // const updated = { [prop]: value };
+      const updated = { [prop]: value };
       em.getSelectedAll().forEach(component => {
-        // !opt.noEmit && em.trigger('component:update', component, updated, opt);
-        // em.trigger('component:styleUpdate', component, prop, opt);
-        // em.trigger(`component:styleUpdate:${prop}`, component, value, opt);
-        // component.trigger(`change:style`, component, updated, opt);
+        !opt.noEmit && em.trigger('component:update', component, updated, opt);
+        em.trigger('component:styleUpdate', component, prop, opt);
+        em.trigger(`component:styleUpdate:${prop}`, component, value, opt);
+        component.trigger(`change:style`, component, updated, opt);
         component.trigger(`change:style:${prop}`, component, value, opt);
       });
     }
