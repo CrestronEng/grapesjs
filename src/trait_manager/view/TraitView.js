@@ -38,16 +38,15 @@ export default Backbone.View.extend({
     // this.target = target;
     const { ppfx } = this;
     this.clsField = `${ppfx}field ${ppfx}field-${type}`;
-    [
-      ['change:value', this.onValueChange],
-      ['remove', this.removeView]
-    ].forEach(([event, clb]) => {
-      this.models &&
-        this.models.forEach(modelRef => {
-          modelRef.off(event, clb);
-          this.listenTo(modelRef, event, clb);
-        });
-    });
+    [['change:value', this.onValueChange], ['remove', this.removeView]].forEach(
+      ([event, clb]) => {
+        this.models &&
+          this.models.forEach(modelRef => {
+            modelRef.off(event, clb);
+            this.listenTo(modelRef, event, clb);
+          });
+      }
+    );
 
     this.models &&
       this.models.forEach(modelRef => {
@@ -88,7 +87,7 @@ export default Backbone.View.extend({
     const el = this.getInputElem();
     if (el && !isUndefined(el.value)) {
       this.models.forEach(modelRef => {
-        modelRef.set('value', el.value);
+        modelRef.set('value', el.value, { fromInput: 1 });
       });
     }
 
@@ -117,6 +116,10 @@ export default Backbone.View.extend({
       this.postUpdate();
     } else {
       const val = this.getValueForTarget();
+      if (opts.fromInput) {
+        const { em } = this;
+        em.trigger('traitview:change', this, model, val);
+      }
       model.setTargetValue(val, opts);
     }
   },

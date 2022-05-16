@@ -437,7 +437,11 @@ export default Backbone.View.extend({
       if (!em) return;
       const prop = model.get('property');
       const updated = { [prop]: value };
-      em.getSelectedAll().forEach(component => {
+      const selectedComponents = em.getSelectedAll();
+      if (selectedComponents && opt.fromInput) {
+        em.trigger('propertyview:change', this, selectedComponents, value);
+      }
+      selectedComponents.forEach(component => {
         !opt.noEmit && em.trigger('component:update', component, updated, opt);
         em.trigger('component:styleUpdate', component, prop, opt);
         em.trigger(`component:styleUpdate:${prop}`, component, value, opt);

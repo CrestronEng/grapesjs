@@ -68,7 +68,7 @@ export default Input.extend({
    */
   handleChange(e) {
     e.stopPropagation();
-    this.setValue(this.getInputEl().value);
+    this.setValue(this.getInputEl().value, { fromInput: 1 });
     this.elementUpdated();
   },
 
@@ -151,7 +151,7 @@ export default Input.extend({
     let value = parseFloat(model.get('value'));
     value = this.normalizeValue(value + step);
     var valid = this.validateInputValue(value);
-    model.set('value', valid.value);
+    model.set('value', valid.value, { fromInput: 1 });
     this.elementUpdated();
   },
 
@@ -164,7 +164,7 @@ export default Input.extend({
     const value = parseFloat(model.get('value'));
     const val = this.normalizeValue(value - step);
     var valid = this.validateInputValue(val);
-    model.set('value', valid.value);
+    model.set('value', valid.value, { fromInput: 1 });
     this.elementUpdated();
   },
 
@@ -196,7 +196,7 @@ export default Input.extend({
     const data = this.current;
     var pos = this.normalizeValue(data.val + (data.y - ev.pageY) * step);
     this.prValue = this.validateInputValue(pos).value;
-    model.set('value', this.prValue, { avoidStore: 1 });
+    model.set('value', this.prValue, { avoidStore: 1, fromInput: 1 });
     return false;
   },
 
@@ -211,7 +211,9 @@ export default Input.extend({
 
     if (this.prValue && this.moved) {
       var value = this.prValue - step;
-      model.set('value', value, { avoidStore: 1 }).set('value', value + step);
+      model
+        .set('value', value, { avoidStore: 1, fromInput: 1 })
+        .set('value', value + step, { fromInput: 1 });
       this.elementUpdated();
     }
   },
