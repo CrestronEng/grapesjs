@@ -497,6 +497,7 @@ export default {
         onEnd(e, opts) {
           toggleBodyClass('remove', e, opts);
           editor.trigger('component:resize');
+          editor.trigger('component:resize:end');
           canvas.toggleFramesEvents(1);
           showOffsets = 1;
         },
