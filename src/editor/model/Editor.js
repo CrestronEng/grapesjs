@@ -825,7 +825,17 @@ export default Backbone.Model.extend({
     ['config', 'view', '_previousAttributes', '_events', '_listeners'].forEach(
       i => (this[i] = {})
     );
-    editors.splice(editors.indexOf(editor), 1);
+
+    for (let [key, value] of editors.entries()) {
+      if (value.editor.cid === this.cid) {
+        editors.delete(key);
+        break;
+      }
+    }
+
+    // TODO: revert to this handler after updating to the latest GrapesJS version
+    // editors.splice(editors.indexOf(editor), 1);
+
     $(config.el)
       .empty()
       .attr(this.attrsOrig);
