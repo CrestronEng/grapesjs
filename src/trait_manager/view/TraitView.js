@@ -85,10 +85,21 @@ export default Backbone.View.extend({
    */
   onChange(event) {
     const el = this.getInputElem();
-    if (el && !isUndefined(el.value)) {
-      this.models.forEach(modelRef => {
-        modelRef.set('value', el.value, { fromInput: 1 });
-      });
+
+    if (el) {
+      // favor the query-selected input value because for some reason
+      // "sometimes" the el.value is old
+      let valueToUse = el.value;
+      const input = el.querySelector('input'); // alas, Javascript...
+      if (input && input.value) {
+        valueToUse = input.value;
+      }
+
+      if (!isUndefined(valueToUse)) {
+        this.models.forEach(modelRef => {
+          modelRef.set('value', valueToUse, { fromInput: 1 });
+        });
+      }
     }
 
     this.onEvent({
