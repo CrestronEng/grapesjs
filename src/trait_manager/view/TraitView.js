@@ -38,16 +38,15 @@ export default Backbone.View.extend({
     // this.target = target;
     const { ppfx } = this;
     this.clsField = `${ppfx}field ${ppfx}field-${type}`;
-    [
-      ['change:value', this.onValueChange],
-      ['remove', this.removeView]
-    ].forEach(([event, clb]) => {
-      this.models &&
-        this.models.forEach(modelRef => {
-          modelRef.off(event, clb);
-          this.listenTo(modelRef, event, clb);
-        });
-    });
+    [['change:value', this.onValueChange], ['remove', this.removeView]].forEach(
+      ([event, clb]) => {
+        this.models &&
+          this.models.forEach(modelRef => {
+            modelRef.off(event, clb);
+            this.listenTo(modelRef, event, clb);
+          });
+      }
+    );
 
     this.models &&
       this.models.forEach(modelRef => {
@@ -86,10 +85,21 @@ export default Backbone.View.extend({
    */
   onChange(event) {
     const el = this.getInputElem();
-    if (el && !isUndefined(el.value)) {
-      this.models.forEach(modelRef => {
-        modelRef.set('value', el.value);
-      });
+
+    if (el) {
+      // favor the query-selected input value because for some reason
+      // "sometimes" the el.value is old
+      let valueToUse = el.value;
+      const input = el.querySelector('input'); // alas, Javascript...
+      if (input && input.value) {
+        valueToUse = input.value;
+      }
+
+      if (!isUndefined(valueToUse)) {
+        this.models.forEach(modelRef => {
+          modelRef.set('value', valueToUse, { fromInput: 1 });
+        });
+      }
     }
 
     this.onEvent({
@@ -117,6 +127,11 @@ export default Backbone.View.extend({
       this.postUpdate();
     } else {
       const val = this.getValueForTarget();
+      if (opts.fromInput) {
+        const { em } = this;
+        // this event is not a native GrapesJS event, it was added for CCIDE
+        em.trigger('traitview:change', this, model, val);
+      }
       model.setTargetValue(val, opts);
     }
   },
