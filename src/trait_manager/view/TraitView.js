@@ -129,6 +129,7 @@ export default Backbone.View.extend({
       const val = this.getValueForTarget();
       if (opts.fromInput) {
         const { em } = this;
+        // this event is not a native GrapesJS event, it was added for CCIDE
         em.trigger('traitview:change', this, model, val);
       }
       model.setTargetValue(val, opts);

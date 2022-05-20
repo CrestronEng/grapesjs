@@ -439,6 +439,7 @@ export default Backbone.View.extend({
       const updated = { [prop]: value };
       const selectedComponents = em.getSelectedAll();
       if (selectedComponents && opt.fromInput) {
+        // this event is not a native GrapesJS event, it was added for CCIDE
         em.trigger('propertyview:change', this, selectedComponents, value);
       }
       selectedComponents.forEach(component => {

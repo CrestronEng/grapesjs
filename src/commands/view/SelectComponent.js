@@ -497,7 +497,7 @@ export default {
         onEnd(e, opts) {
           toggleBodyClass('remove', e, opts);
           editor.trigger('component:resize');
-          editor.trigger('component:resize:end');
+          editor.trigger('component:resize:end'); // this event is not a native GrapesJS event, it was added for CCIDE
           canvas.toggleFramesEvents(1);
           showOffsets = 1;
         },
