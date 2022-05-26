@@ -153,6 +153,7 @@ export default Backbone.View.extend({
 
     model.setStyle(style);
     em && em.trigger('component:toggled'); // Updates Style Manager #2938
+    em && em.trigger('itemview:toggled:display', this, model, style.display); // this event is not a native GrapesJS event, it was added for CCIDE
   },
 
   /**
