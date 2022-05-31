@@ -96,6 +96,9 @@ export default Backbone.View.extend({
       }
 
       if (!isUndefined(valueToUse)) {
+        const { em } = this;
+        em.trigger('traitview:change', this, this.models, valueToUse); // this event is not a native GrapesJS event, it was added for CCIDE
+
         this.models.forEach(modelRef => {
           modelRef.set('value', valueToUse, { fromInput: 1 });
         });
@@ -127,11 +130,6 @@ export default Backbone.View.extend({
       this.postUpdate();
     } else {
       const val = this.getValueForTarget();
-      if (opts.fromInput) {
-        const { em } = this;
-        // this event is not a native GrapesJS event, it was added for CCIDE
-        em.trigger('traitview:change', this, model, val);
-      }
       model.setTargetValue(val, opts);
     }
   },
