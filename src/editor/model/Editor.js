@@ -67,9 +67,7 @@ export default Backbone.Model.extend({
       modules: [],
       toLoad: [],
       opened: {},
-      device: '',
-      traitManager: null, //** CCIDE select / deselect optimization
-      styleManager: null //** CCIDE select / deselect optimization
+      device: ''
     };
   },
 
@@ -217,12 +215,6 @@ export default Backbone.Model.extend({
     // Bind the module to the editor model if public
     !Mod.private && this.set(Mod.name, Mod);
     Mod.onLoad && this.get('toLoad').push(Mod);
-
-    //** CCIDE select / deselect optimization
-    if (Mod.name === 'TraitManager') this.traitManager = Mod;
-    //** CCIDE select / deselect optimization
-    if (Mod.name === 'StyleManager') this.styleManager = Mod;
-
     this.get('modules').push(Mod);
     return this;
   },
@@ -476,13 +468,13 @@ export default Backbone.Model.extend({
 
   disableCollectionUpdateEventHandling() {
     //** CCIDE select / deselect optimization
-    this.traitManager.disableCollectionUpdatedEventHandler();
-    this.styleManager.disableCollectionUpdatedEventHandler();
+    this.get('TraitManager').disableCollectionUpdatedEventHandler();
+    this.get('StyleManager').disableCollectionUpdatedEventHandler();
   },
   enableCollectionUpdateEventHandling() {
     //** CCIDE select / deselect optimization
-    this.traitManager.enableCollectionUpdatedEventHandler();
-    this.styleManager.enableCollectionUpdatedEventHandler();
+    this.get('TraitManager').enableCollectionUpdatedEventHandler();
+    this.get('StyleManager').enableCollectionUpdatedEventHandler();
   },
 
   /**
@@ -891,8 +883,8 @@ export default Backbone.Model.extend({
 
     //** CCIDE select / deselect optimization
     //addresses performance issues closing an editor
-    this.traitManager.disableCollectionUpdatedEventHandler();
-    this.styleManager.disableCollectionUpdatedEventHandler();
+    this.get('TraitManager').disableCollectionUpdatedEventHandler();
+    this.get('StyleManager').disableCollectionUpdatedEventHandler();
 
     this.stopDefault();
     this.get('modules')
