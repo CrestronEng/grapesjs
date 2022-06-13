@@ -391,7 +391,7 @@ export default Backbone.Model.extend({
     const models = isArray(model) ? model : [model];
 
     //** CCIDE select / deselect optimization
-    // set ccideViewIgnoreUpdate to false to stop views
+    // unhook event handlers in order  to stop views
     // from updating for every collection update, except the last
     let reEnableEvents = false;
     if (models.length > 1) {
@@ -423,7 +423,7 @@ export default Backbone.Model.extend({
     selected.remove(selected.filter(s => !contains(els, s), opts));
 
     //** CCIDE select / deselect optimization
-    // set ccideViewIgnoreUpdate to false to stop views
+    // unhook event handlers in order  to stop views
     // from updating for every collection update, except the last
     if (els.length > 1) {
       this.traitManager.disableCollectionUpdatedEventHandler();
@@ -455,7 +455,7 @@ export default Backbone.Model.extend({
     const models = getModel(el, $);
 
     //** CCIDE select / deselect optimization
-    // set ccideViewIgnoreUpdate to false to stop views
+    // unhook event handlers in order  to stop views
     // from updating for every collection update, except the last
     if (models) {
       if (models.length > 1) {

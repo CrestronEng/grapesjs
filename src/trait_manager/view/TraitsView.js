@@ -39,9 +39,6 @@ export default DomainViews.extend({
     this.config.catClass = 'c';
 
     //** CCIDE select / deselect optimization
-    // set ccideViewIgnoreUpdate to false to stop views
-    // from updating for every collection update, except the last
-
     this.enableViewCollectionUpdatedEventHandler();
 
     if (this.config.showSearch) {
