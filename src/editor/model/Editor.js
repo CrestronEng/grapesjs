@@ -395,8 +395,7 @@ export default Backbone.Model.extend({
     // from updating for every collection update, except the last
     let reEnableEvents = false;
     if (models.length > 1) {
-      this.traitManager.disableCollectionUpdatedEventHandler();
-      this.styleManager.disableCollectionUpdatedEventHandler();
+      this.disableCollectionUpdateEventHandling();
       reEnableEvents = true;
     }
 
@@ -405,8 +404,7 @@ export default Backbone.Model.extend({
     for (let i = 0; i < models.length; i += 1) {
       try {
         if (reEnableEvents && i === stopIgnoringAtIndex) {
-          this.traitManager.enableCollectionUpdatedEventHandler();
-          this.styleManager.enableCollectionUpdatedEventHandler();
+          this.enableCollectionUpdateEventHandling();
         }
 
         if (models[i] && !models[i].get('selectable')) continue;
@@ -426,8 +424,7 @@ export default Backbone.Model.extend({
     // unhook event handlers in order  to stop views
     // from updating for every collection update, except the last
     if (els.length > 1) {
-      this.traitManager.disableCollectionUpdatedEventHandler();
-      this.styleManager.disableCollectionUpdatedEventHandler();
+      this.disableCollectionUpdateEventHandling();
 
       const silentEls = [els.length - 1];
       try {
@@ -438,8 +435,7 @@ export default Backbone.Model.extend({
       } catch (e) {
         console.error(e);
       }
-      this.traitManager.enableCollectionUpdatedEventHandler();
-      this.styleManager.enableCollectionUpdatedEventHandler();
+      this.enableCollectionUpdateEventHandling();
     }
     selected.add(els[els.length - 1], opts);
   },
@@ -459,8 +455,7 @@ export default Backbone.Model.extend({
     // from updating for every collection update, except the last
     if (models) {
       if (models.length > 1) {
-        this.traitManager.disableCollectionUpdatedEventHandler();
-        this.styleManager.disableCollectionUpdatedEventHandler();
+        this.disableCollectionUpdateEventHandling();
 
         try {
           const silentModels = [models.length - 1];
@@ -471,14 +466,23 @@ export default Backbone.Model.extend({
         } catch (e) {
           console.error(e);
         }
-        if (models.length > 1) {
-          this.traitManager.enableCollectionUpdatedEventHandler();
-          this.styleManager.enableCollectionUpdatedEventHandler();
-        }
+
+        this.enableCollectionUpdateEventHandling();
       }
       selected.remove(models[models.length - 1], opts);
       this.trigger('traits:update');
     }
+  },
+
+  disableCollectionUpdateEventHandling() {
+    //** CCIDE select / deselect optimization
+    this.traitManager.disableCollectionUpdatedEventHandler();
+    this.styleManager.disableCollectionUpdatedEventHandler();
+  },
+  enableCollectionUpdateEventHandling() {
+    //** CCIDE select / deselect optimization
+    this.traitManager.enableCollectionUpdatedEventHandler();
+    this.styleManager.enableCollectionUpdatedEventHandler();
   },
 
   /**
