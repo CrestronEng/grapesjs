@@ -35,10 +35,15 @@ export default DomainViews.extend({
     this.catsClass = `${this.ppfx}categories`;
     this.noCatClass = `${this.ppfx}no-cat`;
     this.contClass = `${this.ppfx}c`;
-    const toListen = 'component:toggled';
+    this.componentToggledListener = 'component:toggled'; //** CCIDE select / deselect optimization
     this.config.catClass = 'c';
 
-    this.listenTo(this.em, toListen, this.updatedCollection);
+    //** CCIDE select / deselect optimization
+    // set ccideViewIgnoreUpdate to false to stop views
+    // from updating for every collection update, except the last
+
+    this.enableViewCollectionUpdatedEventHandler();
+
     if (this.config.showSearch) {
       this.searchField = new Filter({
         clb: this.inclusiveSearchCallBack.bind(this),
@@ -241,5 +246,21 @@ export default DomainViews.extend({
     this.$el.addClass(cls);
     this.onRender();
     return this;
+  },
+  disableViewCollectionUpdatedEventHandler() {
+    //** CCIDE select / deselect optimization
+    this.stopListening(
+      this.em,
+      this.componentToggledListener,
+      this.updatedCollection
+    );
+  },
+  enableViewCollectionUpdatedEventHandler() {
+    //** CCIDE select / deselect optimization
+    this.listenTo(
+      this.em,
+      this.componentToggledListener,
+      this.updatedCollection
+    );
   }
 });
