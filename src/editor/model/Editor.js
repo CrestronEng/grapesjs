@@ -883,8 +883,7 @@ export default Backbone.Model.extend({
 
     //** CCIDE select / deselect optimization
     //addresses performance issues closing an editor
-    this.get('TraitManager').disableCollectionUpdatedEventHandler();
-    this.get('StyleManager').disableCollectionUpdatedEventHandler();
+    this.disableCollectionUpdateEventHandling();
 
     this.stopDefault();
     this.get('modules')
