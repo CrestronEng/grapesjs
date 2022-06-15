@@ -303,7 +303,7 @@ export default Backbone.Model.extend({
     const els = multiple ? el : [el];
     const selected = this.get('selected');
     const mltSel = this.getConfig('multipleSelection');
-    let added;
+    //let added;
     const models = [];
     // If an array is passed remove all selected
     // expect those yet to be selected
@@ -358,7 +358,8 @@ export default Backbone.Model.extend({
         return this.addSelected(model);
       }
 */
-      added = model;
+
+      //added = model;
       models.push(model);
     }
 
@@ -381,22 +382,54 @@ export default Backbone.Model.extend({
     const model = getModel(el, $);
     const models = isArray(model) ? model : [model];
 
-    for (let i = 0; i < models.length; i += 1) {
-      if (models[i] && !models[i].get('selectable')) return;
-      const selected = this.get('selected');
-      opts.forceChange && selected.remove(models[i], opts);
-      selected.add(models[i], opts);
+    //** CCIDE select / deselect optimization
+    // unhook event handlers in order  to stop views
+    // from updating for every collection update, except the last
+    let reEnableEvents = false;
+    if (models.length > 1) {
+      this.disableCollectionUpdateEventHandling();
+      reEnableEvents = true;
     }
 
+    const selected = this.get('selected');
+    const stopIgnoringAtIndex = models.length - 1;
+    for (let i = 0; i < models.length; i += 1) {
+      try {
+        if (reEnableEvents && i === stopIgnoringAtIndex) {
+          this.enableCollectionUpdateEventHandling();
+        }
+
+        if (models[i] && !models[i].get('selectable')) continue;
+        opts.forceChange && selected.remove(models[i], opts);
+        selected.add(models[i], opts);
+      } catch (e) {
+        console.error(e);
+      }
+    }
     this.trigger('traits:update');
   },
   dragSelect(els, opts = {}) {
     const selected = this.get('selected');
     selected.remove(selected.filter(s => !contains(els, s), opts));
 
-    for (let i = 0; i < els.length; i += 1) {
-      selected.add(els[i], opts);
+    //** CCIDE select / deselect optimization
+    // unhook event handlers in order  to stop views
+    // from updating for every collection update, except the last
+    if (els.length > 1) {
+      this.disableCollectionUpdateEventHandling();
+
+      const silentEls = [els.length - 1];
+      try {
+        for (let i = 0; i < els.length - 1; i++) {
+          silentEls[i] = els[i];
+        }
+        selected.add(silentEls, opts);
+      } catch (e) {
+        console.error(e);
+      }
+      this.enableCollectionUpdateEventHandling();
     }
+    selected.add(els[els.length - 1], opts);
   },
 
   /**
@@ -406,8 +439,42 @@ export default Backbone.Model.extend({
    * @private
    */
   removeSelected(el, opts = {}) {
-    this.get('selected').remove(getModel(el, $), opts);
-    this.trigger('traits:update');
+    const selected = this.get('selected');
+    const models = getModel(el, $);
+
+    //** CCIDE select / deselect optimization
+    // unhook event handlers in order  to stop views
+    // from updating for every collection update, except the last
+    if (models) {
+      if (models.length > 1) {
+        this.disableCollectionUpdateEventHandling();
+
+        try {
+          const silentModels = [models.length - 1];
+          for (let i = 0; i < models.length - 1; i++) {
+            silentModels[i] = models[i];
+          }
+          selected.remove(silentModels, opts);
+        } catch (e) {
+          console.error(e);
+        }
+
+        this.enableCollectionUpdateEventHandling();
+      }
+      selected.remove(models[models.length - 1], opts);
+      this.trigger('traits:update');
+    }
+  },
+
+  disableCollectionUpdateEventHandling() {
+    //** CCIDE select / deselect optimization
+    this.get('TraitManager').disableCollectionUpdatedEventHandler();
+    this.get('StyleManager').disableCollectionUpdatedEventHandler();
+  },
+  enableCollectionUpdateEventHandling() {
+    //** CCIDE select / deselect optimization
+    this.get('TraitManager').enableCollectionUpdatedEventHandler();
+    this.get('StyleManager').enableCollectionUpdatedEventHandler();
   },
 
   /**
@@ -813,6 +880,11 @@ export default Backbone.Model.extend({
     const { config } = this;
     const editor = this.getEditor();
     const { editors = [] } = config.grapesjs || {};
+
+    //** CCIDE select / deselect optimization
+    //addresses performance issues closing an editor
+    this.disableCollectionUpdateEventHandling();
+
     this.stopDefault();
     this.get('modules')
       .slice()
