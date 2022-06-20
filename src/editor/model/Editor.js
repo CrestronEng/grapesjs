@@ -399,7 +399,7 @@ export default Backbone.Model.extend({
           this.enableCollectionUpdateEventHandling();
         }
 
-        if (models[i] && !models[i].get('selectable')) continue;
+        if (models[i] && !models[i].get('selectable')) return;
         opts.forceChange && selected.remove(models[i], opts);
         selected.add(models[i], opts);
       } catch (e) {
