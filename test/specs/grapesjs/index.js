@@ -493,7 +493,7 @@ describe('GrapesJS', () => {
         // Remove el1
         editor.selectRemove(el1);
         expect(editor.getSelected()).toBe(el2);
-        expect(editor.getSelectedAll().length).toBe(3);
+        expect(editor.getSelectedAll().length).toBe(2);
         // Add el1 via toggle
         editor.selectToggle(el1);
         //expect(editor.getSelected()).toBe(el1);
@@ -532,9 +532,9 @@ describe('GrapesJS', () => {
         editor.selectRemove(el2); // deselected=3
         editor.select(el1); // selected=4
 
-        expect(selected).toBeCalledTimes(3);
-        expect(deselected).toBeCalledTimes(2);
-        expect(toggled).toBeCalledTimes(5);
+        expect(selected).toBeCalledTimes(4);
+        expect(deselected).toBeCalledTimes(3);
+        expect(toggled).toBeCalledTimes(7);
       });
     });
   });
