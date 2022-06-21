@@ -385,27 +385,31 @@ export default Backbone.Model.extend({
     //** CCIDE select / deselect optimization
     // unhook event handlers in order  to stop views
     // from updating for every collection update, except the last
-    let reEnableEvents = false;
-    if (models.length > 1) {
-      this.disableCollectionUpdateEventHandling();
-      reEnableEvents = true;
-    }
+
+    //inline function
+    const addModel = function(model, selected, opts) {
+      if (model && !model.get('selectable')) return;
+      opts.forceChange && selected.remove(model, opts);
+      selected.add(model, opts);
+    };
 
     const selected = this.get('selected');
-    const stopIgnoringAtIndex = models.length - 1;
-    for (let i = 0; i < models.length; i += 1) {
-      try {
-        if (reEnableEvents && i === stopIgnoringAtIndex) {
-          this.enableCollectionUpdateEventHandling();
-        }
 
-        if (models[i] && !models[i].get('selectable')) return;
-        opts.forceChange && selected.remove(models[i], opts);
-        selected.add(models[i], opts);
-      } catch (e) {
-        console.error(e);
+    const magicIndex = models.length - 1; //upper limit of for loop & index of last models element
+    if (magicIndex > 0) {
+      this.disableCollectionUpdateEventHandling();
+
+      for (let i = 0; i < magicIndex; i += 1) {
+        try {
+          addModel(models[i], selected, opts);
+        } catch (e) {
+          console.error(e);
+        }
       }
+      this.enableCollectionUpdateEventHandling();
     }
+
+    addModel(models[magicIndex], selected, opts);
     this.trigger('traits:update');
   },
   dragSelect(els, opts = {}) {
@@ -440,7 +444,8 @@ export default Backbone.Model.extend({
    */
   removeSelected(el, opts = {}) {
     const selected = this.get('selected');
-    const models = getModel(el, $);
+    const model = getModel(el, $);
+    const models = isArray(model) ? model : [model];
 
     //** CCIDE select / deselect optimization
     // unhook event handlers in order  to stop views
