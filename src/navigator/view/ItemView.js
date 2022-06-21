@@ -189,6 +189,7 @@ export default Backbone.View.extend({
     inputEl.scrollLeft = 0;
     inputEl[inputProp] = false;
     this.model.set({ 'custom-name': name });
+    em && em.trigger('itemview:change', this, this.model, name); // this event is not a native GrapesJS event, it was added for CCIDE
     em && em.setEditing(0);
     $el
       .find(`.${this.inputNameCls}`)
