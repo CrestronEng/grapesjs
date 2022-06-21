@@ -386,9 +386,12 @@ export default Backbone.Model.extend({
     // unhook event handlers in order  to stop views
     // from updating for every collection update, except the last
     let reEnableEvents = false;
+    let eventsEnabled = true;
+
     if (models.length > 1) {
       this.disableCollectionUpdateEventHandling();
       reEnableEvents = true;
+      eventsEnabled = false;
     }
 
     const selected = this.get('selected');
@@ -397,6 +400,7 @@ export default Backbone.Model.extend({
       try {
         if (reEnableEvents && i === stopIgnoringAtIndex) {
           this.enableCollectionUpdateEventHandling();
+          eventsEnabled = true;
         }
 
         if (models[i] && !models[i].get('selectable')) return;
@@ -404,6 +408,8 @@ export default Backbone.Model.extend({
         selected.add(models[i], opts);
       } catch (e) {
         console.error(e);
+      } finally {
+        if (!eventsEnabled) this.enableCollectionUpdateEventHandling();
       }
     }
     this.trigger('traits:update');
