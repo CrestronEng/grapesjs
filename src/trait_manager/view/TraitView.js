@@ -99,9 +99,26 @@ export default Backbone.View.extend({
         const { em } = this;
         em.trigger('traitview:change', this, this.models, valueToUse); // this event is not a native GrapesJS event, it was added for CCIDE
 
-        this.models.forEach(modelRef => {
-          modelRef.set('value', valueToUse, { fromInput: 1 });
-        });
+        //** CCIDE optimization
+        const setProperty = function(modelRef, value) {
+          modelRef.set('value', value, { fromInput: 1 });
+        };
+
+        const magicIndex = this.models.length - 1; //upper limit of for loop & index of last models element
+        if (magicIndex > 0) {
+          this.em.disableCollectionUpdateEventHandling();
+
+          for (let i = 0; i < magicIndex; i += 1) {
+            try {
+              setProperty(this.models[i], valueToUse);
+            } catch (e) {
+              console.error('Error setting trait', e);
+            }
+          }
+          this.em.enableCollectionUpdateEventHandling();
+        }
+
+        setProperty(this.models[magicIndex], valueToUse);
       }
     }
 
