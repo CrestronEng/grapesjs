@@ -430,18 +430,23 @@ export default Backbone.View.extend({
 
     // Avoid target update if the changes comes from it
     if (!opt.fromTarget) {
+      const { em } = this.config;
+      let selectedComponents;
+      if (em) {
+        selectedComponents = em.getSelectedAll();
+        if (selectedComponents && opt.fromInput) {
+          // this event is not a native GrapesJS event, it was added for CCIDE
+          // note: this event must fire before updating targets below
+          em.trigger('propertyview:change', this, selectedComponents, value);
+        }
+      }
+
       this.getTargets().forEach(target => this.__updateTarget(target, opt));
 
       // Update the editor and selected components about the change
-      const { em } = this.config;
       if (!em) return;
       const prop = model.get('property');
       const updated = { [prop]: value };
-      const selectedComponents = em.getSelectedAll();
-      if (selectedComponents && opt.fromInput) {
-        // this event is not a native GrapesJS event, it was added for CCIDE
-        em.trigger('propertyview:change', this, selectedComponents, value);
-      }
       selectedComponents.forEach(component => {
         !opt.noEmit && em.trigger('component:update', component, updated, opt);
         em.trigger('component:styleUpdate', component, prop, opt);
