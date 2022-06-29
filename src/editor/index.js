@@ -288,19 +288,7 @@ export default (config = {}) => {
      * });
      */
     addComponents(components, opts) {
-      //** CCIDE optimization
-      let result;
-
-      try {
-        em.disableCollectionUpdateEventHandling();
-        result = this.getWrapper().append(components, opts);
-      } catch (e) {
-        console.error('Error adding components', e);
-      } finally {
-        em.enableCollectionUpdateEventHandling();
-      }
-
-      return result;
+      return this.getWrapper().append(components, opts);
     },
 
     /**
