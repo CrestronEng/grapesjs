@@ -99,6 +99,7 @@ export default Input.extend({
           changed = 0;
           const cl = getColor(color);
           cpStyle.backgroundColor = cl;
+          // TODO - delete all old undo scope code once PR1946 gets merged to develop
           const undo = em.getEditor().Undo;
           if (undo) {
             undo.scope.usingUndoSuppressScope(() => {
@@ -120,6 +121,8 @@ export default Input.extend({
           changed = 0;
           previousColor = getColor(color);
           isHideOnSelection = false;
+          const propertyId = model.attributes.property;
+          em.trigger('inputcolor:show', this, propertyId, previousColor); // this event is not a native GrapesJS event, it was added for CCIDE
         },
         hide(color) {
           const undo = em.getEditor().Undo;
@@ -133,6 +136,7 @@ export default Input.extend({
             }
             cpStyle.backgroundColor = previousColor;
             colorEl.spectrum('set', previousColor);
+            // TODO - delete all old undo scope code once PR1946 gets merged to develop
             if (undo) {
               // if coming from selection then assign the color, otherwise suuppress
               if (isHideOnSelection) {

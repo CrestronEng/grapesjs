@@ -196,6 +196,11 @@ export default Input.extend({
     const data = this.current;
     var pos = this.normalizeValue(data.val + (data.y - ev.pageY) * step);
     this.prValue = this.validateInputValue(pos).value;
+
+    const em = model.view.em;
+    const propertyId = model.attributes.property;
+    em.trigger('inputnumber:moveincrement', this, propertyId, this.prValue); // this event is not a native GrapesJS event, it was added for CCIDE
+
     model.set('value', this.prValue, { avoidStore: 1, fromInput: 1 });
     return false;
   },
