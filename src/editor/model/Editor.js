@@ -414,20 +414,13 @@ export default Backbone.Model.extend({
   },
   dragSelect(els, opts = {}) {
     const selected = this.get('selected');
-    const selectionDisabledEventHandlers = selected.length > 0;
-
-    if (selected.length > 0) {
-      this.disableCollectionUpdateEventHandling();
-      selected.remove(selected.filter(s => !contains(els, s), opts));
-      if (els.length === 0) this.enableCollectionUpdateEventHandling();
-    }
+    selected.remove(selected.filter(s => !contains(els, s), opts));
 
     //** CCIDE select / deselect optimization
     // unhook event handlers in order  to stop views
     // from updating for every collection update, except the last
     if (els.length > 1) {
-      if (!selectionDisabledEventHandlers)
-        this.disableCollectionUpdateEventHandling();
+      this.disableCollectionUpdateEventHandling();
 
       const silentEls = [els.length - 1];
       try {
@@ -439,9 +432,8 @@ export default Backbone.Model.extend({
         console.error(e);
       }
       this.enableCollectionUpdateEventHandling();
-
-      selected.add(els[els.length - 1], opts);
     }
+    selected.add(els[els.length - 1], opts);
   },
 
   /**
