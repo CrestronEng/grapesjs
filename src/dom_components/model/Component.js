@@ -897,26 +897,7 @@ const Component = Backbone.Model.extend(Styleable).extend(
           return comp;
         }
       });
-
-      let result = undefined;
-      const magicIndex = toAppend.length - 1; //upper limit of for loop & index of last toAppend element
-      let doEnable = false;
-      if (magicIndex > 0) {
-        try {
-          this.em.disableCollectionUpdateEventHandling();
-          result = this.components().add(toAppend.slice(0, -1), opts);
-          this.em.enableCollectionUpdateEventHandling();
-          result.push(this.components().add(toAppend[magicIndex], opts));
-        } catch (e) {
-          doEnable = true;
-          console.error('Error in Component.append: ' + e);
-        } finally {
-          if (doEnable) this.em.enableCollectionUpdateEventHandling();
-        }
-      } else {
-        result = this.components().add(toAppend[magicIndex], opts);
-      }
-
+      const result = this.components().add(toAppend, opts);
       return isArray(result) ? result : [result];
     },
 
