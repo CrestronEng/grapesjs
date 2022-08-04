@@ -139,6 +139,9 @@ export default Backbone.View.extend({
     const { display } = style;
     const hidden = display == 'none';
 
+    const newValue = hidden ? prevDisplay : 'none';
+    em && em.trigger('itemview:toggled:display', this, model, newValue); // this event is not a native GrapesJS event, it was added for CCIDE
+
     if (hidden) {
       delete style.display;
 
@@ -153,7 +156,6 @@ export default Backbone.View.extend({
 
     model.setStyle(style);
     em && em.trigger('component:toggled'); // Updates Style Manager #2938
-    em && em.trigger('itemview:toggled:display', this, model, style.display); // this event is not a native GrapesJS event, it was added for CCIDE
   },
 
   /**
@@ -188,8 +190,8 @@ export default Backbone.View.extend({
     const name = inputEl.textContent;
     inputEl.scrollLeft = 0;
     inputEl[inputProp] = false;
-    this.model.set({ 'custom-name': name });
     em && em.trigger('itemview:change', this, this.model, name); // this event is not a native GrapesJS event, it was added for CCIDE
+    this.model.set({ 'custom-name': name });
     em && em.setEditing(0);
     $el
       .find(`.${this.inputNameCls}`)

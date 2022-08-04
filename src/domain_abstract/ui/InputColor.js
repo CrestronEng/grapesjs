@@ -99,21 +99,12 @@ export default Input.extend({
           changed = 0;
           const cl = getColor(color);
           cpStyle.backgroundColor = cl;
-          // TODO - delete all old undo scope code once PR1946 gets merged to develop
-          const undo = em.getEditor().Undo;
-          if (undo) {
-            undo.scope.usingUndoSuppressScope(() => {
-              model.setValueFromInput(cl, 0);
-            }, 100);
-          } else {
-            model.setValueFromInput(cl, 0);
-          }
+          model.setValueFromInput(cl, 0);
         },
         change(color) {
           changed = 1;
           const cl = getColor(color);
           cpStyle.backgroundColor = cl;
-          model.setValueFromInput(0, 0); // for UndoManager
           model.setValueFromInput(cl);
           self.noneColor = 0;
         },
@@ -125,7 +116,6 @@ export default Input.extend({
           em.trigger('inputcolor:show', this, propertyId, previousColor); // this event is not a native GrapesJS event, it was added for CCIDE
         },
         hide(color) {
-          const undo = em.getEditor().Undo;
           if (!changed && previousColor) {
             if (self.noneColor) {
               previousColor = '';
@@ -136,21 +126,7 @@ export default Input.extend({
             }
             cpStyle.backgroundColor = previousColor;
             colorEl.spectrum('set', previousColor);
-            // TODO - delete all old undo scope code once PR1946 gets merged to develop
-            if (undo) {
-              // if coming from selection then assign the color, otherwise suuppress
-              if (isHideOnSelection) {
-                undo.scope.usingUndoPushScope(() => {
-                  model.setValueFromInput(previousColor, 0);
-                });
-              } else {
-                undo.scope.usingUndoSuppressScope(() => {
-                  model.setValueFromInput(previousColor, 0);
-                }, 100);
-              }
-            } else {
-              model.setValueFromInput(previousColor, 0);
-            }
+            model.setValueFromInput(previousColor, 0);
           }
         }
       });
