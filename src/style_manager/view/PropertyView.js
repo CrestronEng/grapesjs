@@ -152,7 +152,7 @@ export default Backbone.View.extend({
    */
   clear(ev) {
     ev && ev.stopPropagation();
-    this.model.clearValue();
+    this.model.clearValue({ fromInput: 1 });
     // Skip one stack with setTimeout to avoid inconsistencies (eg. visible on padding composite clear)
     setTimeout(() => this.targetUpdated());
   },
