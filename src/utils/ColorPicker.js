@@ -374,8 +374,11 @@ export default function($, undefined) {
       cancelButton.bind('click.spectrum', function(e) {
         e.stopPropagation();
         e.preventDefault();
-        revert();
-        hide();
+        if (visible) {
+          // only do the following if the color picker is actually being shown
+          revert();
+          hide();
+        }
       });
 
       clearButton.attr('title', opts.clearText);
