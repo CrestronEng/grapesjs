@@ -395,9 +395,19 @@ export default Backbone.View.extend({
       { event: 'wheel', class: 'WheelEvent' }
     ].forEach(obj =>
       obj.event.split(' ').forEach(event => {
-        doc.addEventListener(event, ev =>
-          this.el.dispatchEvent(createCustomEvent(ev, obj.class))
-        );
+        doc.addEventListener(event, ev => {
+          //** CCIDE modification for CCID-1560: support for arrow keys moving UI elements
+          //
+          // The dispatchEvent() is not returning false when the customEvent.preventDefault() is called.
+          // However, the customEvent.defaultPrevented value is set properly.  Logic has been added to
+          // call the ev.preventDefault() if the customEvent.defaultPrevented value is true.
+
+          const customEvent = createCustomEvent(ev, obj.class);
+          this.el.dispatchEvent(customEvent);
+          if (customEvent.defaultPrevented) {
+            ev.preventDefault();
+          }
+        });
       })
     );
 
