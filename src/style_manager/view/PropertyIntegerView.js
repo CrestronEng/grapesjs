@@ -17,7 +17,11 @@ export default PropertyView.extend({
 
   setValue(value) {
     const parsed = this.model.parseValue(value);
-    value = `${parsed.value}${parsed.unit}`;
+    if (parsed.unit === 'name') {
+      value = `${value}`;
+    } else {
+      value = `${parsed.value}${parsed.unit}`;
+    }
     this.inputInst.setValue(value, { silent: 1 });
   },
 

@@ -681,23 +681,10 @@ describe('PropertyFactory', () => {
   test('Build font-size', () => {
     var res = {
       type: 'integer',
-      units: ['px', 'em', 'rem', '%'],
+      units: ['px', '%', 'name'],
       defaults: 'medium',
       min: 0,
-      fixedValues: [
-        'medium',
-        'xx-small',
-        'x-small',
-        'small',
-        'large',
-        'x-large',
-        'xx-large',
-        'smaller',
-        'larger',
-        'length',
-        'initial',
-        'inherit'
-      ]
+      fixedValues: ['normal', 'initial', 'inherit']
     };
     res.property = 'font-size';
     expect(obj.build('font-size')).toEqual([res]);

@@ -46,21 +46,6 @@ export default () => ({
           obj.fixedValues = ['initial', 'inherit', 'auto'];
           break;
         case 'font-size':
-          obj.fixedValues = [
-            'medium',
-            'xx-small',
-            'x-small',
-            'small',
-            'large',
-            'x-large',
-            'xx-large',
-            'smaller',
-            'larger',
-            'length',
-            'initial',
-            'inherit'
-          ];
-          break;
         case 'letter-spacing':
         case 'line-height':
           obj.fixedValues = ['normal', 'initial', 'inherit'];
@@ -372,6 +357,8 @@ export default () => ({
           obj.units = ['px', '%'];
           break;
         case 'font-size':
+          obj.units = ['px', '%', 'name'];
+          break;
         case 'letter-spacing':
         case 'line-height':
           obj.units = ['px', 'em', 'rem', '%'];
