@@ -279,8 +279,8 @@ export default Input.extend({
           var uN = valCopy.replace(val, '');
           // Check if exists as unit
           if (indexOf(units, uN) >= 0) unit = uN;
-          if (unit === 'name' && val === '') {
-            val = valCopy;
+          if (units.includes('name') && val === '') {
+            if (valCopy != 'px' && valCopy != '%') val = valCopy;
           }
         }
       }

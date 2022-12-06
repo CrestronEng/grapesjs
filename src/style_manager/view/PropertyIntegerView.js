@@ -18,7 +18,8 @@ export default PropertyView.extend({
   setValue(value) {
     const parsed = this.model.parseValue(value);
     if (parsed.unit === 'name') {
-      value = `${value}`;
+      value = value.split('name')[0];
+      //value = `${parsed.value}`;
     } else {
       value = `${parsed.value}${parsed.unit}`;
     }
