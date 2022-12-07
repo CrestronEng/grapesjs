@@ -280,7 +280,13 @@ export default Input.extend({
           // Check if exists as unit
           if (indexOf(units, uN) >= 0) unit = uN;
           if (units.includes('name') && val === '') {
-            if (valCopy != 'px' && valCopy != '%') val = valCopy;
+            if (valCopy != 'px' && valCopy != '%') {
+              val = valCopy;
+              if (valCopy.includes('name')) {
+                val = valCopy.split('name')[0];
+                unit = 'name';
+              }
+            }
           }
         }
       }
