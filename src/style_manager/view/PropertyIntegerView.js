@@ -17,7 +17,14 @@ export default PropertyView.extend({
 
   setValue(value) {
     const parsed = this.model.parseValue(value);
-    value = `${parsed.value}${parsed.unit}`;
+    if (parsed.unit === 'name') {
+      //Code to handle newly added 'name' unit for Font-size
+      //CCID-40
+      value = value.split('name')[0];
+      //value = `${parsed.value}`;
+    } else {
+      value = `${parsed.value}${parsed.unit}`;
+    }
     this.inputInst.setValue(value, { silent: 1 });
   },
 
