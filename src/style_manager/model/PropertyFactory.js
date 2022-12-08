@@ -45,7 +45,7 @@ export default () => ({
         case 'flex-basis':
           obj.fixedValues = ['initial', 'inherit', 'auto'];
           break;
-        case 'font-size':
+        case 'font-size': //fixed values updated for font-size
         case 'letter-spacing':
         case 'line-height':
           obj.fixedValues = ['normal', 'initial', 'inherit'];

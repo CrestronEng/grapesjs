@@ -684,6 +684,7 @@ describe('PropertyFactory', () => {
       units: ['px', '%', 'name'],
       defaults: 'medium',
       min: 0,
+      //Updated fixed values from proprty factory
       fixedValues: ['normal', 'initial', 'inherit']
     };
     res.property = 'font-size';

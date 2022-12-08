@@ -280,6 +280,8 @@ export default Input.extend({
           // Check if exists as unit
           if (indexOf(units, uN) >= 0) unit = uN;
           if (units.includes('name') && val === '') {
+            //Code to handle newly added 'name' unit for Font-size
+            //CCID-40
             if (valCopy != 'px' && valCopy != '%') {
               val = valCopy;
               if (valCopy.includes('name')) {
