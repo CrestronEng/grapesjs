@@ -21,17 +21,19 @@ export default function($, undefined) {
       // Options
       color: false,
       flat: false,
-      showInput: false,
+      showInput: true,
       allowEmpty: false,
       showButtons: true,
       clickoutFiresChange: true,
-      showInitial: false,
-      showPalette: false,
+      showInitial: true,
+      showPalette: true,
       showPaletteOnly: false,
       hideAfterPaletteSelect: false,
       togglePaletteOnly: false,
       showSelectionPalette: true,
       localStorageKey: false,
+      isRGBInputUpdated: false,
+      isHSLInputUpdated: false,
       appendTo: 'body',
       maxSelectionSize: 7,
       cancelText: 'cancel',
@@ -123,9 +125,19 @@ export default function($, undefined) {
         "<div class='sp-alpha'><div class='sp-alpha-inner'><div class='sp-alpha-handle'></div></div></div>",
         '</div>',
         "<div class='sp-input-container sp-cf'>",
-        "<input class='sp-input' type='text' spellcheck='false'  />",
-        '</div>',
+        "<input class='sp-input' type='text' spellcheck='false'  style='background-color:white;'/>",
         "<div class='sp-initial sp-thumb sp-cf'></div>",
+        '</div>',
+        "<div class='sp-input-container' style='background: lightgrey;border: #dae9f0;'>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> R<input type='number' min='0' max='255' class='sp-Red-Input' style='width:37px;height:20px;margin:3px;background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> G<input type='number' min='0' max='255' class='sp-Green-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> B<input type='number' min='0' max='255' class='sp-Blue-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        '</div>',
+        "<div class='sp-input-container' style='background: lightgrey;border: #dae9f0;margin-top: -5px;'>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> H<input type='number' min='0' class='sp-Hue-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> S<input type='number' min='0' class='sp-Sat-Input' style='width:39px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> L<input type='number' min='0' class='sp-Lum-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        '</div>',
         "<div class='sp-button-container sp-cf'>",
         "<a class='sp-cancel' href='#'></a>",
         "<button type='button' class='sp-choose'></button>",
@@ -204,6 +216,8 @@ export default function($, undefined) {
       flat = opts.flat,
       showSelectionPalette = opts.showSelectionPalette,
       localStorageKey = opts.localStorageKey,
+      isRGBInputUpdated = opts.isRGBInputUpdated,
+      isHSLInputUpdated = opts.isHSLInputUpdated,
       theme = opts.theme,
       callbacks = opts.callbacks,
       resize = throttle(reflow, 10),
@@ -249,6 +263,12 @@ export default function($, undefined) {
       cancelButton = container.find('.sp-cancel'),
       clearButton = container.find('.sp-clear'),
       chooseButton = container.find('.sp-choose'),
+      hueInput = container.find('.sp-Hue-Input'),
+      satInput = container.find('.sp-Sat-Input'),
+      lumInput = container.find('.sp-Lum-Input'),
+      redInput = container.find('.sp-Red-Input'),
+      greenInput = container.find('.sp-Green-Input'),
+      blueInput = container.find('.sp-Blue-Input'),
       toggleButton = container.find('.sp-palette-toggle'),
       isInput = boundElement.is('input'),
       isInputTypeColor =
@@ -368,6 +388,37 @@ export default function($, undefined) {
         if (e.keyCode == 13) {
           setFromTextInput();
         }
+      });
+
+      //Initializing the RGB & HSL Input box's events
+      redInput.change(setFromRGBInput);
+      redInput.bind('paste', function() {
+        setTimeout(setFromRGBInput, 1);
+      });
+
+      blueInput.change(setFromRGBInput);
+      blueInput.bind('paste', function() {
+        setTimeout(setFromRGBInput, 1);
+      });
+
+      greenInput.change(setFromRGBInput);
+      greenInput.bind('paste', function() {
+        setTimeout(setFromRGBInput, 1);
+      });
+
+      hueInput.change(setFromHSLInput);
+      hueInput.bind('paste', function() {
+        setTimeout(setFromHSLInput, 1);
+      });
+
+      satInput.change(setFromHSLInput);
+      satInput.bind('paste', function() {
+        setTimeout(setFromHSLInput, 1);
+      });
+
+      lumInput.change(setFromHSLInput);
+      lumInput.bind('paste', function() {
+        setTimeout(setFromHSLInput, 1);
       });
 
       cancelButton.text(opts.cancelText);
@@ -682,6 +733,92 @@ export default function($, undefined) {
           textInput.addClass('sp-validation-error');
         }
       }
+      //Below code updates the RGB & HSL values
+      var color = get();
+      setRGBValues(color);
+      setHSLValues(color);
+    }
+
+    //Function to set RGB values
+    function setRGBValues(color) {
+      var rgb = tinycolor(color).toRgb();
+      redInput.val(rgb.r);
+      greenInput.val(rgb.g);
+      blueInput.val(rgb.b);
+    }
+
+    //Function to set HSL values
+    function setHSLValues(color) {
+      var hsl = tinycolor(color).toHsl();
+      hueInput.val(mathRound(hsl.h));
+      satInput.val(mathRound(hsl.s * 100));
+      lumInput.val(mathRound(hsl.l * 100));
+    }
+
+    //Function will be triggered with R or G or B value changes
+    function setFromRGBInput() {
+      var redVal = redInput.val();
+      var blueVal = blueInput.val();
+      var greenVal = greenInput.val();
+
+      validateRGBInput(redVal, greenVal, blueVal);
+
+      var hexaColor = rgbToHex(redVal, greenVal, blueVal, true);
+      var currentColor = tinycolor(hexaColor);
+      if (currentColor.isValid() && !tinycolor.equals(currentColor, get())) {
+        isRGBInputUpdated = true;
+        set(currentColor);
+        move();
+      }
+    }
+
+    //Function will be triggered with H or S or L value changes
+    function setFromHSLInput() {
+      var hueVal = hueInput.val();
+      var satVal = satInput.val();
+      var lumVal = lumInput.val();
+
+      validateHSLInput(hueVal, satVal, lumVal);
+
+      var rgb = hslToRgb(hueVal, satVal, lumVal);
+      var hexaColor = rgbToHex(rgb.r, rgb.g, rgb.b, true);
+      var currentColor = tinycolor(hexaColor);
+
+      if (currentColor.isValid() && !tinycolor.equals(currentColor, get())) {
+        isHSLInputUpdated = true;
+        set(currentColor);
+        move();
+      }
+    }
+
+    //Function validates the HSL input
+    function validateHSLInput(hueVal, satVal, lumVal) {
+      if (hueVal < 0) hueInput.val(0);
+
+      if (hueVal > 360) hueInput.val(360);
+
+      if (satVal < 0) satInput.val(0);
+
+      if (satVal > 100) satInput.val(100);
+
+      if (lumInput < 0) lumInput.val(0);
+
+      if (lumInput > 100) lumInput.val(100);
+    }
+
+    //Function validates the RGB input
+    function validateRGBInput(redVal, greenVal, blueVal) {
+      if (redVal < 0) redInput.val(0);
+
+      if (redVal > 255) redInput.val(255);
+
+      if (greenVal < 0) greenInput.val(0);
+
+      if (greenVal > 255) greenInput.val(255);
+
+      if (blueVal < 0) blueInput.val(0);
+
+      if (blueVal > 255) blueInput.val(255);
     }
 
     function toggle() {
@@ -907,6 +1044,20 @@ export default function($, undefined) {
       // Update the text entry input as it changes happen
       if (opts.showInput) {
         textInput.val(displayColor);
+      }
+
+      //Updates the HSL input boxes when the color is set through other ways
+      if (isRGBInputUpdated === true) {
+        isRGBInputUpdated = false;
+      } else {
+        setHSLValues(tinycolor(displayColor));
+      }
+
+      //Updates the RGB input boxes when the color is set through other ways
+      if (isHSLInputUpdated === true) {
+        isHSLInputUpdated = false;
+      } else {
+        setRGBValues(tinycolor(displayColor));
       }
 
       if (opts.showPalette) {
