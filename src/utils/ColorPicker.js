@@ -735,12 +735,13 @@ export default function($, undefined) {
       }
       //Below code updates the RGB & HSL values
       var color = get();
-      setRGBValues(color);
-      setHSLValues(color);
+      setRGBValues(color, false);
+      setHSLValues(color, false);
     }
 
     //Function to set RGB values
-    function setRGBValues(color) {
+    function setRGBValues(color, isRGBUpdated) {
+      if (isRGBUpdated) return;
       var rgb = tinycolor(color).toRgb();
       redInput.val(rgb.r);
       greenInput.val(rgb.g);
@@ -748,7 +749,8 @@ export default function($, undefined) {
     }
 
     //Function to set HSL values
-    function setHSLValues(color) {
+    function setHSLValues(color, isHSLUpdated) {
+      if (isHSLUpdated) return;
       var hsl = tinycolor(color).toHsl();
       hueInput.val(mathRound(hsl.h));
       satInput.val(mathRound(hsl.s * 100));
@@ -760,15 +762,22 @@ export default function($, undefined) {
       var redVal = redInput.val();
       var blueVal = blueInput.val();
       var greenVal = greenInput.val();
+      var color = { redVal: redVal, blueVal: blueVal, greenVal: greenVal };
 
-      validateRGBInput(redVal, greenVal, blueVal);
+      validateRGBInput(color);
 
-      var hexaColor = rgbToHex(redVal, greenVal, blueVal, true);
+      var hexaColor = rgbToHex(
+        color.redVal,
+        color.greenVal,
+        color.blueVal,
+        true
+      );
       var currentColor = tinycolor(hexaColor);
       if (currentColor.isValid() && !tinycolor.equals(currentColor, get())) {
         isRGBInputUpdated = true;
         set(currentColor);
         move();
+        isRGBInputUpdated = false;
       }
     }
 
@@ -777,10 +786,10 @@ export default function($, undefined) {
       var hueVal = hueInput.val();
       var satVal = satInput.val();
       var lumVal = lumInput.val();
+      var color = { hueVal: hueVal, satVal: satVal, lumVal: lumVal };
+      validateHSLInput(color);
 
-      validateHSLInput(hueVal, satVal, lumVal);
-
-      var rgb = hslToRgb(hueVal, satVal, lumVal);
+      var rgb = hslToRgb(color.hueVal, color.satVal, color.lumVal);
       var hexaColor = rgbToHex(rgb.r, rgb.g, rgb.b, true);
       var currentColor = tinycolor(hexaColor);
 
@@ -788,37 +797,74 @@ export default function($, undefined) {
         isHSLInputUpdated = true;
         set(currentColor);
         move();
+        isHSLInputUpdated = false;
       }
     }
 
     //Function validates the HSL input
-    function validateHSLInput(hueVal, satVal, lumVal) {
-      if (hueVal < 0) hueInput.val(0);
+    function validateHSLInput(color) {
+      if (color.hueVal < 0) {
+        color.hueVal = 0;
+        hueInput.val(0);
+      }
 
-      if (hueVal > 360) hueInput.val(360);
+      if (color.hueVal > 360) {
+        color.hueVal = 360;
+        hueInput.val(360);
+      }
 
-      if (satVal < 0) satInput.val(0);
+      if (color.satVal < 0) {
+        color.satVal = 0;
+        satInput.val(0);
+      }
 
-      if (satVal > 100) satInput.val(100);
+      if (color.satVal > 100) {
+        color.satVal = 100;
+        satInput.val(100);
+      }
 
-      if (lumInput < 0) lumInput.val(0);
+      if (color.lumVal < 0) {
+        color.lumVal = 0;
+        lumInput.val(0);
+      }
 
-      if (lumInput > 100) lumInput.val(100);
+      if (color.lumVal > 100) {
+        color.lumVal = 100;
+        lumInput.val(100);
+      }
     }
 
     //Function validates the RGB input
-    function validateRGBInput(redVal, greenVal, blueVal) {
-      if (redVal < 0) redInput.val(0);
+    function validateRGBInput(color) {
+      if (color.redVal < 0) {
+        color.redVal = 0;
+        redInput.val(0);
+      }
 
-      if (redVal > 255) redInput.val(255);
+      if (color.redVal > 255) {
+        color.redVal = 255;
+        redInput.val(255);
+      }
 
-      if (greenVal < 0) greenInput.val(0);
+      if (color.greenVal < 0) {
+        color.greenVal = 0;
+        greenInput.val(0);
+      }
 
-      if (greenVal > 255) greenInput.val(255);
+      if (color.greenVal > 255) {
+        color.greenVal = 255;
+        greenInput.val(255);
+      }
 
-      if (blueVal < 0) blueInput.val(0);
+      if (color.blueVal < 0) {
+        color.blueVal = 0;
+        blueInput.val(0);
+      }
 
-      if (blueVal > 255) blueInput.val(255);
+      if (color.blueVal > 255) {
+        color.blueVal = 255;
+        blueInput.val(255);
+      }
     }
 
     function toggle() {
@@ -1047,18 +1093,10 @@ export default function($, undefined) {
       }
 
       //Updates the HSL input boxes when the color is set through other ways
-      if (isRGBInputUpdated === true) {
-        isRGBInputUpdated = false;
-      } else {
-        setHSLValues(tinycolor(displayColor));
-      }
+      setRGBValues(tinycolor(displayColor), isRGBInputUpdated);
 
       //Updates the RGB input boxes when the color is set through other ways
-      if (isHSLInputUpdated === true) {
-        isHSLInputUpdated = false;
-      } else {
-        setRGBValues(tinycolor(displayColor));
-      }
+      setHSLValues(tinycolor(displayColor), isHSLInputUpdated);
 
       if (opts.showPalette) {
         drawPalette();
