@@ -54,7 +54,6 @@ export default Input.extend({
    */
   onColorUnitChange(e) {
     this.updateFromInputColor = true;
-
     this.processSelectedColor();
   },
 
@@ -110,7 +109,6 @@ export default Input.extend({
         if (!inputVal.startsWith('#') || !inputVal.match(/[0-9A-Fa-f]{6}/g)) {
           this.resetInput();
         } else {
-          //const colorValues = { Name: '', Hex: '', RGB: '' };
           let hexVal = '';
           if (!inputVal.startsWith('#')) {
             hexVal = '#' + inputVal;
