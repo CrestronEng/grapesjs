@@ -54,6 +54,12 @@ export default Input.extend({
    */
   onColorUnitChange(e) {
     this.updateFromInputColor = true;
+    if (
+      JSON.stringify(this.currentColorValues) !=
+      JSON.stringify({ Name: '', Hex: '', RGB: '' })
+    )
+      this.refreshCurrentColorValues(this.getInputEl().value);
+
     this.processSelectedColor();
   },
 
@@ -150,6 +156,28 @@ export default Input.extend({
 
     this.refreshUnitsDropdown(unit, this.currentColorValues);
     this.setSelectedColor(unit, this.currentColorValues);
+  },
+
+  refreshCurrentColorValues(inputVal) {
+    if (inputVal.startsWith('#')) {
+      if (this.currentColorValues.Hex != inputVal) {
+        this.setColorValues(
+          this.getColorName(inputVal),
+          this.getRGBValue(hexVal),
+          inputVal
+        );
+      }
+    } else if (inputVal.startsWith('RGB') || inputVal.startsWith('rgb')) {
+      if (this.currentColorValues.RGB != inputVal) {
+        var hexVal = '#' + this.getColorHexByRGB(inputVal);
+        this.setColorValues(this.getColorName(hexVal), inputVal, hexVal);
+      }
+    } else {
+      if (this.currentColorValues.Name != inputVal) {
+        var hexVal = '#' + this.getHexValue(inputVal);
+        this.setColorValues(inputVal, this.getRGBValue(hexVal), hexVal);
+      }
+    }
   },
 
   setColorValues(name, rgb, hex) {
