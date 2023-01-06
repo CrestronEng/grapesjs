@@ -250,17 +250,17 @@ export default Input.extend({
   setSelectedColor(selectedUnit, currentColorValues) {
     switch (selectedUnit) {
       case 'Name': {
-        this.setValue(currentColorValues.Name);
+        this.setValue(currentColorValues.Name + 'Name');
         this.getInputEl().value = currentColorValues.Name;
         break;
       }
       case 'RGB': {
-        this.setValue(currentColorValues.RGB);
+        this.setValue(currentColorValues.RGB + 'RGB');
         this.getInputEl().value = currentColorValues.RGB;
         break;
       }
       case 'Hex': {
-        this.setValue(currentColorValues.Hex);
+        this.setValue(currentColorValues.Hex + 'Hex');
         this.getInputEl().value = currentColorValues.Hex;
         break;
       }
