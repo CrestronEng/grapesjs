@@ -766,11 +766,11 @@ export default function($, undefined) {
 
       validateRGBInput(color);
 
-      var hexaColor = rgbToHex(
+      var hexaColor = rgbaToHex(
         color.redVal,
         color.greenVal,
         color.blueVal,
-        true
+        currentAlpha
       );
       var currentColor = tinycolor(hexaColor);
       if (currentColor.isValid() && !tinycolor.equals(currentColor, get())) {
@@ -790,7 +790,7 @@ export default function($, undefined) {
       validateHSLInput(color);
 
       var rgb = hslToRgb(color.hueVal, color.satVal, color.lumVal);
-      var hexaColor = rgbToHex(rgb.r, rgb.g, rgb.b, true);
+      var hexaColor = rgbaToHex(rgb.r, rgb.g, rgb.b, currentAlpha);
       var currentColor = tinycolor(hexaColor);
 
       if (currentColor.isValid() && !tinycolor.equals(currentColor, get())) {
@@ -2089,10 +2089,10 @@ export default function($, undefined) {
   // Returns an 8 character hex
   function rgbaToHex(r, g, b, a) {
     var hex = [
-      pad2(convertDecimalToHex(a)),
       pad2(mathRound(r).toString(16)),
       pad2(mathRound(g).toString(16)),
-      pad2(mathRound(b).toString(16))
+      pad2(mathRound(b).toString(16)),
+      pad2(convertDecimalToHex(a))
     ];
 
     return hex.join('');
@@ -2687,10 +2687,10 @@ export default function($, undefined) {
     }
     if ((match = matchers.hex8.exec(color))) {
       return {
-        a: convertHexToDecimal(match[1]),
-        r: parseIntFromHex(match[2]),
-        g: parseIntFromHex(match[3]),
-        b: parseIntFromHex(match[4]),
+        r: parseIntFromHex(match[1]),
+        g: parseIntFromHex(match[2]),
+        b: parseIntFromHex(match[3]),
+        a: convertHexToDecimal(match[4]),
         format: named ? 'name' : 'hex8'
       };
     }
