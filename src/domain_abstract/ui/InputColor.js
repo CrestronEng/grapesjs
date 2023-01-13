@@ -45,6 +45,10 @@ export default Input.extend({
       this.getInputEl().value == 'RGB' ||
       this.getInputEl().value == 'rgb'
     ) {
+      this.refreshUnitsDropdown(
+        this.getUnitEl().value,
+        this.currentColorValues
+      );
       return;
     } else {
       //On refocus the currentcolorValues object has to revalidate
@@ -109,17 +113,13 @@ export default Input.extend({
 
   processSelectedColor() {
     const inputVal = this.getInputEl().value;
-    let unit = this.getUnitEl().value;
 
     if (!this.updateFromInputColor) {
       if (inputVal.startsWith('#')) {
-        unit = 'Hex';
         this.getUnitEl().value = 'Hex';
       } else if (inputVal.startsWith('RGB')) {
-        unit = 'RGB';
         this.getUnitEl().value = 'RGB';
       } else if (this.getHexValue(inputVal) != undefined) {
-        unit = 'Name';
         this.getUnitEl().value = 'Name';
       }
     }
@@ -159,7 +159,7 @@ export default Input.extend({
         if (!rgb.test(inputVal)) {
           this.resetInput();
         } else {
-          var hexVal = '#' + this.getColorHexByRGB(inputVal);
+          const hexVal = '#' + this.getColorHexByRGB(inputVal);
           console.log('RGB block :' + inputVal);
           this.setColorValues(this.getColorName(hexVal), inputVal, hexVal);
           console.log('RGB block :' + JSON.stringify(this.currentColorValues));
@@ -181,7 +181,7 @@ export default Input.extend({
             return;
           }
 
-          var hexVal = '#' + this.getHexValue(inputVal);
+          const hexVal = '#' + this.getHexValue(inputVal);
           this.setColorValues(inputVal, this.getRGBValue(hexVal), hexVal);
         }
         break;
@@ -204,14 +204,15 @@ export default Input.extend({
         this.currentColorValues.Name = this.getColorName(inputVal);
         this.currentColorValues.Hex = inputVal;
         this.currentColorValues.RGB = this.getRGBValue(inputVal);
+        return;
       }
 
       if (inputVal.startsWith('rgb') || inputVal.startsWith('RGB')) {
         const hexVal = '#' + this.getColorHexByRGB(inputVal);
-
         this.currentColorValues.RGB = inputVal;
         this.currentColorValues.Name = this.getColorName(hexVal);
         this.currentColorValues.Hex = hexVal;
+        return;
       }
 
       if (
@@ -219,10 +220,10 @@ export default Input.extend({
         !inputVal.startsWith('#')
       ) {
         const hexVal = '#' + this.getHexValue(inputVal);
-
         this.currentColorValues.Name = inputVal;
         this.currentColorValues.RGB = this.getRGBValue(hexVal);
         this.currentColorValues.Hex = hexVal;
+        return;
       }
     }
   },
@@ -357,7 +358,7 @@ export default Input.extend({
     }
     const tinyColor = window.tinycolor;
     const name = tinyColor.hexNames[colorHex];
-    return name;
+    return name != 'undefined' ? name : '';
   },
 
   getColorHexByRGB(rgb) {
@@ -529,16 +530,11 @@ export default Input.extend({
     this.getUnitEl();
   },
 
-  initialize(opts = {}) {
-    Input.prototype.initialize.apply(this, arguments);
-
-    console.log('Color Input Initialize()');
-    console.log('input color: ' + this.getInputEl().value);
-    console.log('unit: ' + this.getUnitEl().value);
-
-    this.doc = document;
-    //this.listenTo(this.model, 'change:unit', this.processSelectedColor);
-  },
+  // initialize(opts = {}) {
+  //   Input.prototype.initialize.apply(this, arguments);
+  //   this.doc = document;
+  //   //this.listenTo(this.model, 'change:unit', this.processSelectedColor);
+  // },
 
   resetInput() {
     this.getInputEl().value = '';
