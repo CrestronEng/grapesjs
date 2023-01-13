@@ -117,7 +117,7 @@ export default Input.extend({
     if (!this.updateFromInputColor) {
       if (inputVal.startsWith('#')) {
         this.getUnitEl().value = 'Hex';
-      } else if (inputVal.startsWith('RGB')) {
+      } else if (inputVal.startsWith('RGB') || inputVal.startsWith('rgb')) {
         this.getUnitEl().value = 'RGB';
       } else if (this.getHexValue(inputVal) != undefined) {
         this.getUnitEl().value = 'Name';
@@ -407,8 +407,10 @@ export default Input.extend({
     if (valueClr) {
       if (valueClr.startsWith('#')) {
         this.getUnitEl().value = 'Hex';
+        this.processSelectedColor();
       } else if (valueClr.startsWith('RGB') || valueClr.startsWith('rgb')) {
         this.getUnitEl().value = 'RGB';
+        this.processSelectedColor();
       } else if (this.getHexValue(valueClr) != undefined) {
         this.getUnitEl().value = 'Name';
       }
