@@ -88,14 +88,14 @@ export default Input.extend({
       if (this.currentColorValues.Hex != inputVal) {
         this.setColorValues(
           this.getColorName(inputVal),
-          this.getRGBValue(hexVal),
+          this.getRGBValue(inputVal),
           inputVal
         );
       }
       return;
     } else if (inputVal.startsWith('RGB') || inputVal.startsWith('rgb')) {
       if (this.currentColorValues.RGB != inputVal) {
-        var hexVal = '#' + this.getColorHexByRGB(inputVal);
+        const hexVal = '#' + this.getColorHexByRGB(inputVal);
         this.setColorValues(this.getColorName(hexVal), inputVal, hexVal);
       }
       return;
@@ -104,7 +104,7 @@ export default Input.extend({
       !(inputVal.startsWith('RGB') || inputVal.startsWith('rgb'))
     ) {
       if (this.currentColorValues.Name != inputVal) {
-        var hexVal = '#' + this.getHexValue(inputVal);
+        const hexVal = '#' + this.getHexValue(inputVal);
         this.setColorValues(inputVal, this.getRGBValue(hexVal), hexVal);
       }
       return;
@@ -123,6 +123,8 @@ export default Input.extend({
         this.getUnitEl().value = 'Name';
       }
     }
+
+    const unit = this.getUnitEl().value;
 
     switch (unit) {
       case 'Hex': {
