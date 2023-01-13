@@ -405,14 +405,21 @@ export default Input.extend({
     }
 
     if (valueClr) {
-      if (valueClr.startsWith('#')) {
+      if (valueClr.startsWith('#') && this.getUnitEl().value != 'Hex') {
         this.getUnitEl().value = 'Hex';
-        this.processSelectedColor();
-      } else if (valueClr.startsWith('RGB') || valueClr.startsWith('rgb')) {
+        this.onColorUnitChange(null);
+      } else if (
+        (valueClr.startsWith('RGB') || valueClr.startsWith('rgb')) &&
+        this.getUnitEl().value != 'RGB'
+      ) {
         this.getUnitEl().value = 'RGB';
-        this.processSelectedColor();
-      } else if (this.getHexValue(valueClr) != undefined) {
+        this.onColorUnitChange(null);
+      } else if (
+        this.getHexValue(valueClr) != undefined &&
+        this.getUnitEl().value != 'Name'
+      ) {
         this.getUnitEl().value = 'Name';
+        this.onColorUnitChange(null);
       }
     }
   },
