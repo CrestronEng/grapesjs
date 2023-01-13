@@ -62,8 +62,6 @@ export default Input.extend({
    */
   onColorUnitChange(e) {
     this.updateFromInputColor = true;
-    // if (JSON.stringify(this.currentColorValues) != JSON.stringify({ Name: '', Hex: '', RGB: '' }))
-    //   this.refreshCurrentColorValues(this.getInputEl().value);
 
     //On refocus the currentcolorValues object has to revalidate
     this.revalidateColorObjectOnFocus(this.getInputEl().value);
@@ -147,7 +145,6 @@ export default Input.extend({
         break;
       }
       case 'RGB': {
-        console.log('Entering RGB block :' + inputVal);
         let range = '(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|2[0-5]{2})';
         let rgb = new RegExp(
           '^rgb\\(\\s*' +
@@ -162,9 +159,7 @@ export default Input.extend({
           this.resetInput();
         } else {
           const hexVal = '#' + this.getColorHexByRGB(inputVal);
-          console.log('RGB block :' + inputVal);
           this.setColorValues(this.getColorName(hexVal), inputVal, hexVal);
-          console.log('RGB block :' + JSON.stringify(this.currentColorValues));
         }
         break;
       }
@@ -229,25 +224,6 @@ export default Input.extend({
       }
     }
   },
-
-  //refreshCurrentColorValues(inputVal) {
-
-  // if (inputVal.startsWith('#')) {
-  //   if (this.currentColorValues.Hex != inputVal) {
-  //     this.setColorValues(this.getColorName(inputVal), this.getRGBValue(hexVal), inputVal);
-  //   }
-  // } else if (inputVal.startsWith('RGB') || inputVal.startsWith('rgb')) {
-  //   if (this.currentColorValues.RGB != inputVal) {
-  //     var hexVal = '#' + this.getColorHexByRGB(inputVal);
-  //     this.setColorValues(this.getColorName(hexVal), inputVal, hexVal);
-  //   }
-  // } else {
-  //   if (this.currentColorValues.Name != inputVal) {
-  //     var hexVal = '#' + this.getHexValue(inputVal);
-  //     this.setColorValues(inputVal, this.getRGBValue(hexVal), hexVal);
-  //   }
-  // }
-  //},
 
   setColorValues(name, rgb, hex) {
     if (this.currentColorValues == null || this.currentColorValues == undefined)
@@ -404,6 +380,7 @@ export default Input.extend({
       this.noneColor = value == 'none';
     }
 
+    //On refocusing the control, based on the color value we need to set the unit
     if (valueClr) {
       if (valueClr.startsWith('#') && this.getUnitEl().value != 'Hex') {
         this.getUnitEl().value = 'Hex';
@@ -540,12 +517,6 @@ export default Input.extend({
     this.currentColorValues = { Name: '', Hex: '', RGB: '' };
     this.getUnitEl();
   },
-
-  // initialize(opts = {}) {
-  //   Input.prototype.initialize.apply(this, arguments);
-  //   this.doc = document;
-  //   //this.listenTo(this.model, 'change:unit', this.processSelectedColor);
-  // },
 
   resetInput() {
     this.getInputEl().value = '';
