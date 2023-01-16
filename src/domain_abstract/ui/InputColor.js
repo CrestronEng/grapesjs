@@ -62,15 +62,21 @@ export default Input.extend({
    */
   onColorUnitChange(e) {
     this.updateFromInputColor = true;
+    const inputVal = this.getInputEl().value;
+
+    if (inputVal == 'none' || inputVal == 'None') {
+      this.initializeColors();
+      return;
+    }
 
     //On refocus the currentcolorValues object has to revalidate
-    this.revalidateColorObjectOnFocus(this.getInputEl().value);
+    this.revalidateColorObjectOnFocus(inputVal);
 
     if (
       JSON.stringify(this.currentColorValues) ==
       JSON.stringify({ Name: '', Hex: '', RGB: '' })
     ) {
-      this.processSelectedColor(this.getInputEl().value);
+      this.processSelectedColor(inputVal);
     }
 
     this.processSelectedUnit();
@@ -318,7 +324,7 @@ export default Input.extend({
     if (colorName.startsWith('#')) {
       colorName = colorName.substring(1);
     }
-
+    colorName = colorName.toLowerCase();
     const tinyColor = window.tinycolor;
     const hexVal = tinyColor.names[colorName];
     return hexVal;
@@ -334,6 +340,7 @@ export default Input.extend({
     if (colorHex.startsWith('#')) {
       colorHex = colorHex.substring(1);
     }
+    colorHex = colorHex.toLowerCase();
     const tinyColor = window.tinycolor;
     const name = tinyColor.hexNames[colorHex];
     return name != 'undefined' ? name : '';
@@ -382,18 +389,19 @@ export default Input.extend({
 
     //On refocusing the control, based on the color value we need to set the unit
     if (valueClr) {
-      if (valueClr.startsWith('#') && this.getUnitEl().value != 'Hex') {
+      const selectedUnit = this.getUnitEl().value;
+      if (valueClr.startsWith('#') && selectedUnit != 'Hex') {
         this.getUnitEl().value = 'Hex';
         this.onColorUnitChange(null);
       } else if (
         (valueClr.startsWith('RGB') || valueClr.startsWith('rgb')) &&
-        this.getUnitEl().value != 'RGB'
+        selectedUnit != 'RGB'
       ) {
         this.getUnitEl().value = 'RGB';
         this.onColorUnitChange(null);
       } else if (
         this.getHexValue(valueClr) != undefined &&
-        this.getUnitEl().value != 'Name'
+        selectedUnit != 'Name'
       ) {
         this.getUnitEl().value = 'Name';
         this.onColorUnitChange(null);
