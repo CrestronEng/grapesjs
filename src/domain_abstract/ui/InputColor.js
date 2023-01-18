@@ -539,7 +539,7 @@ export default Input.extend({
   },
 
   isValidHexInput(inputVal) {
-    return isHex(inputVal) && inputVal.match(/[0-9A-Fa-f]{6}/g);
+    return this.isHex(inputVal) && inputVal.match(/[0-9A-Fa-f]{6}/g);
   },
 
   render() {
