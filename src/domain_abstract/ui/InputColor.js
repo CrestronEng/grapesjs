@@ -332,7 +332,8 @@ export default Input.extend({
     const tinyColor = window.tinycolor;
     //
     let hexValue = tinyColor(rgb).toHex8();
-    if (rgb == 'rgb(0, 0, 0)') {
+    let alpha = tinyColor(rgb).getCurrentAlpha();
+    if (rgb == 'rgb(0, 0, 0)' || alpha == 1) {
       hexValue = tinyColor(rgb).toHex();
     }
 
@@ -359,6 +360,10 @@ export default Input.extend({
    * @param {Object} opts
    */
   setValue(val, opts = {}) {
+    if (this.isSettingValue) {
+      return;
+    }
+    this.isSettingValue = true;
     const model = this.model;
     const def = model.get('defaults');
     const value = !isUndefined(val) ? val : !isUndefined(def) ? def : '';
@@ -390,8 +395,13 @@ export default Input.extend({
       ) {
         this.getUnitEl().value = 'Name';
         this.onColorUnitChange(null);
+      } else {
+        this.initializeColors();
+        this.revalidateColorObjectOnFocus(valueClr);
+        this.refreshUnitsDropdown(selectedUnit, this.currentColorValues);
       }
     }
+    this.isSettingValue = false;
   },
 
   /**
@@ -557,6 +567,7 @@ export default Input.extend({
     Input.prototype.render.call(this);
     this.unitEl = null;
     this.updateFromInputColor = false;
+    this.isSettingValue = false;
     this.getColorEl();
     const unit = this.getUnitEl();
     this.initializeColors();
