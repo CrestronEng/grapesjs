@@ -41,7 +41,6 @@ export default Input.extend({
     this.updateFromInputColor = true;
     if (
       this.getInputEl().value == '#' ||
-      this.getInputEl().value == '' ||
       this.getInputEl().value == 'RGB' ||
       this.getInputEl().value == 'rgb'
     ) {
@@ -331,7 +330,12 @@ export default Input.extend({
 
   getColorHexByRGB(rgb) {
     const tinyColor = window.tinycolor;
-    const hexValue = tinyColor(rgb).toHex();
+    //
+    let hexValue = tinyColor(rgb).toHex8();
+    if (rgb == 'rgb(0, 0, 0)') {
+      hexValue = tinyColor(rgb).toHex();
+    }
+
     return hexValue;
   },
 
@@ -508,8 +512,15 @@ export default Input.extend({
   },
 
   resetInput() {
-    this.getInputEl().value = '';
-    this.getUnitEl();
+    let val = '';
+    if (this.model && this.model.attributes && this.model.attributes.value) {
+      val = this.model.attributes.value;
+      this.currentColorValues = { Name: '', Hex: '', RGB: '' };
+      this.revalidateColorObjectOnFocus(val);
+    } else {
+      this.getInputEl().value = '';
+      this.getUnitEl();
+    }
   },
 
   isRGB(inputVal) {
