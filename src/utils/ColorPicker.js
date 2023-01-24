@@ -1715,6 +1715,9 @@ export default function($, undefined) {
         ')'
       );
     },
+    getCurrentAlpha: function() {
+      return this._a;
+    },
     toString: function(format) {
       var formatSet = !!format;
       format = format || this._format;
