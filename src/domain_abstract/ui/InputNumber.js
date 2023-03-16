@@ -294,6 +294,19 @@ export default Input.extend({
       }
     }
 
+    if (val && val != '') {
+      if (unit == 'px' || unit == '%') {
+        val = isNaN(val) ? '' : val;
+      } else if (unit == 'name') {
+        var regFixed = new RegExp('^' + fixed.join('|'), 'g');
+        if (fixed.length && regFixed.test(val)) {
+          val = val.match(regFixed)[0];
+          unit = '';
+          force = 1;
+        }
+      }
+    }
+
     if (!limitlessMax && !isUndefined(max) && max !== '')
       val = val > max ? max : val;
     if (!limitlessMin && !isUndefined(min) && min !== '')
