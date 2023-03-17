@@ -68,7 +68,14 @@ export default Input.extend({
    */
   handleChange(e) {
     e.stopPropagation();
-    this.setValue(this.getInputEl().value, { fromInput: 1 });
+    var input = this.getInputEl().value;
+    //checks for invalid chars appending in the input box
+    input = this.checkInvalidCharacters(input, this.model.get('unit'));
+    if (input != '') {
+      this.setValue(input, { fromInput: 1 });
+    } else {
+      this.getInputEl().value = input;
+    }
     this.elementUpdated();
   },
 
@@ -80,6 +87,21 @@ export default Input.extend({
     var value = this.getUnitEl().value;
     this.model.set('unit', value);
     this.elementUpdated();
+  },
+
+  checkInvalidCharacters(val, unit) {
+    if (val && val != '') {
+      if (unit == 'px' || unit == '%') {
+        val = isNaN(val) ? '' : val;
+      } else if (unit == 'name') {
+        var fixed = this.model.get('fixedValues');
+        var regFixed = new RegExp('^' + fixed.join('|'), 'g');
+        if (fixed.length && regFixed.test(val)) {
+          val = val.match(regFixed)[0];
+        }
+      }
+    }
+    return val;
   },
 
   /**
@@ -293,19 +315,9 @@ export default Input.extend({
         }
       }
     }
-
-    if (val && val != '') {
-      if (unit == 'px' || unit == '%') {
-        val = isNaN(val) ? '' : val;
-      } else if (unit == 'name') {
-        var regFixed = new RegExp('^' + fixed.join('|'), 'g');
-        if (fixed.length && regFixed.test(val)) {
-          val = val.match(regFixed)[0];
-          unit = '';
-          force = 1;
-        }
-      }
-    }
+    //checks for invalid chars appending in the input box
+    //ex: mediumpx, pxpx, etc
+    val = this.checkInvalidCharacters(val, unit);
 
     if (!limitlessMax && !isUndefined(max) && max !== '')
       val = val > max ? max : val;
