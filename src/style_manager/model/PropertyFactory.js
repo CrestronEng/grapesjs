@@ -128,6 +128,8 @@ export default () => ({
         case 'flex-grow':
         case 'flex-shrink':
         case 'flex-basis':
+        case 'row-gap':
+        case 'column-gap':
           obj.type = 'integer';
           break;
         case 'margin':
@@ -207,6 +209,8 @@ export default () => ({
         case 'transform-rotate-z':
         case 'order':
         case 'flex-grow':
+        case 'row-gap':
+        case 'column-gap':
           obj.defaults = 0;
           break;
         case 'border-top-left-radius':
@@ -369,6 +373,8 @@ export default () => ({
         case 'box-shadow-blur':
         case 'box-shadow-spread':
         case 'perspective':
+        case 'row-gap':
+        case 'column-gap':
           obj.units = ['px'];
           break;
         case 'transition-duration':
