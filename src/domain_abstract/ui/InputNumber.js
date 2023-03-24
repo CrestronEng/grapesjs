@@ -90,14 +90,16 @@ export default Input.extend({
   },
 
   checkInvalidCharacters(val, unit) {
-    if (val && val != '') {
-      if (unit == 'px' || unit == '%') {
-        val = isNaN(val) ? '' : val;
-      } else if (unit == 'name') {
-        var fixed = this.model.get('fixedValues');
-        var regFixed = new RegExp('^' + fixed.join('|'), 'g');
-        if (fixed.length && regFixed.test(val)) {
-          val = val.match(regFixed)[0];
+    if (this.model && this.model.get('name') == 'Font Size') {
+      if (val && val != '') {
+        if (unit == 'px' || unit == '%') {
+          val = isNaN(val) ? '' : val;
+        } else if (unit == 'name') {
+          var fixed = this.model.get('fixedValues');
+          var regFixed = new RegExp('^' + fixed.join('|'), 'g');
+          if (fixed.length && regFixed.test(val)) {
+            val = val.match(regFixed)[0];
+          }
         }
       }
     }
