@@ -71,11 +71,12 @@ export default Input.extend({
     var input = this.getInputEl().value;
     //checks for invalid chars appending in the input box
     input = this.checkInvalidCharacters(input, this.model.get('unit'));
-    if (input != '') {
-      this.setValue(input, { fromInput: 1 });
-    } else {
+    this.setValue(input, { fromInput: 1 });
+
+    if (input != this.getInputEl().value) {
       this.getInputEl().value = input;
     }
+
     this.elementUpdated();
   },
 
