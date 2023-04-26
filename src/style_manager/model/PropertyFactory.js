@@ -340,9 +340,6 @@ export default () => ({
         case 'margin-left':
         case 'padding-right':
         case 'padding-left':
-        case 'min-width':
-        case 'max-width':
-        case 'width':
           obj.units = ['px', '%', 'vw'];
           break;
         case 'flex-basis':
@@ -375,6 +372,9 @@ export default () => ({
         case 'perspective':
         case 'row-gap':
         case 'column-gap':
+        case 'min-width':
+        case 'max-width':
+        case 'width':
           obj.units = ['px'];
           break;
         case 'transition-duration':

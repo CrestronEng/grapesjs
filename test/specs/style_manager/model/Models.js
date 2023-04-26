@@ -527,7 +527,7 @@ describe('PropertyFactory', () => {
   test('Build width family', () => {
     var res = {
       type: 'integer',
-      units: ['px', '%', 'vw'],
+      units: ['px'],
       defaults: 'auto',
       fixedValues: ['initial', 'inherit', 'auto'],
       min: 0
