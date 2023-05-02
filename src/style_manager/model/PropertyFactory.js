@@ -329,9 +329,6 @@ export default () => ({
         case 'margin-bottom':
         case 'padding-top':
         case 'padding-bottom':
-        case 'min-height':
-        case 'max-height':
-        case 'height':
           obj.units = ['px', '%', 'vh'];
           break;
         case 'right':
@@ -375,6 +372,9 @@ export default () => ({
         case 'min-width':
         case 'max-width':
         case 'width':
+        case 'min-height':
+        case 'max-height':
+        case 'height':
           obj.units = ['px'];
           break;
         case 'transition-duration':
