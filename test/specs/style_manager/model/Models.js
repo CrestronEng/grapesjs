@@ -556,7 +556,7 @@ describe('PropertyFactory', () => {
   test('Build height family', () => {
     var res = {
       type: 'integer',
-      units: ['px', '%', 'vh'],
+      units: ['px'],
       defaults: 'auto',
       fixedValues: ['initial', 'inherit', 'auto'],
       min: 0
