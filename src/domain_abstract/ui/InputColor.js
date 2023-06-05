@@ -366,7 +366,11 @@ export default Input.extend({
     this.isSettingValue = true;
     const model = this.model;
     const def = model.get('defaults');
-    const value = !isUndefined(val) ? val : !isUndefined(def) ? def : '';
+    const value = !isUndefined(val)
+      ? val.replace(/\s+/g, '')
+      : !isUndefined(def)
+      ? def
+      : '';
     const inputEl = this.getInputEl();
     const colorEl = this.getColorEl();
     const valueClr = value != 'none' ? value : '';
