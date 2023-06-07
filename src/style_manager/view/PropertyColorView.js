@@ -4,7 +4,9 @@ import InputColor from 'domain_abstract/ui/InputColor';
 export default PropertyIntegerView.extend({
   setValue(value, opts = {}) {
     opts = { ...opts, silent: 1 };
-    this.inputInst.setValue(value, opts);
+    if (this.inputInst != undefined && this.inputInst.setValue != undefined) {
+      this.inputInst.setValue(value, opts);
+    }
   },
 
   remove() {
