@@ -150,8 +150,9 @@ export default Input.extend({
         if (!this.isValidRGBInput(inputVal)) {
           this.resetInput();
         } else {
-          const hexVal = '#' + this.getColorHexByRGB(inputVal);
-          this.setColor(this.getColorName(hexVal), inputVal, hexVal);
+          const rgbVal = inputVal.replace(/\s+/g, '');
+          const hexVal = '#' + this.getColorHexByRGB(rgbVal);
+          this.setColor(this.getColorName(hexVal), rgbVal, hexVal);
         }
         break;
       }
