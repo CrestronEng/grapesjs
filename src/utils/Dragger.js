@@ -61,7 +61,10 @@ export default class Dragger {
       doc: 0,
 
       // Scale result points, can also be a function
-      scale: 1
+      scale: 1,
+
+      // Editor canvas zoom value
+      zoom: 1
     };
     bindAll(this, 'drag', 'stop', 'keyHandle', 'handleScroll');
     this.setOptions(opts);
@@ -297,7 +300,9 @@ export default class Dragger {
   move(x, y, end) {
     const { el, opts } = this;
     const pos = this.startPosition;
-    if (!pos) return;
+    // Added to avoid component initial movement in zoom mode
+    const ignoreStartMove = opts.zoom !== 1 && x === 0 && y === 0;
+    if (!pos || ignoreStartMove) return;
     const { setPosition } = opts;
     const xPos = pos.x + x;
     const yPos = pos.y + y;
