@@ -153,7 +153,6 @@ export default (config = {}) => {
         'Panels',
         'Canvas',
         'Parser',
-        'Undo',
         'CodeManager',
         'UndoManager',
         'RichTextEditor',
@@ -366,10 +365,6 @@ export default (config = {}) => {
       return this;
     },
 
-    lassoSelect(el, opts) {
-      em.dragSelect(el, opts);
-      return this;
-    },
     /**
      * Add component to selection
      * @param  {Component|HTMLElement|Array} el Component to select
@@ -464,10 +459,6 @@ export default (config = {}) => {
       return em.store(clb);
     },
 
-    storeData() {
-      return em.storeData();
-    },
-
     /**
      * Load data from the current storage
      * @param {Function} clb Callback function
@@ -475,10 +466,6 @@ export default (config = {}) => {
      */
     load(clb) {
       return em.load(clb);
-    },
-
-    loadData(data = {}) {
-      return em.loadData(data);
     },
 
     /**
