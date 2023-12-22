@@ -473,13 +473,17 @@ export default Backbone.Model.extend({
 
   disableCollectionUpdateEventHandling() {
     //** CCIDE select / deselect optimization
-    this.get('TraitManager').disableCollectionUpdatedEventHandler();
-    this.get('StyleManager').disableCollectionUpdatedEventHandler();
+    this.get('TraitManager').disableCollectionUpdatedEventHandler &&
+      this.get('TraitManager').disableCollectionUpdatedEventHandler();
+    this.get('StyleManager').disableCollectionUpdatedEventHandler &&
+      this.get('StyleManager').disableCollectionUpdatedEventHandler();
   },
   enableCollectionUpdateEventHandling() {
     //** CCIDE select / deselect optimization
-    this.get('TraitManager').enableCollectionUpdatedEventHandler();
-    this.get('StyleManager').enableCollectionUpdatedEventHandler();
+    this.get('TraitManager').enableCollectionUpdatedEventHandler &&
+      this.get('TraitManager').enableCollectionUpdatedEventHandler();
+    this.get('StyleManager').enableCollectionUpdatedEventHandler &&
+      this.get('StyleManager').enableCollectionUpdatedEventHandler();
   },
 
   /**
