@@ -61,10 +61,7 @@ export default class Dragger {
       doc: 0,
 
       // Scale result points, can also be a function
-      scale: 1,
-
-      // Editor canvas zoom value
-      zoom: 1
+      scale: 1
     };
     bindAll(this, 'drag', 'stop', 'keyHandle', 'handleScroll');
     this.setOptions(opts);
@@ -137,25 +134,11 @@ export default class Dragger {
       x: globScrollDiff.x + lastScrollDiff.x,
       y: globScrollDiff.y + lastScrollDiff.y
     };
-    let delta = {};
     this.globScrollDiff = glDiff;
-    if (currentPos.y > startPointer.y) {
-      delta = {
-        x: currentPos.x - startPointer.x + glDiff.x,
-        y: currentPos.y - startPointer.y + glDiff.y
-      };
-    } else if (currentPos.y < startPointer.y) {
-      delta = {
-        x: currentPos.x - startPointer.x + glDiff.x,
-        y: currentPos.y - startPointer.y + glDiff.y - 22
-      };
-    } else if (currentPos.y == startPointer.y) {
-      delta = {
-        x: currentPos.x - startPointer.x + glDiff.x,
-        y: currentPos.y - startPointer.y + glDiff.y
-      };
-    }
-
+    const delta = {
+      x: currentPos.x - startPointer.x + glDiff.x,
+      y: currentPos.y - startPointer.y + glDiff.y
+    };
     this.lastScrollDiff = resetPos();
     let { lockedAxis } = this;
 
@@ -300,9 +283,7 @@ export default class Dragger {
   move(x, y, end) {
     const { el, opts } = this;
     const pos = this.startPosition;
-    // Added to avoid component initial movement in zoom mode
-    const ignoreStartMove = opts.zoom !== 1 && x === 0 && y === 0;
-    if (!pos || ignoreStartMove) return;
+    if (!pos) return;
     const { setPosition } = opts;
     const xPos = pos.x + x;
     const yPos = pos.y + y;
@@ -358,6 +339,7 @@ export default class Dragger {
   getPointerPos(ev) {
     const getPos = this.opts.getPointerPosition;
     const pEv = getPointerEvent(ev);
+
     return getPos
       ? getPos(ev)
       : {
