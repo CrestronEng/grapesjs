@@ -24,17 +24,17 @@
  * @module UndoManager
  */
 
-//import UndoManager from 'backbone-undo';
+import UndoManager from 'backbone-undo';
 
 export default () => {
-  // let em;
-  // let um;
-  // let config;
-  // let beforeCache;
-  // const configDef = {
-  //   maximumStackLength: 500
-  // };
-  // const hasSkip = opts => opts.avoidStore || opts.noUndo;
+  let em;
+  let um;
+  let config;
+  let beforeCache;
+  const configDef = {
+    maximumStackLength: 500
+  };
+  const hasSkip = opts => opts.avoidStore || opts.noUndo;
 
   return {
     name: 'UndoManager',
@@ -45,65 +45,65 @@ export default () => {
      * @private
      */
     init(opts = {}) {
-      // config = { ...opts, ...configDef };
-      // em = config.em;
-      // this.em = em;
-      // um = new UndoManager({ track: true, register: [], ...config });
-      // um.changeUndoType('change', { condition: false });
-      // um.changeUndoType('add', {
-      //   on(model, collection, options = {}) {
-      //     if (hasSkip(options)) return;
-      //     return {
-      //       object: collection,
-      //       before: undefined,
-      //       after: model,
-      //       options: { ...options }
-      //     };
-      //   }
-      // });
-      // um.changeUndoType('remove', {
-      //   on(model, collection, options = {}) {
-      //     if (hasSkip(options)) return;
-      //     return {
-      //       object: collection,
-      //       before: model,
-      //       after: undefined,
-      //       options: { ...options }
-      //     };
-      //   }
-      // });
-      // const customUndoType = {
-      //   on(object, value, opt = {}) {
-      //     !beforeCache && (beforeCache = object.previousAttributes());
-      //
-      //     if (hasSkip(opt)) {
-      //       return;
-      //     } else {
-      //       const result = {
-      //         object,
-      //         before: beforeCache,
-      //         after: object.toJSON({ keepSymbols: 1 })
-      //       };
-      //       beforeCache = null;
-      //       return result;
-      //     }
-      //   },
-      //
-      //   undo(model, bf, af, opt) {
-      //     model.set(bf);
-      //   },
-      //
-      //   redo(model, bf, af, opt) {
-      //     model.set(af);
-      //   }
-      // };
+      config = { ...opts, ...configDef };
+      em = config.em;
+      this.em = em;
+      um = new UndoManager({ track: true, register: [], ...config });
+      um.changeUndoType('change', { condition: false });
+      um.changeUndoType('add', {
+        on(model, collection, options = {}) {
+          if (hasSkip(options)) return;
+          return {
+            object: collection,
+            before: undefined,
+            after: model,
+            options: { ...options }
+          };
+        }
+      });
+      um.changeUndoType('remove', {
+        on(model, collection, options = {}) {
+          if (hasSkip(options)) return;
+          return {
+            object: collection,
+            before: model,
+            after: undefined,
+            options: { ...options }
+          };
+        }
+      });
+      const customUndoType = {
+        on(object, value, opt = {}) {
+          !beforeCache && (beforeCache = object.previousAttributes());
 
-      // const events = ['style', 'attributes', 'content', 'src'];
-      // events.forEach(ev => um.addUndoType(`change:${ev}`, customUndoType));
-      // um.on('undo redo', () =>
-      //   em.trigger('component:toggled change:canvasOffset')
-      // );
-      // ['undo', 'redo'].forEach(ev => um.on(ev, () => em.trigger(ev)));
+          if (hasSkip(opt)) {
+            return;
+          } else {
+            const result = {
+              object,
+              before: beforeCache,
+              after: object.toJSON({ keepSymbols: 1 })
+            };
+            beforeCache = null;
+            return result;
+          }
+        },
+
+        undo(model, bf, af, opt) {
+          model.set(bf);
+        },
+
+        redo(model, bf, af, opt) {
+          model.set(af);
+        }
+      };
+
+      const events = ['style', 'attributes', 'content', 'src'];
+      events.forEach(ev => um.addUndoType(`change:${ev}`, customUndoType));
+      um.on('undo redo', () =>
+        em.trigger('component:toggled change:canvasOffset')
+      );
+      ['undo', 'redo'].forEach(ev => um.on(ev, () => em.trigger(ev)));
 
       return this;
     },
@@ -116,8 +116,7 @@ export default () => {
      * // { ... }
      */
     getConfig() {
-      // return config;
-      return {};
+      return config;
     },
 
     /**
@@ -129,7 +128,7 @@ export default () => {
      * um.add(someModelOrCollection);
      */
     add(entity) {
-      //um.register(entity);
+      um.register(entity);
       return this;
     },
 
@@ -141,7 +140,7 @@ export default () => {
      * um.remove(someModelOrCollection);
      */
     remove(entity) {
-      // um.unregister(entity);
+      um.unregister(entity);
       return this;
     },
 
@@ -152,7 +151,7 @@ export default () => {
      * um.removeAll();
      */
     removeAll() {
-      // um.unregisterAll();
+      um.unregisterAll();
       return this;
     },
 
@@ -163,7 +162,7 @@ export default () => {
      * um.start();
      */
     start() {
-      //  um.startTracking();
+      um.startTracking();
       return this;
     },
 
@@ -174,7 +173,7 @@ export default () => {
      * um.stop();
      */
     stop() {
-      // um.stopTracking();
+      um.stopTracking();
       return this;
     },
 
@@ -185,7 +184,7 @@ export default () => {
      * um.undo();
      */
     undo(all = true) {
-      // !em.isEditing() && um.undo(all);
+      !em.isEditing() && um.undo(all);
       return this;
     },
 
@@ -196,7 +195,7 @@ export default () => {
      * um.undoAll();
      */
     undoAll() {
-      //um.undoAll();
+      um.undoAll();
       return this;
     },
 
@@ -207,7 +206,7 @@ export default () => {
      * um.redo();
      */
     redo(all = true) {
-      //  !em.isEditing() && um.redo(all);
+      !em.isEditing() && um.redo(all);
       return this;
     },
 
@@ -218,7 +217,7 @@ export default () => {
      * um.redoAll();
      */
     redoAll() {
-      // um.redoAll();
+      um.redoAll();
       return this;
     },
 
@@ -229,8 +228,7 @@ export default () => {
      * um.hasUndo();
      */
     hasUndo() {
-      // return um.isAvailable('undo');
-      return false;
+      return um.isAvailable('undo');
     },
 
     /**
@@ -240,8 +238,7 @@ export default () => {
      * um.hasRedo();
      */
     hasRedo() {
-      //return um.isAvailable('redo');
-      return false;
+      return um.isAvailable('redo');
     },
 
     /**
@@ -252,8 +249,7 @@ export default () => {
      * stack.each(item => ...);
      */
     getStack() {
-      // return um.stack;
-      return [];
+      return um.stack;
     },
 
     /**
@@ -266,24 +262,24 @@ export default () => {
      * inserted component will be returned in the list) by returning an array length of 1.
      * @return {Array}
      */
-    // getStackGroup() {
-    //   const result = [];
-    //   const inserted = [];
-    //
-    //   this.getStack().forEach(item => {
-    //     const index = item.get('magicFusionIndex');
-    //     if (inserted.indexOf(index) < 0) {
-    //       inserted.push(index);
-    //       result.push(item);
-    //     }
-    //   });
-    //
-    //   return result;
-    // },
-    //
-    // getPointer() {
-    //   return this.getStack().pointer;
-    // },
+    getStackGroup() {
+      const result = [];
+      const inserted = [];
+
+      this.getStack().forEach(item => {
+        const index = item.get('magicFusionIndex');
+        if (inserted.indexOf(index) < 0) {
+          inserted.push(index);
+          result.push(item);
+        }
+      });
+
+      return result;
+    },
+
+    getPointer() {
+      return this.getStack().pointer;
+    },
 
     /**
      * Clear the stack
@@ -292,18 +288,18 @@ export default () => {
      * um.clear();
      */
     clear() {
-      // um.clear();
+      um.clear();
       return this;
     },
 
-    // getInstance() {
-    //   return um;
-    // },
+    getInstance() {
+      return um;
+    },
 
     destroy() {
-      // this.clear().removeAll();
-      //  [em, um, config, beforeCache].forEach(i => (i = {}));
-      //  this.em = {};
+      this.clear().removeAll();
+      [em, um, config, beforeCache].forEach(i => (i = {}));
+      this.em = {};
     }
   };
 };
