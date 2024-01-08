@@ -1,7 +1,7 @@
 import { extend, bindAll } from 'underscore';
 import Backbone from 'backbone';
 import { on, off } from 'utils/mixins';
-import SelectComponent from './SelectComponent';
+import SelectComponent from 'overrides/commands/view/SelectComponent';
 import SelectPosition from './SelectPosition';
 
 const $ = Backbone.$;
