@@ -31,7 +31,7 @@ import { isArray } from 'underscore';
 import defaults from './config/config';
 import CssRule from './model/CssRule';
 import CssRules from './model/CssRules';
-import CssRulesView from './view/CssRulesView';
+import CssRulesView from 'overrides/css_composer/view/CssRulesView';
 import Selectors from 'selector_manager/model/Selectors';
 import Selector from 'selector_manager/model/Selector';
 
