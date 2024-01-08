@@ -1,5 +1,5 @@
 import Backbone from 'backbone';
-import FrameView from './FrameView';
+import FrameView from 'overrides/canvas/view/FrameView';
 import { bindAll, isNumber, isNull, debounce } from 'underscore';
 import { createEl, motionsEv } from 'utils/dom';
 import Dragger from 'utils/Dragger';
