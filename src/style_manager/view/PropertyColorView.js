@@ -1,5 +1,5 @@
 import PropertyIntegerView from './PropertyIntegerView';
-import InputColor from 'domain_abstract/ui/InputColor';
+import InputColor from 'overrides/domain_abstract/ui/InputColor';
 
 export default PropertyIntegerView.extend({
   setValue(value, opts = {}) {
