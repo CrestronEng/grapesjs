@@ -1,6 +1,6 @@
 import Dragger from './Dragger';
 import Sorter from './Sorter';
-import Resizer from './Resizer';
+import Resizer from 'overrides/utils/Resizer';
 
 export default () => {
   return {

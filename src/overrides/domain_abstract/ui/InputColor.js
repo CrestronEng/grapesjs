@@ -1,6 +1,6 @@
 import Backbone from 'backbone';
 import { isUndefined } from 'underscore';
-import ColorPicker from 'utils/ColorPicker';
+import ColorPicker from 'overrides/utils/ColorPicker';
 import Input from 'domain_abstract/ui/Input';
 
 const $ = Backbone.$;
