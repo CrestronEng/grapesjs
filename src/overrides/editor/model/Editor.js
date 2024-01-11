@@ -21,7 +21,7 @@ const deps = [
   require('storage_manager'),
   require('device_manager'),
   require('parser'),
-  require('style_manager'),
+  require('overrides/style_manager'),
   require('selector_manager'),
   require('modal_dialog'),
   require('code_manager'),

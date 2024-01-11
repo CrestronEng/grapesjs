@@ -15,7 +15,7 @@ import PropertySlider from './PropertySlider';
 import PropertySliderView from './../view/PropertySliderView';
 import PropertyInteger from './PropertyInteger';
 import PropertyIntegerView from './../view/PropertyIntegerView';
-import PropertyView from './../view/PropertyView';
+import PropertyView from 'overrides/style_manager/view/PropertyView';
 
 export default Backbone.Collection.extend(TypeableCollection).extend({
   extendViewApi: 1,

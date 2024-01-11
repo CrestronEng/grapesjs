@@ -34,9 +34,9 @@
  */
 
 import { isElement } from 'underscore';
-import defaults from './config/config';
-import Sectors from './model/Sectors';
-import Properties from './model/Properties';
+import defaults from 'style_manager/config/config';
+import Sectors from 'style_manager/model/Sectors';
+import Properties from 'style_manager/model/Properties';
 import PropertyFactory from './model/PropertyFactory';
 import SectorsView from './view/SectorsView';
 
@@ -425,6 +425,14 @@ export default () => {
       SectView.remove();
       [c, properties, sectors, SectView].forEach(i => (i = {}));
       this.em = {};
+    },
+    disableCollectionUpdatedEventHandler() {
+      //** CCIDE select / deselect optimization
+      SectView.disableViewCollectionUpdatedEventHandler();
+    },
+    enableCollectionUpdatedEventHandler() {
+      //** CCIDE select / deselect optimization
+      SectView.enableViewCollectionUpdatedEventHandler();
     }
   };
 };

@@ -1,7 +1,7 @@
 import Backbone from 'backbone';
 import { extend } from 'underscore';
 import Properties from './Properties';
-import PropertyFactory from './PropertyFactory';
+import PropertyFactory from 'overrides/style_manager/model/PropertyFactory';
 
 export default Backbone.Model.extend({
   defaults: {
