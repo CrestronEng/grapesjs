@@ -85,10 +85,41 @@ export default Backbone.View.extend({
    */
   onChange(event) {
     const el = this.getInputElem();
-    if (el && !isUndefined(el.value)) {
-      this.models.forEach(modelRef => {
-        modelRef.set('value', el.value);
-      });
+
+    if (el) {
+      // favor the query-selected input value because for some reason
+      // "sometimes" the el.value is old
+      let valueToUse = el.value;
+      const input = el.querySelector('input'); // alas, Javascript...
+      if (input && input.value) {
+        valueToUse = input.value;
+      }
+
+      if (!isUndefined(valueToUse)) {
+        const { em } = this;
+        em.trigger('traitview:change', this, this.models, valueToUse); // this event is not a native GrapesJS event, it was added for CCIDE
+
+        //** CCIDE optimization
+        const setProperty = function(modelRef, value) {
+          modelRef.set('value', value, { fromInput: 1 });
+        };
+
+        const magicIndex = this.models.length - 1; //upper limit of for loop & index of last models element
+        if (magicIndex > 0) {
+          this.em.disableCollectionUpdateEventHandling();
+
+          for (let i = 0; i < magicIndex; i += 1) {
+            try {
+              setProperty(this.models[i], valueToUse);
+            } catch (e) {
+              console.error('Error setting trait', e);
+            }
+          }
+          this.em.enableCollectionUpdateEventHandling();
+        }
+
+        setProperty(this.models[magicIndex], valueToUse);
+      }
     }
 
     this.onEvent({
@@ -127,7 +158,7 @@ export default Backbone.View.extend({
   renderLabel() {
     const { $el } = this;
     const label = this.getLabel();
-    let tpl = this.templateLabel(this.models[0]);
+    let tpl = this.templateLabel(this.models[this.models.length - 1]);
 
     if (this.createLabel) {
       tpl =
@@ -149,7 +180,7 @@ export default Backbone.View.extend({
   getLabel() {
     const { em } = this;
     const { label, name } = this.models
-      ? this.models[0].attributes
+      ? this.models[this.models.length - 1].attributes
       : { label: '', name: '' };
     return (
       em.t(`traitManager.traits.labels.${name}`) ||
@@ -238,7 +269,7 @@ export default Backbone.View.extend({
     const { $el, appendInput, models } = this;
     const inputs = $el.find('[data-input]');
     const el = inputs[inputs.length - 1];
-    let tpl = this.models && this.models[0].el;
+    let tpl = this.models && this.models[this.models.length - 1].el;
 
     if (!tpl) {
       tpl = this.createInput
@@ -254,7 +285,7 @@ export default Backbone.View.extend({
       this.elInput = tpl;
     }
 
-    this.models[0].el = this.elInput;
+    this.models[this.models.length - 1].el = this.elInput;
   },
 
   hasLabel() {

@@ -1,4 +1,4 @@
-import TraitView from './TraitView';
+import TraitView from 'overrides/trait_manager/view/TraitView';
 import { isUndefined } from 'underscore';
 import InputNumber from 'overrides/domain_abstract/ui/InputNumber';
 

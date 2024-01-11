@@ -1,6 +1,6 @@
 import Backbone from 'backbone';
 import { isString, isUndefined } from 'underscore';
-import TraitView from './TraitView';
+import TraitView from 'overrides/trait_manager/view/TraitView';
 
 const $ = Backbone.$;
 

@@ -1,7 +1,7 @@
 import { isString, isObject, object } from 'underscore';
 import CategoryView from 'category/view/CategoryView';
 import DomainViews from 'domain_abstract/view/DomainViews';
-import TraitView from './TraitView';
+import TraitView from 'overrides/trait_manager/view/TraitView';
 import TraitSelectView from './TraitSelectView';
 import TraitCheckboxView from './TraitCheckboxView';
 import TraitNumberView from './TraitNumberView';
