@@ -1,7 +1,7 @@
 import Backbone from 'backbone';
 import { isEmpty, each, keys } from 'underscore';
-import Components from '../model/Components';
-import ComponentsView from './ComponentsView';
+import Components from 'dom_components/model/Components';
+import ComponentsView from 'dom_components/view/ComponentsView';
 import Selectors from 'selector_manager/model/Selectors';
 import { replaceWith } from 'utils/dom';
 import { setViewEl } from 'utils/mixins';
@@ -259,10 +259,21 @@ export default Backbone.View.extend({
    * @private
    * */
   updateClasses() {
-    const str = this.model
+    var str = this.model
       .get('classes')
       .pluck('name')
       .join(' ');
+
+    //This code is added to resolve CCID-8322.
+    if (str == '') {
+      var classVal = '';
+      const { el } = this;
+      for (const value of el.classList.values()) {
+        classVal = classVal + value + ' ';
+      }
+      str = classVal.trim();
+    }
+
     this.setAttribute('class', str);
 
     // Regenerate status class
@@ -313,12 +324,16 @@ export default Backbone.View.extend({
 
     // Remove all current attributes
     each(el.attributes, attr => attrs.push(attr.nodeName));
-    attrs.forEach(attr => $el.removeAttr(attr));
+    attrs.forEach(attr => {
+      //This code is added to resolve CCID-8322.
+      if (attr != 'class') {
+        $el.removeAttr(attr);
+      }
+    });
     const attr = {
       ...defaultAttr,
       ...model.getAttributes()
     };
-
     // Remove all `false` attributes
     keys(attr).forEach(key => attr[key] === false && delete attr[key]);
 

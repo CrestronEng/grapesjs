@@ -1,5 +1,5 @@
 import ComponentView from './ComponentImageView';
-import OComponentView from './ComponentView';
+import OComponentView from 'overrides/dom_components/view/ComponentView';
 
 export default ComponentView.extend({
   tagName: 'div',

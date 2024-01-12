@@ -56,7 +56,8 @@ export default Backbone.View.extend({
    * @private
    * */
   addToCollection(model, fragmentEl, index) {
-    if (!this.compView) this.compView = require('./ComponentView').default;
+    if (!this.compView)
+      this.compView = require('overrides/dom_components/view/ComponentView').default;
     const { config, opts, em } = this;
     const fragment = fragmentEl || null;
     const { frameView = {} } = config;

@@ -1,5 +1,5 @@
 import { on, off } from 'utils/mixins';
-import ComponentView from './ComponentView';
+import ComponentView from 'overrides/dom_components/view/ComponentView';
 
 const compProt = ComponentView.prototype;
 

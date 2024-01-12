@@ -1,7 +1,7 @@
 import { isUndefined, isString, bindAll } from 'underscore';
 import { getModel, isEscKey, isEnterKey } from 'utils/mixins';
 import Backbone from 'backbone';
-import ComponentView from 'dom_components/view/ComponentView';
+import ComponentView from 'overrides/dom_components/view/ComponentView';
 import { eventDrag } from 'dom_components/model/Component';
 
 const inputProp = 'contentEditable';

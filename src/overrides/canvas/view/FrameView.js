@@ -1,7 +1,7 @@
 import Backbone from 'backbone';
 import { bindAll, isString, debounce, isUndefined } from 'underscore';
 import CssRulesView from 'overrides/css_composer/view/CssRulesView';
-import ComponentView from 'dom_components/view/ComponentView';
+import ComponentView from 'overrides/dom_components/view/ComponentView';
 import {
   appendVNodes,
   empty,
