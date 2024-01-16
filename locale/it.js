@@ -7,7 +7,7 @@ exports.default = void 0;
 var traitInputAttr = {
   placeholder: 'es. Testo'
 };
-var _default = {
+var _default = exports.default = {
   assetManager: {
     addButton: 'Aggiungi immagine',
     inputPlh: 'http://percorso/immagine.jpg',
@@ -79,7 +79,10 @@ var _default = {
       flex: 'Flex',
       dimension: 'Dimensioni'
     },
-    properties: {}
+    // The core library generates the name by their `property` name
+    properties: {
+      // float: 'Float',
+    }
   },
   traitManager: {
     empty: 'Seleziona un elemento prima di usare il Trait Manager',
@@ -107,4 +110,3 @@ var _default = {
     }
   }
 };
-exports.default = _default;

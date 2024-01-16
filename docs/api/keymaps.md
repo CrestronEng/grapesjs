@@ -19,24 +19,38 @@ const editor = grapesjs.init({
 })
 ```
 
-Once the editor is instantiated you can use its API. Before using these methods you should get the module from the instance
+Once the editor is instantiated you can use its API and listen to its events. Before using these methods, you should get the module from the instance.
 
 ```js
+// Listen to events
+editor.on('keymap:add', () => { ... });
+
+// Use the API
 const keymaps = editor.Keymaps;
+keymaps.add(...);
 ```
 
--   [getConfig][1]
--   [add][2]
--   [get][3]
--   [getAll][4]
--   [remove][5]
--   [removeAll][6]
+## Available Events
+
+*   `keymap:add` - New keymap added. The new keyamp object is passed as an argument
+*   `keymap:remove` - Keymap removed. The removed keyamp object is passed as an argument
+*   `keymap:emit` - Some keymap emitted, in arguments you get keymapId, shortcutUsed, Event
+*   `keymap:emit:{keymapId}` - `keymapId` emitted, in arguments you get keymapId, shortcutUsed, Event
+
+## Methods
+
+*   [getConfig][1]
+*   [add][2]
+*   [get][3]
+*   [getAll][4]
+*   [remove][5]
+*   [removeAll][6]
 
 ## getConfig
 
-Get module configurations
+Get configuration object
 
-Returns **[Object][7]** Configuration object
+Returns **[Object][7]** 
 
 ## add
 
@@ -44,10 +58,13 @@ Add new keymap
 
 ### Parameters
 
--   `id` **[string][8]** Keymap id
--   `keys` **[string][8]** Keymap keys, eg. `ctrl+a`, `⌘+z, ctrl+z`
--   `handler` **([Function][9] \| [string][8])** Keymap handler, might be a function
--   `opts` **[Object][7]** Options (optional, default `{}`)
+*   `id` **[string][8]** Keymap id
+*   `keys` **[string][8]** Keymap keys, eg. `ctrl+a`, `⌘+z, ctrl+z`
+*   `handler` **([Function][9] | [string][8])** Keymap handler, might be a function
+*   `opts` **[Object][7]** Options (optional, default `{}`)
+
+    *   `opts.force` **[Boolean][10]** Force the handler to be executed. (optional, default `false`)
+    *   `opts.prevent` **[Boolean][10]** Prevent default of the original triggered event. (optional, default `false`)
 
 ### Examples
 
@@ -57,16 +74,18 @@ keymaps.add('ns:my-keymap', '⌘+j, ⌘+u, ctrl+j, alt+u', editor => {
  console.log('do stuff');
 });
 // or
-keymaps.add('ns:my-keymap', '⌘+s, ctrl+s', 'some-gjs-command');
+keymaps.add('ns:my-keymap', '⌘+s, ctrl+s', 'some-gjs-command', {
+ // Prevent the default browser action
+ prevent: true,
+});
 
 // listen to events
-editor.on('keymap:emit', (id, shortcut, e) => {
+editor.on('keymap:emit', (id, shortcut, event) => {
  // ...
 })
 ```
 
 Returns **[Object][7]** Added keymap
- or just a command id as a string
 
 ## get
 
@@ -74,7 +93,7 @@ Get the keymap by id
 
 ### Parameters
 
--   `id` **[string][8]** Keymap id
+*   `id` **[string][8]** Keymap id
 
 ### Examples
 
@@ -104,7 +123,7 @@ Remove the keymap by id
 
 ### Parameters
 
--   `id` **[string][8]** Keymap id
+*   `id` **[string][8]** Keymap id
 
 ### Examples
 
@@ -138,3 +157,5 @@ Returns **this**
 [8]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
 [9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+
+[10]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean

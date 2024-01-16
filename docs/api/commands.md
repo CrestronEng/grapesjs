@@ -12,21 +12,37 @@ const editor = grapesjs.init({
 })
 ```
 
-Once the editor is instantiated you can use its API. Before using these methods you should get the module from the instance
+Once the editor is instantiated you can use its API and listen to its events. Before using these methods, you should get the module from the instance.
 
 ```js
+// Listen to events
+editor.on('run', () => { ... });
+
+// Use the API
 const commands = editor.Commands;
+commands.add(...);
 ```
 
--   [add][2]
--   [get][3]
--   [getAll][4]
--   [extend][5]
--   [has][6]
--   [run][7]
--   [stop][8]
--   [isActive][9]
--   [getActive][10]
+*   ## Available Events
+*   `run:{commandName}` - Triggered when some command is called to run (eg. editor.runCommand('preview'))
+*   `stop:{commandName}` - Triggered when some command is called to stop (eg. editor.stopCommand('preview'))
+*   `run:{commandName}:before` - Triggered before the command is called
+*   `stop:{commandName}:before` - Triggered before the command is called to stop
+*   `abort:{commandName}` - Triggered when the command execution is aborted (`editor.on(`run:preview:before`, opts => opts.abort = 1);`)
+*   `run` - Triggered on run of any command. The id and the result are passed as arguments to the callback
+*   `stop` - Triggered on stop of any command. The id and the result are passed as arguments to the callback
+
+## Methods
+
+*   [add][2]
+*   [get][3]
+*   [getAll][4]
+*   [extend][5]
+*   [has][6]
+*   [run][7]
+*   [stop][8]
+*   [isActive][9]
+*   [getActive][10]
 
 ## add
 
@@ -34,10 +50,10 @@ Add new command to the collection
 
 ### Parameters
 
--   `id` **[string][11]** Command's ID
--   `command` **([Object][12] \| [Function][13])** Object representing your command,
-     By passing just a function it's intended as a stateless command
-     (just like passing an object with only `run` method).
+*   `id` **[string][11]** Command's ID
+*   `command` **([Object][12] | [Function][13])** Object representing your command,
+    By passing just a function it's intended as a stateless command
+    (just like passing an object with only `run` method).
 
 ### Examples
 
@@ -61,7 +77,7 @@ Get command by ID
 
 ### Parameters
 
--   `id` **[string][11]** Command's ID
+*   `id` **[string][11]** Command's ID
 
 ### Examples
 
@@ -78,9 +94,9 @@ Extend the command. The command to extend should be defined as an object
 
 ### Parameters
 
--   `id` **[string][11]** Command's ID
--   `cmd`   (optional, default `{}`)
--   `Object` **[Object][12]** with the new command functions
+*   `id` **[string][11]** Command's ID
+*   `cmd` **CommandObject**  (optional, default `{}`)
+*   `Object` **[Object][12]** with the new command functions
 
 ### Examples
 
@@ -100,7 +116,7 @@ Check if command exists
 
 ### Parameters
 
--   `id` **[string][11]** Command's ID
+*   `id` **[string][11]** Command's ID
 
 Returns **[Boolean][14]** 
 
@@ -116,8 +132,8 @@ Execute the command
 
 ### Parameters
 
--   `id` **[String][11]** Command ID
--   `options` **[Object][12]** Options (optional, default `{}`)
+*   `id` **[String][11]** Command ID
+*   `options` **[Object][12]** Options (optional, default `{}`)
 
 ### Examples
 
@@ -133,8 +149,8 @@ Stop the command
 
 ### Parameters
 
--   `id` **[String][11]** Command ID
--   `options` **[Object][12]** Options (optional, default `{}`)
+*   `id` **[String][11]** Command ID
+*   `options` **[Object][12]** Options (optional, default `{}`)
 
 ### Examples
 
@@ -152,7 +168,7 @@ method it can't be registered as active
 
 ### Parameters
 
--   `id` **[String][11]** Command id
+*   `id` **[String][11]** Command id
 
 ### Examples
 
@@ -181,7 +197,7 @@ console.log(commands.getActive());
 
 Returns **[Object][12]** 
 
-[1]: https://github.com/artf/grapesjs/blob/master/src/commands/config/config.js
+[1]: https://github.com/GrapesJS/grapesjs/blob/master/src/commands/config/config.ts
 
 [2]: #add
 

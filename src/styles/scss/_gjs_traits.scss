@@ -1,6 +1,6 @@
 .#{$app-prefix} {
   &traits-label {
-    border-bottom: 1px solid $mainDkColor;
+    border-bottom: 1px solid var(--gjs-main-dark-color);
     font-weight: lighter;
     margin-bottom: 5px;
     padding: 10px;
@@ -37,7 +37,7 @@
   text-align: left;
 
   &s {
-    font-size: $fontSizeS;
+    font-size: var(--gjs-font-size);
   }
 
   .#{$app-prefix}label {
@@ -45,31 +45,4 @@
     text-overflow: ellipsis;
     overflow: hidden;
   }
-}
-
-.#{$app-prefix}category {
-  width: 100%;
-
-  &.#{$app-prefix}open {
-    @extend .#{$app-prefix}category-open;
-  }
-
-  .#{$app-prefix}title {
-    @extend .#{$app-prefix}category-title;
-  }
-
-  .#{$app-prefix}caret-icon {
-    margin-right: 5px;
-  }
-}
-
-.#{$app-prefix}categories {
-  display: flex;
-  flex-direction: column;
-}
-
-.#{$app-prefix}c {
-  flex: 0 0 100%;
-  flex-wrap: wrap;
-  justify-content: flex-start;
 }

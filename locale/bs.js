@@ -7,16 +7,22 @@ exports.default = void 0;
 var traitInputAttr = {
   placeholder: 'Ovdje ide tekst'
 };
-var _default = {
+var _default = exports.default = {
   assetManager: {
     addButton: 'Dodaj sliku',
     inputPlh: 'http://putanja/url/do/slike.jpg',
     modalTitle: 'Odaberi sliku',
     uploadTitle: 'Ubaci datoteke ovdje ili klikni za Upload'
   },
+  // Here just as a reference, GrapesJS core doesn't contain any block,
+  // so this should be omitted from other local files
   blockManager: {
-    labels: {},
-    categories: {}
+    labels: {
+      // 'block-id': 'Block Label',
+    },
+    categories: {
+      // 'category-id': 'Category Label',
+    }
   },
   domComponents: {
     names: {
@@ -83,6 +89,7 @@ var _default = {
       flex: 'Flex',
       dimension: 'Dimenzije'
     },
+    // The core library generates the name by their `property` name
     properties: {
       float: 'Plutanje',
       display: 'Prikaz',
@@ -134,9 +141,9 @@ var _default = {
       'box-shadow-h': 'Sjena: horizontalno',
       'box-shadow-v': 'Sjena: vertikalno',
       'box-shadow-blur': 'Sjena: zamagljenost',
-      'box-shadow-spread': "Sjena: širenje",
-      'box-shadow-color': "Sjena: boja",
-      'box-shadow-type': "Sjena: tip",
+      'box-shadow-spread': 'Sjena: širenje',
+      'box-shadow-color': 'Sjena: boja',
+      'box-shadow-type': 'Sjena: tip',
       background: 'Pozadina',
       'background-image': 'Pozadinska slika',
       'background-repeat': 'Ponavljanje pozadine',
@@ -172,7 +179,14 @@ var _default = {
     empty: 'Odaberi element prije korištenja Postavki Osobina',
     label: 'Postavke komponente',
     traits: {
-      labels: {},
+      // The core library generates the name by their `name` property
+      labels: {
+        // id: 'Id',
+        // alt: 'Opis',
+        // title: 'Naslov',
+        // href: 'Link',
+      },
+      // In a simple trait, like text input, these are used on input attributes
       attributes: {
         id: traitInputAttr,
         alt: traitInputAttr,
@@ -181,6 +195,7 @@ var _default = {
           placeholder: 'npr. https://google.com'
         }
       },
+      // In a trait like select, these are used to translate option names
       options: {
         target: {
           false: 'Ovaj prozor',
@@ -190,4 +205,3 @@ var _default = {
     }
   }
 };
-exports.default = _default;

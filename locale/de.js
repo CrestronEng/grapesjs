@@ -5,18 +5,24 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var traitInputAttr = {
-  placeholder: 'Text einfügen'
+  placeholder: 'z.B. Text hier'
 };
-var _default = {
+var _default = exports.default = {
   assetManager: {
     addButton: 'Bild hinzufügen',
-    inputPlh: 'http://chemin/vers/image.jpg',
+    inputPlh: 'http://path/to/the/image.jpg',
     modalTitle: 'Bild auswählen',
-    uploadTitle: 'Ziehen Sie eine Datei hierher oder klicken Sie auf Upload'
+    uploadTitle: 'Dateien hier ablegen oder zum Hochladen anklicken'
   },
+  // Here just as a reference, GrapesJS core doesn't contain any block,
+  // so this should be omitted from other local files
   blockManager: {
-    labels: {},
-    categories: {}
+    labels: {
+      // 'block-id': 'Block Label',
+    },
+    categories: {
+      // 'category-id': 'Kategorie Label',
+    }
   },
   domComponents: {
     names: {
@@ -29,12 +35,12 @@ var _default = {
       label: 'Label',
       link: 'Link',
       map: 'Karte',
-      tfoot: 'Tabellen Fußzeile',
-      tbody: 'Tabellen Inhalt',
-      thead: 'Tabellen Kopf',
+      tfoot: 'Tabellenfuß',
+      tbody: 'Tabellenkörßer',
+      thead: 'Tabellenkopf',
       table: 'Tabelle',
-      row: 'Zeile',
-      cell: 'Zelle'
+      row: 'Tabellenzeile',
+      cell: 'Tabellenzelle'
     }
   },
   deviceManager: {
@@ -42,8 +48,8 @@ var _default = {
     devices: {
       desktop: 'Desktop',
       tablet: 'Tablet',
-      mobileLandscape: 'Mobile Landscape',
-      mobilePortrait: 'Mobile Portrait'
+      mobileLandscape: 'Mobile horizontal',
+      mobilePortrait: 'Mobile vertikal'
     }
   },
   panels: {
@@ -51,12 +57,12 @@ var _default = {
       titles: {
         preview: 'Vorschau',
         fullscreen: 'Vollbild',
-        'sw-visibility': 'Komponente anzeigen',
+        'sw-visibility': 'Komponenten anzeigen',
         'export-template': 'Code anzeigen',
-        'open-sm': 'Stil Manager öffnen',
-        'open-tm': 'Parameter',
-        'open-layers': 'Layer Manager öffnen',
-        'open-blocks': 'Block öffnen'
+        'open-sm': 'Style Manager öffnen',
+        'open-tm': 'Einstellungen',
+        'open-layers': 'Ebenen öffnen',
+        'open-blocks': 'Blöcke öffnen'
       }
     }
   },
@@ -66,13 +72,13 @@ var _default = {
     emptyState: '- Status -',
     states: {
       hover: 'Hover',
-      active: 'Klick',
-      'nth-of-type(2n)': 'Gerade/Ungerade'
+      active: 'Click',
+      'nth-of-type(2n)': 'Even/Odd'
     }
   },
   styleManager: {
-    empty: 'Wählen Sie ein Element aus bevor Sie den Stil Manager nutzen',
-    layer: 'Ebene',
+    empty: 'Wählen Sie ein Element aus, bevor Sie den Style Manager verwenden',
+    layer: 'Ebenen',
     fileButton: 'Bilder',
     sectors: {
       general: 'Allgemein',
@@ -81,8 +87,9 @@ var _default = {
       decorations: 'Dekorationen',
       extra: 'Extra',
       flex: 'Flex',
-      dimension: 'Dimension'
+      dimension: 'Größen'
     },
+    // The core library generates the name by their `property` name
     properties: {
       float: 'Ausrichtung',
       display: 'Anzeige',
@@ -100,6 +107,21 @@ var _default = {
       'margin-right': 'Äußerer Abstand rechts',
       'margin-left': 'Äußerer Abstand links',
       'margin-bottom': 'Äußerer Abstand unten',
+      'margin-top-sub': 'Oben',
+      'margin-right-sub': 'Rechts',
+      'margin-bottom-sub': 'Unten',
+      'margin-left-sub': 'Links',
+      'padding-top-sub': 'Oben',
+      'padding-right-sub': 'Rechts',
+      'padding-bottom-sub': 'Unten',
+      'padding-left-sub': 'Links',
+      'border-width-sub': 'Breite',
+      'border-style-sub': 'Stil',
+      'border-color-sub': 'Rarbe',
+      'border-top-left-radius-sub': 'Oben links',
+      'border-top-right-radius-sub': 'Oben rechts',
+      'border-bottom-right-radius-sub': 'Unten rechts',
+      'border-bottom-left-radius-sub': 'Unten links',
       padding: 'Innerer Abstand',
       'padding-top': 'Innerer Abstand oben',
       'padding-left': 'Innerer Abstand links',
@@ -113,10 +135,10 @@ var _default = {
       'line-height': 'Zeilenhöhe',
       'text-align': 'Textausrichtung',
       'text-shadow': 'Textschatten',
-      'text-shadow-h': 'Textschatten: horizontal',
-      'text-shadow-v': 'Textschatten: vertikal',
-      'text-shadow-blur': 'Textschatten: unschärfe',
-      'text-shadow-color': 'Textschatten: Farbe',
+      'text-shadow-h': 'X',
+      'text-shadow-v': 'Y',
+      'text-shadow-blur': 'Unschärfe',
+      'text-shadow-color': 'Farbe',
       'border-top-left': 'Rand oben links',
       'border-top-right': 'Rand oben rechts',
       'border-bottom-left': 'Rand unten links',
@@ -131,12 +153,12 @@ var _default = {
       'border-style': 'Randstil',
       'border-color': 'Randfarbe',
       'box-shadow': 'Boxschatten',
-      'box-shadow-h': 'Boxschatten: horizontal',
-      'box-shadow-v': 'Boxschatten: vertikal',
-      'box-shadow-blur': 'Boxschatten: Unschärfe',
-      'box-shadow-spread': 'Boxschatten: Streuung',
-      'box-shadow-color': 'Boxschatten: Farbe',
-      'box-shadow-type': 'Boxschatten: Typ',
+      'box-shadow-h': 'X',
+      'box-shadow-v': 'Y',
+      'box-shadow-blur': 'Unschärge',
+      'box-shadow-spread': 'Verteilung',
+      'box-shadow-color': 'Farbe',
+      'box-shadow-type': 'Typ',
       background: 'Hintergrund',
       'background-image': 'Hintergrundbild',
       'background-repeat': 'Hintergrund wiederholen',
@@ -144,18 +166,26 @@ var _default = {
       'background-attachment': 'Hintergrundanhang',
       'background-size': 'Hintergrundgröße',
       'background-color': 'Hintergrundfarbe',
+      'background-image-sub': 'Bild',
+      'background-repeat-sub': 'Wiederholung',
+      'background-position-sub': 'Position',
+      'background-attachment-sub': 'Anhang',
+      'background-size-sub': 'Größe',
       transition: 'Übergang',
       'transition-property': 'Übergang: Typ',
       'transition-duration': 'Übergang: Dauer',
       'transition-timing-function': 'Übergang: Zeitfunktion',
+      'transition-property-sub': 'Eigenschaft',
+      'transition-duration-sub': 'Dauer',
+      'transition-timing-function-sub': 'Zeit',
       perspective: 'Perspektive',
       transform: 'Transformation',
-      'transform-rotate-x': 'Transformation: Rotation x',
-      'transform-rotate-y': 'Transformation: Rotation y',
-      'transform-rotate-z': 'Transformation: Rotation z',
-      'transform-scale-x': 'Transformation: Skalierung x',
-      'transform-scale-y': 'Transformation: Skalierung y',
-      'transform-scale-z': 'Transformation: Skalierung z',
+      'transform-rotate-x': 'Rotation X',
+      'transform-rotate-y': 'Rotation Y',
+      'transform-rotate-z': 'Rotation Z',
+      'transform-scale-x': 'Skalierung X',
+      'transform-scale-y': 'Skalierung Y',
+      'transform-scale-z': 'Skalierung Z',
       'flex-direction': 'Flex Ausrichtung',
       'flex-wrap': 'Flex Wrap',
       'justify-content': 'Vertikale Ausrichtung',
@@ -169,15 +199,17 @@ var _default = {
     }
   },
   traitManager: {
-    empty: 'Wählen Sie ein Element aus bevor Sie den Komponenten Manager nutzen',
-    label: 'Komponenteneinstellungen',
+    empty: 'Wählen Sie ein Element aus, bevor Sie den Eigenschaftsmanager verwenden',
+    label: 'Komponenten Eigenschaften',
     traits: {
+      // The core library generates the name by their `name` property
       labels: {
         id: 'ID',
         alt: 'Alternativtext',
         title: 'Titel',
         href: 'Link'
       },
+      // In a simple trait, like text input, these are used on input attributes
       attributes: {
         id: traitInputAttr,
         alt: traitInputAttr,
@@ -186,6 +218,7 @@ var _default = {
           placeholder: 'z.B. https://google.com'
         }
       },
+      // In a trait like select, these are used to translate option names
       options: {
         target: {
           false: 'Dieses Fenster',
@@ -193,6 +226,8 @@ var _default = {
         }
       }
     }
+  },
+  storageManager: {
+    recover: 'Möchten Sie ungespeicherte Änderungen wiederherstellen?'
   }
 };
-exports.default = _default;

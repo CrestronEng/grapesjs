@@ -7,16 +7,22 @@ exports.default = void 0;
 var traitInputAttr = {
   placeholder: 'eg. Text here'
 };
-var _default = {
+var _default = exports.default = {
   assetManager: {
     addButton: 'Προσθήκη Εικόνας',
     inputPlh: 'http://διαδρομή/μέχρι/την/εικόνα.jpg',
     modalTitle: 'Επιλογή Εικόνας',
     uploadTitle: 'Αφήστε τα αρχεία εδώ ή κάντε κλικ για ανέβασμα'
   },
+  // Εδώ υπάρχει απλά αναφορά, ο πυρήνας του GrapesJS δεν διαθέτει κανένα πλαίσιο,
+  // οπότε αυτό θα πρέπει να αγνοηθεί από τα υπόλοιπα αρχεία μετάφρασης
   blockManager: {
-    labels: {},
-    categories: {}
+    labels: {
+      // 'block-id': 'Ετικέτα Πλαισίου',
+    },
+    categories: {
+      // 'category-id': 'Ετικέτα Κατηγορίας',
+    }
   },
   domComponents: {
     names: {
@@ -83,13 +89,23 @@ var _default = {
       flex: 'Φλεξ',
       dimension: 'Διάσταση'
     },
-    properties: {}
+    // Η βασική βιβλιοθήκη παράγει το όνομα από την δικού του `ιδιότητα` name
+    properties: {
+      // float: 'Float',
+    }
   },
   traitManager: {
     empty: 'Επιλέξτε ένα στοιχεία πριν χρησιμοποιήσετε τον Διαχειριστή Χαρακτηριστικών',
     label: 'Ρυθμίσεις Συστατικού',
     traits: {
-      labels: {},
+      // Η βασική βιβλιοθήκη παράγει το όνομα από την δικού του `ιδιότητα` name
+      labels: {
+        // id: 'Id',
+        // alt: 'Εναλλακτικό Κείμενο',
+        // title: 'Τίτλος',
+        // href: 'Href',
+      },
+      // Σε ένα απλό χαρακτηριστικό, όπως ένα πεδίο κείμενο, χρησιμοποιούνται στις ιδιότητες του πεδίου εισαγωγής
       attributes: {
         id: traitInputAttr,
         alt: traitInputAttr,
@@ -98,6 +114,7 @@ var _default = {
           placeholder: 'πχ. https://google.gr'
         }
       },
+      // Σε χαρακτηριστικό όπως το select, αυτά χρησιμοποιούνται για την μετάφραση των ονομάτων των επιλογών
       options: {
         target: {
           false: 'Στο ίδιο παράθυρο',
@@ -107,4 +124,3 @@ var _default = {
     }
   }
 };
-exports.default = _default;

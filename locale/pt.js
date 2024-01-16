@@ -7,16 +7,22 @@ exports.default = void 0;
 var traitInputAttr = {
   placeholder: 'ex: Insira o texto'
 };
-var _default = {
+var _default = exports.default = {
   assetManager: {
     addButton: 'Adicionar imagem',
     inputPlh: 'http://caminho/para/a/imagem.jpg',
     modalTitle: 'Selecionar imagem',
     uploadTitle: 'Solte os arquivos aqui ou clique para enviar'
   },
+  // Here just as a reference, GrapesJS core doesn't contain any block,
+  // so this should be omitted from other local files
   blockManager: {
-    labels: {},
-    categories: {}
+    labels: {
+      // 'block-id': 'Block Label',
+    },
+    categories: {
+      // 'category-id': 'Category Label',
+    }
   },
   domComponents: {
     names: {
@@ -85,6 +91,7 @@ var _default = {
       flex: 'Flex',
       dimension: 'Dimensão'
     },
+    // The core library generates the name by their `property` name
     properties: {
       float: 'Float',
       display: 'Exibição',
@@ -98,15 +105,15 @@ var _default = {
       'max-width': 'Largura Max.',
       'max-height': 'Altura Max.',
       margin: 'Margem',
-      'margin-top': 'Margem Superior',
-      'margin-right': 'Margem a Direita',
-      'margin-left': 'Margem a Esquerda',
-      'margin-bottom': 'Margem Inferior',
+      'margin-top-sub': 'Superior',
+      'margin-right-sub': 'Direita',
+      'margin-left-sub': 'Esquerda',
+      'margin-bottom-sub': 'Inferior',
       padding: 'Padding',
-      'padding-top': 'Padding Superior',
-      'padding-left': 'Padding a Esquerda',
-      'padding-right': 'Padding a Direita',
-      'padding-bottom': 'Padding Inferior',
+      'padding-top-sub': 'Superior',
+      'padding-left-sub': 'Esquerda',
+      'padding-right-sub': 'Direita',
+      'padding-bottom-sub': 'Inferior',
       'font-family': 'Tipo de letra',
       'font-size': 'Tamanho da fonte',
       'font-weight': 'Espessura da fonte',
@@ -123,15 +130,15 @@ var _default = {
       'border-top-right': 'Borda superior a direita',
       'border-bottom-left': 'Borda inferior a esquerda',
       'border-bottom-right': 'Borda inferior a direita',
-      'border-radius-top-left': 'Raio da borda superior esquerda',
-      'border-radius-top-right': 'Raio da borda superior direita',
-      'border-radius-bottom-left': 'Raio da borda inferior esquerda',
-      'border-radius-bottom-right': 'Raio da borda inferior direita',
+      'border-top-left-radius-sub': 'Superior esquerda',
+      'border-top-right-radius-sub': 'Superior direita',
+      'border-bottom-right-radius-sub': 'Inferior direita',
+      'border-bottom-left-radius-sub': 'Inferior esquerda',
       'border-radius': 'Raio da borda',
       border: 'Borda',
-      'border-width': 'Largura da borda',
-      'border-style': 'Estilo da borda',
-      'border-color': 'Cor da borda',
+      'border-width-sub': 'Largura',
+      'border-style-sub': 'Estilo',
+      'border-color-sub': 'Cor',
       'box-shadow': 'Sombra da box',
       'box-shadow-h': 'Sombra da box: horizontal',
       'box-shadow-v': 'Sombra da box: vertical',
@@ -146,6 +153,7 @@ var _default = {
       'background-position': 'Posição do fundo',
       'background-attachment': 'Plugin de fundo',
       'background-size': 'Tamanho do fundo',
+      opacity: 'Opacidade',
       transition: 'Transição',
       'transition-property': 'Tipo de transição',
       'transition-duration': 'Tempo de transição',
@@ -174,7 +182,15 @@ var _default = {
     empty: 'Selecione um elemento para usar o gerenciador de características',
     label: 'Configurações do componente',
     traits: {
-      labels: {},
+      // The core library generates the name by their `name` property
+      labels: {
+        // id: 'Id',
+        // alt: 'Alt',
+        title: 'Título',
+        href: 'Link',
+        target: 'Abrir em'
+      },
+      // In a simple trait, like text input, these are used on input attributes
       attributes: {
         id: traitInputAttr,
         alt: traitInputAttr,
@@ -183,6 +199,7 @@ var _default = {
           placeholder: 'ex: https://google.com'
         }
       },
+      // In a trait like select, these are used to translate option names
       options: {
         target: {
           false: 'Esta janela',
@@ -192,4 +209,3 @@ var _default = {
     }
   }
 };
-exports.default = _default;
