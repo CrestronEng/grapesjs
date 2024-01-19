@@ -61,6 +61,8 @@ export interface BlockProperties {
    * @deprecated
    */
   activeOnRender?: boolean;
+
+  visible?: boolean;
 }
 
 /**
@@ -90,6 +92,7 @@ export default class Block extends Model<BlockProperties> {
       disable: false,
       onClick: undefined,
       attributes: {},
+      visible: true,
     };
   }
 

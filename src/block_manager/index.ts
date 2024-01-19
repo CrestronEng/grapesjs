@@ -37,7 +37,7 @@ import Blocks from './model/Blocks';
 import Categories from './model/Categories';
 import Category from './model/Category';
 import { BlocksEvents } from './types';
-import BlocksView from './view/BlocksView';
+import BlocksView from '../overrides/block_manager/view/BlocksView';
 
 export type BlockEvent = `${BlocksEvents}`;
 
