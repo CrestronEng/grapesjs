@@ -46,7 +46,7 @@ import Component from '../dom_components/model/Component';
 import EditorModel from '../editor/model/Editor';
 import { hasWin, isComponent, isDef } from '../utils/mixins';
 import defaults, { LayerManagerConfig } from './config/config';
-import View from './view/ItemView';
+import View from '../overrides/navigator/view/ItemView';
 
 interface LayerData {
   name: string;
