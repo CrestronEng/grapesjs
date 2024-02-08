@@ -816,14 +816,15 @@ export default Backbone.Model.extend({
     const orientation = device && device.get('orientation');
 
     // create query
+    // example: (orientation: portrait) and (max-device-height: 1281px) and (max-width: 801px), (orientation: portrait) and (max-height: 1279px)
     if (device && maxWidth && maxHeight && orientation && !preview) {
       let mediaString =
         orientation === 'landscape'
           ? `(orientation: ${orientation}) and (${conditionMaxWidth}: ${maxWidth +
-              1}px) and (${conditionMaxHeight}: ${maxHeight}px), (orientation: ${orientation}) and (${conditionMaxWidth}: ${maxWidth -
+              1}px) and (${conditionMaxHeight}: ${maxHeight + 1}px), (orientation: ${orientation}) and (${conditionMaxWidth}: ${maxWidth -
               1}px)`
           : `(orientation: ${orientation}) and (${conditionMaxHeight}: ${maxHeight +
-              1}px) and (${conditionMaxWidth}: ${maxWidth}px), (orientation: ${orientation})  and (${conditionMaxHeight}: ${maxHeight -
+              1}px) and (${conditionMaxWidth}: ${maxWidth + 1}px), (orientation: ${orientation}) and (${conditionMaxHeight}: ${maxHeight -
               1}px)`; 
               //added +1 to breakpoint values to handle offsets on certain laptop DPI
       return mediaString;
