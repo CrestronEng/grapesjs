@@ -246,7 +246,7 @@ $guide_pad: 5px !default;
   .#{$app-prefix}highlighter,
   .#{$app-prefix}highlighter-sel {
     position: absolute;
-    outline: 1px solid var(--gjs-color-blue);
+    outline: 3px solid #4032a8;
     outline-offset: -1px;
     pointer-events: none;
     width: 100%;
@@ -258,7 +258,7 @@ $guide_pad: 5px !default;
   }
 
   .#{$app-prefix}highlighter-sel {
-    outline: 2px solid var(--gjs-color-blue);
+    outline: 6px solid #4032a8;
     outline-offset: -2px;
   }
 
