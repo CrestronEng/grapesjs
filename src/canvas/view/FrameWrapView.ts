@@ -1,6 +1,6 @@
 import { bindAll, isNumber, isNull, debounce } from 'underscore';
 import { ModuleView } from '../../abstract';
-import FrameView from './FrameView';
+import FrameView from '../../overrides/canvas/view/FrameView';
 import { createEl, removeEl } from '../../utils/dom';
 import Dragger from '../../utils/Dragger';
 import CanvasView from './CanvasView';

@@ -5,7 +5,7 @@ import { BoxRect, PrevToNewIdMap } from '../../common';
 import ComponentWrapper from '../../dom_components/model/ComponentWrapper';
 import Page from '../../pages/model/Page';
 import { createId, isComponent, isObject } from '../../utils/mixins';
-import FrameView from '../view/FrameView';
+import FrameView from '../../overrides/canvas/view/FrameView';
 import Frames from './Frames';
 import { CssRuleJSON } from '../../css_composer/model/CssRule';
 

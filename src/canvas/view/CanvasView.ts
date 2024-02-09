@@ -17,7 +17,7 @@ import { getComponentView, getElement, getUiClass } from '../../utils/mixins';
 import Canvas from '../model/Canvas';
 import Frame from '../model/Frame';
 import { GetBoxRectOptions, ToWorldOption } from '../types';
-import FrameView from './FrameView';
+import FrameView from '../../overrides/canvas/view/FrameView';
 import FramesView from './FramesView';
 
 export interface MarginPaddingOffsets {

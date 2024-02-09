@@ -42,7 +42,7 @@ import CanvasSpots from './model/CanvasSpots';
 import Frame from './model/Frame';
 import { CanvasEvents, ToWorldOption } from './types';
 import CanvasView, { FitViewportOptions } from './view/CanvasView';
-import FrameView from './view/FrameView';
+import FrameView from '../overrides/canvas/view/FrameView';
 
 export type CanvasEvent = `${CanvasEvents}`;
 

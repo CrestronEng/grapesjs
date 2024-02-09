@@ -28,7 +28,7 @@
  */
 import { debounce, isArray } from 'underscore';
 import { ItemManagerModule } from '../abstract/Module';
-import FrameView from '../canvas/view/FrameView';
+import FrameView from '../overrides/canvas/view/FrameView';
 import Component from '../dom_components/model/Component';
 import EditorModel from '../editor/model/Editor';
 import defaults, { BlockManagerConfig } from './config/config';

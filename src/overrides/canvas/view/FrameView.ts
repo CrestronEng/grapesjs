@@ -1,9 +1,9 @@
 import { bindAll, debounce, isString, isUndefined } from 'underscore';
-import { ModuleView } from '../../abstract';
-import { BoxRect, ObjectAny } from '../../common';
-import CssRulesView from '../../css_composer/view/CssRulesView';
-import ComponentWrapperView from '../../dom_components/view/ComponentWrapperView';
-import Droppable from '../../utils/Droppable';
+import { ModuleView } from '../../../abstract';
+import { BoxRect, ObjectAny } from '../../../common';
+import CssRulesView from '../../../css_composer/view/CssRulesView';
+import ComponentWrapperView from '../../../dom_components/view/ComponentWrapperView';
+import Droppable from '../../../utils/Droppable';
 import {
   append,
   appendVNodes,
@@ -13,12 +13,12 @@ import {
   motionsEv,
   off,
   on,
-} from '../../utils/dom';
-import { hasDnd, setViewEl } from '../../utils/mixins';
-import Canvas from '../model/Canvas';
-import Frame from '../model/Frame';
-import FrameWrapView from './FrameWrapView';
-import CanvasEvents from '../types';
+} from '../../../utils/dom';
+import { hasDnd, setViewEl } from '../../../utils/mixins';
+import Canvas from '../../../canvas/model/Canvas';
+import Frame from '../../../canvas/model/Frame';
+import FrameWrapView from '../../../canvas/view/FrameWrapView';
+import CanvasEvents from '../../../canvas/types';
 
 export default class FrameView extends ModuleView<Frame, HTMLIFrameElement> {
   /** @ts-ignore */
@@ -58,7 +58,6 @@ export default class FrameView extends ModuleView<Frame, HTMLIFrameElement> {
     const cvModel = this.getCanvasModel();
     this.listenTo(model, 'change:head', this.updateHead);
     this.listenTo(cvModel, 'change:styles', this.renderStyles);
-    //@ts-ignore
     model.view = this;
     setViewEl(el, this);
   }
@@ -388,6 +387,10 @@ export default class FrameView extends ModuleView<Frame, HTMLIFrameElement> {
       `<style>
       ${conf.baseCss || config.frameStyle || ''}
 
+      html {
+        background: #B6C6D5;
+      }
+
       ${hasAutoHeight ? 'body { overflow: hidden }' : ''}
 
       [data-gjs-type="wrapper"] {
@@ -396,12 +399,16 @@ export default class FrameView extends ModuleView<Frame, HTMLIFrameElement> {
       }
 
       .${ppfx}dashed *[data-gjs-highlightable] {
-        outline: 1px dashed rgba(170,170,170,0.7);
+        outline: 0px dashed rgba(64,50,168,0.7);
         outline-offset: -2px;
       }
 
+      .${ppfx}dashed {
+        overflow: visible;
+      }
+
       .${ppfx}selected {
-        outline: 2px solid #3b97e3 !important;
+        outline: 6px solid #4032a8 !important;
         outline-offset: -2px;
       }
 
@@ -493,7 +500,23 @@ export default class FrameView extends ModuleView<Frame, HTMLIFrameElement> {
       { event: 'wheel', class: 'WheelEvent', opts: { passive: !config.infiniteCanvas } },
     ].forEach(obj =>
       obj.event.split(' ').forEach(event => {
-        doc.addEventListener(event, ev => this.el.dispatchEvent(createCustomEvent(ev, obj.class)), obj.opts);
+        doc.addEventListener(
+          event,
+          ev => {
+            //** CCIDE modification for CCID-1560: support for arrow keys moving UI elements
+            // The dispatchEvent() is not returning false when the customEvent.preventDefault() is called.
+            // However, the customEvent.defaultPrevented value is set properly.  Logic has been added to
+            // call the ev.preventDefault() if the customEvent.defaultPrevented value is true.
+
+            const customEvent = createCustomEvent(ev, obj.class);
+            this.el.dispatchEvent(customEvent);
+
+            if (customEvent.defaultPrevented) {
+              ev.preventDefault();
+            }
+          },
+          obj.opts
+        );
       })
     );
 
