@@ -2,7 +2,7 @@ import { debounce } from 'underscore';
 import { Model } from '../common';
 import { Module } from '../abstract';
 import defaults, { TraitManagerConfig } from './config/config';
-import TraitsView from './view/TraitsView';
+import TraitsView from '../overrides/trait_manager/view/TraitsView';
 import TraitView from './view/TraitView';
 import TraitSelectView from './view/TraitSelectView';
 import TraitCheckboxView from './view/TraitCheckboxView';
