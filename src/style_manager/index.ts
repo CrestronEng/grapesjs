@@ -70,7 +70,7 @@ import defaults, { StyleManagerConfig } from './config/config';
 import Sector, { SectorProperties } from './model/Sector';
 import Sectors from './model/Sectors';
 import Properties from './model/Properties';
-import PropertyFactory from '../overrides/style_manager/PropertyFactory';
+import PropertyFactory from './model/PropertyFactory';
 import SectorsView from './view/SectorsView';
 import { ItemManagerModule } from '../abstract/Module';
 import EditorModel from '../editor/model/Editor';
