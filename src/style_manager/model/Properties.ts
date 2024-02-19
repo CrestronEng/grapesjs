@@ -15,7 +15,7 @@ import PropertySlider from './PropertySlider';
 import PropertySliderView from './../view/PropertySliderView';
 import PropertyNumber from './PropertyNumber';
 import PropertyNumberView from './../view/PropertyNumberView';
-import PropertyView from './../view/PropertyView';
+import PropertyView from '../../overrides/style_manager/PropertyView';
 
 const TypeableCollectionExt = Collection.extend(TypeableCollection);
 

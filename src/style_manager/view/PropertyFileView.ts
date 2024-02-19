@@ -1,5 +1,5 @@
 import { isString } from 'underscore';
-import PropertyView from './PropertyView';
+import PropertyView from '../../overrides/style_manager/PropertyView';
 
 export default class PropertyFileView extends PropertyView {
   events() {

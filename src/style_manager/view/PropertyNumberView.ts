@@ -1,4 +1,4 @@
-import PropertyView from './PropertyView';
+import PropertyView from '../../overrides/style_manager/PropertyView';
 
 export default class PropertyNumberView extends PropertyView {
   inputInst?: any;

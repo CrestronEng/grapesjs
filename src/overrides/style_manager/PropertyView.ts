@@ -2,8 +2,8 @@ import { bindAll, isUndefined, debounce } from 'underscore';
 import { View } from '../../common';
 import EditorModel from '../../editor/model/Editor';
 import { isObject } from '../../utils/mixins';
-import Property from '../model/Property';
 import { StyleProps } from '../../domain_abstract/model/StyleableModel';
+import { Property } from '../..';
 
 const clearProp = 'data-clear-style';
 
@@ -169,7 +169,37 @@ export default class PropertyView extends View<Property> {
   }
 
   onValueChange(m: any, val: any, opt: any = {}) {
-    this.setValue(this.model.getFullValue(undefined, { skipImportant: true }));
+    const value = this.model.getFullValue(undefined, { skipImportant: true });
+    this.setValue(value);
+
+    // Avoid target update if the changes comes from it
+    if (!opt.fromTarget) {
+      const { em } = this.config;
+      let selectedComponents;
+      if (em) {
+        selectedComponents = em.getSelectedAll();
+        if (selectedComponents && opt.fromInput && !opt.avoidStore) {
+          // this event is not a native GrapesJS event, it was added for CCIDE
+          // note: this event must fire before updating targets below
+          em.trigger('propertyview:change', this, selectedComponents, value);
+        }
+      }
+
+      // this.getTargets().forEach(target => this.__updateTarget(target, opt));
+
+      // Update the editor and selected components about the change
+      if (!em) return;
+      const prop: any = this.model.get('property');
+      const updated = { [prop]: value };
+      selectedComponents.forEach((component: any) => {
+        !opt.noEmit && em.trigger('component:update', component, updated, opt);
+        em.trigger('component:styleUpdate', component, prop, opt);
+        em.trigger(`component:styleUpdate:${prop}`, component, value, opt);
+        component.trigger('change:style', component, updated, opt);
+        component.trigger(`change:style:${prop}`, component, value, opt);
+      });
+    }
+
     this.updateStatus();
   }
 

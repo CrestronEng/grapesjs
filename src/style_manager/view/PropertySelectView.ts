@@ -1,5 +1,5 @@
 import PropertySelect from '../model/PropertySelect';
-import PropertyView from './PropertyView';
+import PropertyView from '../../overrides/style_manager/PropertyView';
 
 export default class PropertySelectView extends PropertyView {
   templateInput() {

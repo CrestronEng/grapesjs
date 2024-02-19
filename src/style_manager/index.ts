@@ -78,7 +78,7 @@ import Property, { PropertyProps } from './model/Property';
 import Component from '../dom_components/model/Component';
 import CssRule from '../css_composer/model/CssRule';
 import StyleableModel, { StyleProps } from '../domain_abstract/model/StyleableModel';
-import { CustomPropertyView } from './view/PropertyView';
+import { CustomPropertyView } from '../overrides/style_manager/PropertyView';
 import { PropertySelectProps } from './model/PropertySelect';
 import { PropertyNumberProps } from './model/PropertyNumber';
 import { PropertyStackProps } from './model/PropertyStack';
