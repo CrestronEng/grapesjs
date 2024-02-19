@@ -1,9 +1,8 @@
 import { isFunction, isString } from 'underscore';
-import { PropertyProps } from './Property';
-import { PropertyCompositeProps } from './PropertyComposite';
-import PropertyNumber, { PropertyNumberProps } from './PropertyNumber';
-import PropertySelect, { PropertySelectProps } from './PropertySelect';
-import { PropertyStackProps } from './PropertyStack';
+import { PropertyProps } from '../../style_manager/model/Property';
+import PropertyNumber, { PropertyNumberProps } from '../../style_manager/model/PropertyNumber';
+import PropertySelect, { PropertySelectProps } from '../../style_manager/model/PropertySelect';
+import { PropertyStackProps } from '../../style_manager/model/PropertyStack';
 
 type Option = {
   id: string;
@@ -27,6 +26,7 @@ export default class PropertyFactory {
   typeComposite: string;
   typeStack: string;
   unitsSize: string[];
+  units: string[];
   unitsSizeNoPerc: string[];
   unitsTime: string[];
   unitsAngle: string[];
@@ -67,6 +67,7 @@ export default class PropertyFactory {
     this.typeComposite = 'composite';
     this.typeStack = 'stack';
     this.unitsSize = ['px', '%', 'em', 'rem', 'vh', 'vw'];
+    this.units = ['px', '%', 'name'];
     this.unitsSizeNoPerc = ['px', 'em', 'rem', 'vh', 'vw'];
     this.unitsTime = ['s', 'ms'];
     this.unitsAngle = ['deg', 'rad', 'grad'];
@@ -156,20 +157,7 @@ export default class PropertyFactory {
     });
 
     // Fixed values
-    this.fixedFontSizes = [
-      'medium',
-      'xx-small',
-      'x-small',
-      'small',
-      'large',
-      'x-large',
-      'xx-large',
-      'smaller',
-      'larger',
-      'length',
-      'initial',
-      'inherit',
-    ];
+    this.fixedFontSizes = ['normal', 'initial', 'inherit'];
     this.fixedLetSpace = ['normal', 'initial', 'inherit'];
     this.requireFlex = { display: ['flex'] };
 
@@ -209,14 +197,14 @@ export default class PropertyFactory {
       ['padding-right', {}, 'padding-top'],
       ['padding-bottom', {}, 'padding-top'],
       ['padding-left', {}, 'padding-top'],
-      ['width', { min: 0 }, 'top'],
-      ['min-width', {}, 'width'],
-      ['max-width', {}, 'width'],
-      ['height', {}, 'width'],
-      ['min-height', {}, 'width'],
-      ['max-height', {}, 'width'],
+      ['width', { min: 0, units: ['px'] }, 'top'],
+      ['min-width', { units: ['px'] }, 'width'],
+      ['max-width', { units: ['px'] }, 'width'],
+      ['height', { units: ['px'] }, 'width'],
+      ['min-height', { units: ['px'] }, 'width'],
+      ['max-height', { units: ['px'] }, 'width'],
       ['flex-basis', { requiresParent: requireFlex }, 'width'],
-      ['font-size', { default: 'medium', fixedValues: this.fixedFontSizes }, 'width'],
+      ['font-size', { default: 'medium', fixedValues: this.fixedFontSizes, units: this.units }, 'width'],
       ['letter-spacing', { default: 'normal', fixedValues: this.fixedLetSpace }, 'top'],
       ['line-height', {}, 'letter-spacing'],
       ['text-shadow-v', {}, 'text-shadow-h'],
@@ -236,9 +224,11 @@ export default class PropertyFactory {
       ['order', { type: typeNumber, default: '0', requiresParent: requireFlex }],
       ['flex-grow', {}, 'order'],
       ['flex-shrink', { default: '1' }, 'order'],
+      ['row-gap', { type: typeNumber, default: '0', units: ['px'] }],
+      ['column-gap', { type: typeNumber, default: '0', units: ['px'] }],
 
       // Radio types
-      ['float', { type: this.typeRadio, default: 'none', options: this.optsFloat }],
+      // ['float', { type: this.typeRadio, default: 'none', options: this.optsFloat }],
       ['position', { default: 'static', options: this.optsPos }, 'float'],
       ['text-align', { default: 'left', options: this.optsTextAlign }, 'float'],
 
