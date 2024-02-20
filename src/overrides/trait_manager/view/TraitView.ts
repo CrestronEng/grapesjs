@@ -1,9 +1,9 @@
 import { isFunction, isString, isUndefined } from 'underscore';
-import { $, SetOptions, View } from '../../common';
-import Component from '../../dom_components/model/Component';
-import EditorModel from '../../editor/model/Editor';
-import { capitalize } from '../../utils/mixins';
-import Trait from '../model/Trait';
+import { $, SetOptions, View } from '../../../common';
+import Component from '../../../dom_components/model/Component';
+import EditorModel from '../../../editor/model/Editor';
+import { capitalize } from '../../../utils/mixins';
+import Trait from '../../../trait_manager/model/Trait';
 
 export default class TraitView extends View<Trait> {
   pfx: string;
@@ -16,17 +16,18 @@ export default class TraitView extends View<Trait> {
   eventCapture!: string[];
   noLabel?: boolean;
   em: EditorModel;
-  target: Component;
+  target?: Component;
   createLabel?: (data: { label: string; component: Component; trait: TraitView }) => string | HTMLElement;
   createInput?: (data: ReturnType<TraitView['getClbOpts']>) => string | HTMLElement;
 
   events: any = {};
+  models: any;
 
   appendInput = true;
 
   /** @ts-ignore */
   attributes() {
-    return this.model.get('attributes') || {};
+    return this.models && this.models[0].get('attributes');
   }
 
   templateLabel(cmp?: Component) {
@@ -44,13 +45,15 @@ export default class TraitView extends View<Trait> {
     super(o);
     const { config = {} } = o;
     const { model, eventCapture } = this;
-    const { target } = model;
-    const { type } = model.attributes;
+    this.models = o.models;
+    // const { target } = model;
+    // const { type } = model.attributes;
+    const type = this.models ? this.models[0].attributes.type : '';
     this.config = config;
     this.em = config.em;
     this.pfx = this.config.stylePrefix || '';
     this.ppfx = this.config.pStylePrefix || '';
-    this.target = target;
+    //this.target = target;
     this.className = this.pfx + 'trait';
     this.clsField = `${this.ppfx}field ${this.ppfx}field-${type}`;
     const evToListen: [string, any][] = [
@@ -58,12 +61,18 @@ export default class TraitView extends View<Trait> {
       ['remove', this.removeView],
     ];
     evToListen.forEach(([event, clb]) => {
-      model.off(event, clb);
-      this.listenTo(model, event, clb);
+      this.models &&
+        this.models.forEach((modelRef: any) => {
+          modelRef.off(event, clb);
+          this.listenTo(modelRef, event, clb);
+        });
     });
-    model.view = this;
-    this.listenTo(model, 'change:label', this.render);
-    this.listenTo(model, 'change:placeholder', this.rerender);
+    this.models &&
+      this.models.forEach((modelRef: any) => {
+        modelRef.view = this;
+        this.listenTo(modelRef, 'change:label', this.render);
+        this.listenTo(modelRef, 'change:placeholder', this.rerender);
+      });
     this.events = {};
     eventCapture.forEach(event => (this.events[event] = 'onChange'));
     this.delegateEvents();
@@ -72,8 +81,8 @@ export default class TraitView extends View<Trait> {
 
   getClbOpts() {
     return {
-      component: this.target,
-      trait: this.model,
+      component: this.models,
+      trait: this.models,
       elInput: this.getInputElem(),
     };
   }
@@ -95,9 +104,46 @@ export default class TraitView extends View<Trait> {
    */
   onChange(event: Event) {
     const el = this.getInputElem();
-    if (el && !isUndefined(el.value)) {
-      this.model.set('value', el.value);
+
+    if (el) {
+      // favor the query-selected input value because for some reason
+      // "sometimes" the el.value is old
+      let valueToUse = el.value;
+      const input = el.querySelector('input'); // alas, Javascript...
+      if (input && input.value) {
+        valueToUse = input.value;
+      }
+
+      if (!isUndefined(valueToUse)) {
+        const { em } = this;
+        em.trigger('traitview:change', this, this.models, valueToUse); // this event is not a native GrapesJS event, it was added for CCIDE
+
+        //** CCIDE optimization
+        const setProperty = function (modelRef: any, value: any) {
+          modelRef.set('value', value, { fromInput: 1 });
+        };
+
+        const magicIndex = this.models.length - 1; //upper limit of for loop & index of last models element
+        if (magicIndex > 0) {
+          // @ts-ignore
+          this.em.disableCollectionUpdateEventHandling && this.em.disableCollectionUpdateEventHandling();
+
+          for (let i = 0; i < magicIndex; i += 1) {
+            try {
+              setProperty(this.models[i], valueToUse);
+            } catch (e) {
+              console.error('Error setting trait', e);
+            }
+          }
+
+          // @ts-ignore
+          this.em.enableCollectionUpdateEventHandling && this.em.enableCollectionUpdateEventHandling();
+        }
+
+        setProperty(this.models[magicIndex], valueToUse);
+      }
     }
+
     this.onEvent({
       ...this.getClbOpts(),
       event,
@@ -105,7 +151,7 @@ export default class TraitView extends View<Trait> {
   }
 
   getValueForTarget() {
-    return this.model.get('value');
+    return this.models[0].get('value');
   }
 
   setInputValue(value: string) {
@@ -132,15 +178,18 @@ export default class TraitView extends View<Trait> {
    * @private
    */
   renderLabel() {
-    const { $el, target } = this;
+    // const { $el, target } = this;
+    const { $el } = this;
     const label = this.getLabel();
-    let tpl: string | HTMLElement = this.templateLabel(target);
+    let tpl: string | HTMLElement = this.templateLabel(this.models[this.models.length - 1]);
+    //let tpl: string | HTMLElement = this.templateLabel(target);
 
     if (this.createLabel) {
       tpl =
         this.createLabel({
           label,
-          component: target,
+          // component: target,
+          component: this.models[0],
           trait: this,
         }) || '';
     }
@@ -155,7 +204,8 @@ export default class TraitView extends View<Trait> {
    */
   getLabel() {
     const { em } = this;
-    const { label, name } = this.model.attributes;
+    // const { label, name } = this.model.attributes;
+    const { label, name } = this.models ? this.models[this.models.length - 1].attributes : { label: '', name: '' };
     return em.t(`traitManager.traits.labels.${name}`) || capitalize(label || name).replace(/-/g, ' ');
   }
 
@@ -163,7 +213,7 @@ export default class TraitView extends View<Trait> {
    * Returns current target component
    */
   getComponent() {
-    return this.target;
+    return this.models[0];
   }
 
   /**
@@ -173,9 +223,9 @@ export default class TraitView extends View<Trait> {
    */
   getInputEl() {
     if (!this.$input) {
-      const { em, model } = this;
-      const md = model;
-      const { name } = model.attributes;
+      const { em } = this;
+      const md = this.models ? this.models[0] : undefined;
+      const { name } = this.models ? this.models[0].attributes : { name: '' };
       const placeholder = md.get('placeholder') || md.get('default') || '';
       const type = md.get('type') || 'text';
       const min = md.get('min');
@@ -213,15 +263,15 @@ export default class TraitView extends View<Trait> {
 
   getModelValue() {
     let value;
-    const model = this.model;
-    const target = this.target;
-    const name = model.getName();
+    const models = this.models;
+    const target = this.models[0];
+    const name = models ? models[0].get('name') : '';
 
-    if (model.get('changeProp')) {
+    if (models && models[0].get('changeProp')) {
       value = target.get(name);
     } else {
-      const attrs = target.get('attributes')!;
-      value = model.get('value') || attrs[name];
+      const attrs = target.attributes;
+      value = (models && models[0].get('value')) || attrs[name];
     }
 
     return !isUndefined(value) ? value : '';
@@ -236,10 +286,10 @@ export default class TraitView extends View<Trait> {
    * @private
    * */
   renderField() {
-    const { $el, appendInput, model } = this;
+    const { $el, appendInput, models } = this;
     const inputs = $el.find('[data-input]');
     const el = inputs[inputs.length - 1];
-    let tpl: HTMLElement | string | undefined = model.el;
+    let tpl: HTMLElement | string | undefined = models && models[models.length - 1].el;
 
     if (!tpl) {
       tpl = this.createInput ? this.createInput(this.getClbOpts()) : this.getInputEl();
@@ -253,11 +303,11 @@ export default class TraitView extends View<Trait> {
       this.elInput = tpl as HTMLInputElement;
     }
 
-    model.el = this.elInput;
+    models[models.length - 1].el = this.elInput;
   }
 
   hasLabel() {
-    const { label } = this.model.attributes;
+    const { label } = this.models ? this.models[0].attributes : { label: '' };
     return !this.noLabel && label !== false;
   }
 
@@ -271,8 +321,8 @@ export default class TraitView extends View<Trait> {
   }
 
   render() {
-    const { $el, pfx, ppfx, model } = this;
-    const { type, id } = model.attributes;
+    const { $el, pfx, ppfx, models } = this;
+    const { type, id } = models ? models[0].attributes : { type: '', id: '' };
     const hasLabel = this.hasLabel && this.hasLabel();
     const cls = `${pfx}trait`;
     delete this.$input;

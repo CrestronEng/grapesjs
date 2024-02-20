@@ -1,5 +1,5 @@
 import { isString } from 'underscore';
-import TraitView from './TraitView';
+import TraitView from '../../overrides/trait_manager/view/TraitView';
 
 export default class TraitButtonView extends TraitView {
   templateInput() {
