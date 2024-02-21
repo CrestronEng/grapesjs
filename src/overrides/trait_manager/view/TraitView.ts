@@ -178,17 +178,14 @@ export default class TraitView extends View<Trait> {
    * @private
    */
   renderLabel() {
-    // const { $el, target } = this;
     const { $el } = this;
     const label = this.getLabel();
     let tpl: string | HTMLElement = this.templateLabel(this.models[this.models.length - 1]);
-    //let tpl: string | HTMLElement = this.templateLabel(target);
 
     if (this.createLabel) {
       tpl =
         this.createLabel({
           label,
-          // component: target,
           component: this.models[0],
           trait: this,
         }) || '';
@@ -312,7 +309,7 @@ export default class TraitView extends View<Trait> {
   }
 
   rerender() {
-    delete this.model.el;
+    delete this.models.el;
     this.render();
   }
 

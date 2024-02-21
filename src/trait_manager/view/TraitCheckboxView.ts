@@ -1,5 +1,5 @@
 import { isUndefined } from 'underscore';
-import TraitView from '../../overrides/trait_manager/view/TraitView';
+import TraitView from './TraitView';
 
 export default class TraitCheckboxView extends TraitView {
   appendInput = false;
@@ -40,10 +40,10 @@ export default class TraitCheckboxView extends TraitView {
       const name = model.getName();
 
       if (model.get('changeProp')) {
-        checked = target?.get(name);
+        checked = target.get(name);
         targetValue = checked;
       } else {
-        targetValue = target?.get('attributes')![name];
+        targetValue = target.get('attributes')![name];
         checked = targetValue || targetValue === '' ? !0 : !1;
       }
 

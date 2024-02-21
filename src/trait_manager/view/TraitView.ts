@@ -48,11 +48,11 @@ export default class TraitView extends View<Trait> {
     const { type } = model.attributes;
     this.config = config;
     this.em = config.em;
-    this.pfx = this.config.stylePrefix || '';
-    this.ppfx = this.config.pStylePrefix || '';
+    this.ppfx = config.pStylePrefix || '';
+    this.pfx = this.ppfx + config.stylePrefix || '';
     this.target = target;
-    this.className = this.pfx + 'trait';
-    this.clsField = `${this.ppfx}field ${this.ppfx}field-${type}`;
+    const { ppfx } = this;
+    this.clsField = `${ppfx}field ${ppfx}field-${type}`;
     const evToListen: [string, any][] = [
       ['change:value', this.onValueChange],
       ['remove', this.removeView],
