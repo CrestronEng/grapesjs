@@ -66,7 +66,7 @@ export default class PropertyFactory {
     this.typeSlider = 'slider';
     this.typeComposite = 'composite';
     this.typeStack = 'stack';
-    this.unitsSize = ['px', '%', 'em', 'rem', 'vh', 'vw'];
+    this.unitsSize = ['px', '%', 'vw'];
     this.units = ['px', '%', 'name'];
     this.unitsSizeNoPerc = ['px', 'em', 'rem', 'vh', 'vw'];
     this.unitsTime = ['s', 'ms'];
