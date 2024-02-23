@@ -82,7 +82,7 @@ export default class PropertyFactory {
     this.optsWrap = getOptions(['nowrap', 'wrap', 'wrap-reverse']);
     this.optsOverflow = getOptions(['visible', 'hidden', 'scroll', 'auto']);
     this.optsDir = getOptions(['row', 'row-reverse', 'column', 'column-reverse']);
-    this.opstDisplay = getOptions(['block', 'inline', 'inline-block', 'flex', 'none']);
+    this.opstDisplay = getOptions(['Block', 'None']);
     this.optsTransitFn = getOptions(['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out']);
     this.optsCursor = getOptions(['auto', 'pointer', 'copy', 'crosshair', 'grab', 'grabbing', 'help', 'move', 'text']);
     this.optsFloat = getOptions(['none', 'left', 'right']);
