@@ -170,10 +170,11 @@ export default class PropertyView extends View<Property> {
 
   onValueChange(m: any, val: any, opt: any = {}) {
     const value = this.model.getFullValue(undefined, { skipImportant: true });
-    this.setValue(value);
-
-    // Avoid target update if the changes comes from it
-    if (!opt.fromTarget) {
+    // Avoid element update if the change comes from it
+    if (!opt.addStyle || opt.addStyle['background-color']) {
+      this.setValue(value);
+    }
+    if (opt.addStyle) {
       const { em } = this.config;
       let selectedComponents;
       if (em) {
@@ -184,8 +185,6 @@ export default class PropertyView extends View<Property> {
           em.trigger('propertyview:change', this, selectedComponents, value);
         }
       }
-
-      // this.getTargets().forEach(target => this.__updateTarget(target, opt));
 
       // Update the editor and selected components about the change
       if (!em) return;
@@ -199,8 +198,6 @@ export default class PropertyView extends View<Property> {
         component.trigger(`change:style:${prop}`, component, value, opt);
       });
     }
-
-    this.updateStatus();
   }
 
   /**
