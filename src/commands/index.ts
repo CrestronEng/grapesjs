@@ -79,6 +79,8 @@ const commandsDef = [
   ['component-drag', 'ComponentDrag'],
 ];
 
+const modulesOverridden = ['SelectComponent'];
+
 const defComOptions = { preserveSelected: 1 };
 
 export const getOnComponentDragStart = (em: Editor) => (data: any) => em.trigger(`${eventDrag}:start`, data);
@@ -200,7 +202,10 @@ export default class CommandsModule extends Module<CommandsConfig & { pStylePref
     defaultCommands['core:redo'] = e => e.UndoManager.redo();
     commandsDef.forEach(item => {
       const oldCmd = item[2];
-      const cmd = require(`./view/${item[1]}`).default;
+      // const cmd = require(`./view/${item[1]}`).default;
+      const cmd = modulesOverridden.includes(item[1])
+        ? require(`overrides/commands/view/${item[1]}`).default
+        : require(`./view/${item[1]}`).default;
       const cmdName = `core:${item[0]}`;
       defaultCommands[cmdName] = cmd;
       if (oldCmd) {

@@ -1,5 +1,5 @@
 import { isUndefined } from 'underscore';
-import InputNumber from '../../../domain_abstract/ui/InputNumber';
+import InputNumber from '../../domain_abstract/ui/InputNumber';
 import TraitView from './TraitView';
 
 export default class TraitNumberView extends TraitView {
