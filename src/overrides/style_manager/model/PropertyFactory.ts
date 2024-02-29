@@ -1,8 +1,8 @@
 import { isFunction, isString } from 'underscore';
-import { PropertyProps } from '../../style_manager/model/Property';
-import PropertyNumber, { PropertyNumberProps } from '../../style_manager/model/PropertyNumber';
-import PropertySelect, { PropertySelectProps } from '../../style_manager/model/PropertySelect';
-import { PropertyStackProps } from '../../style_manager/model/PropertyStack';
+import { PropertyProps } from '../../../style_manager/model/Property';
+import PropertyNumber, { PropertyNumberProps } from '../../../style_manager/model/PropertyNumber';
+import PropertySelect, { PropertySelectProps } from '../../../style_manager/model/PropertySelect';
+import { PropertyStackProps } from '../../../style_manager/model/PropertyStack';
 
 type Option = {
   id: string;

@@ -1,4 +1,4 @@
-import PropertyFactory from '../../../../src/overrides/style_manager/PropertyFactory';
+import PropertyFactory from '../../../../src/overrides/style_manager/model/PropertyFactory';
 
 describe('PropertyFactory', () => {
   let obj: PropertyFactory;
