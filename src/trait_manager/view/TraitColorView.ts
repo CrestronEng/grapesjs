@@ -1,5 +1,5 @@
+import InputColor from '../../overrides/domain_abstract/ui/InputColor';
 import TraitView from '../../overrides/trait_manager/view/TraitView';
-import InputColor from '../../domain_abstract/ui/InputColor';
 
 export default class TraitColorView extends TraitView {
   templateInput() {
