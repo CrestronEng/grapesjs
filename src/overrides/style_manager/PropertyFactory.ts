@@ -233,7 +233,7 @@ export default class PropertyFactory {
       ['text-align', { default: 'left', options: this.optsTextAlign }, 'float'],
 
       // Color types
-      ['color', { type: this.typeColor, default: 'black', full: true }],
+      ['color', { type: this.typeColor, default: '#ffffff', full: true }],
       ['text-shadow-color', {}, 'color'],
       ['border-color', {}, 'color'],
       ['box-shadow-color', {}, 'color'],
