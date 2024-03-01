@@ -1,6 +1,7 @@
 import { isUndefined } from 'underscore';
 import Input from '../../../domain_abstract/ui/Input';
 import ColorPicker from '../../../utils/ColorPicker';
+import $ from '../../../utils/cash-dom';
 
 $ && ColorPicker($);
 
@@ -554,10 +555,6 @@ export default class InputColor extends Input {
 
   render() {
     Input.prototype.render.call(this);
-    // // This will make the color input available on render
-    // this.getColorEl();
-    // return this;
-
     this.unitEl = null;
     this.updateFromInputColor = false;
     this.isSettingValue = false;
