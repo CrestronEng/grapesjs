@@ -639,9 +639,9 @@ export default class Component extends StyleableModel<ComponentProperties> {
       prop = super.setStyle.apply(this, arguments as any);
     }
 
-    if (!opt.temporary) {
-      this.__onStyleChange(opts.addStyle || prop);
-    }
+    // if (!opt.temporary) {
+    //   this.__onStyleChange(opts.addStyle || prop);
+    // }
 
     return prop;
   }
