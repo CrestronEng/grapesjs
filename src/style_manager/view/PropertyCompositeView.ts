@@ -1,4 +1,4 @@
-import PropertyView from './PropertyView';
+import PropertyView from '../../overrides/style_manager/view/PropertyView';
 import PropertiesView from './PropertiesView';
 import PropertyComposite from '../model/PropertyComposite';
 
