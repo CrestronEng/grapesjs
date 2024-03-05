@@ -33,6 +33,8 @@ export default function ($, undefined?: any) {
       togglePaletteOnly: false,
       showSelectionPalette: true,
       localStorageKey: false,
+      isRGBInputUpdated: false,
+      isHSLInputUpdated: false,
       appendTo: 'body',
       maxSelectionSize: 7,
       cancelText: 'cancel',
@@ -109,9 +111,19 @@ export default function ($, undefined?: any) {
         "<div class='sp-alpha'><div class='sp-alpha-inner'><div class='sp-alpha-handle'></div></div></div>",
         '</div>',
         "<div class='sp-input-container sp-cf'>",
-        "<input class='sp-input' type='text' spellcheck='false'  />",
-        '</div>',
+        "<input class='sp-input' type='text' spellcheck='false' style='background-color:white;' />",
         "<div class='sp-initial sp-thumb sp-cf'></div>",
+        '</div>',
+        "<div class='sp-input-container' style='background: lightgrey;border: #dae9f0;'>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> R<input type='number' min='0' max='255' class='sp-Red-Input' style='width:37px;height:20px;margin:3px;background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> G<input type='number' min='0' max='255' class='sp-Green-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> B<input type='number' min='0' max='255' class='sp-Blue-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        '</div>',
+        "<div class='sp-input-container' style='background: lightgrey;border: #dae9f0;margin-top: -5px;'>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> H<input type='number' min='0' class='sp-Hue-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> S<input type='number' min='0' class='sp-Sat-Input' style='width:39px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        "<SPAN STYLE='font-weight:bold;color:#083d54;'> L<input type='number' min='0' class='sp-Lum-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
+        '</div>',
         "<div class='sp-button-container sp-cf'>",
         "<a class='sp-cancel' href='#'></a>",
         "<button type='button' class='sp-choose'></button>",
@@ -184,6 +196,8 @@ export default function ($, undefined?: any) {
       flat = opts.flat,
       showSelectionPalette = opts.showSelectionPalette,
       localStorageKey = opts.localStorageKey,
+      isRGBInputUpdated = opts.isRGBInputUpdated,
+      isHSLInputUpdated = opts.isHSLInputUpdated,
       theme = opts.theme,
       callbacks = opts.callbacks,
       resize = throttle(reflow, 10),
@@ -229,6 +243,12 @@ export default function ($, undefined?: any) {
       cancelButton = container.find('.sp-cancel'),
       clearButton = container.find('.sp-clear'),
       chooseButton = container.find('.sp-choose'),
+      hueInput = container.find('.sp-Hue-Input'),
+      satInput = container.find('.sp-Sat-Input'),
+      lumInput = container.find('.sp-Lum-Input'),
+      redInput = container.find('.sp-Red-Input'),
+      greenInput = container.find('.sp-Green-Input'),
+      blueInput = container.find('.sp-Blue-Input'),
       toggleButton = container.find('.sp-palette-toggle'),
       isInput = boundElement.is('input'),
       isInputTypeColor = isInput && boundElement.attr('type') === 'color' && inputTypeColorSupport(),
@@ -336,12 +356,46 @@ export default function ($, undefined?: any) {
         }
       });
 
+      // Initializing the RGB & HSL Input box's events
+      redInput.change(setFromRGBInput);
+      redInput.bind('paste', function () {
+        setTimeout(setFromRGBInput, 1);
+      });
+
+      blueInput.change(setFromRGBInput);
+      blueInput.bind('paste', function () {
+        setTimeout(setFromRGBInput, 1);
+      });
+
+      greenInput.change(setFromRGBInput);
+      greenInput.bind('paste', function () {
+        setTimeout(setFromRGBInput, 1);
+      });
+
+      hueInput.change(setFromHSLInput);
+      hueInput.bind('paste', function () {
+        setTimeout(setFromHSLInput, 1);
+      });
+
+      satInput.change(setFromHSLInput);
+      satInput.bind('paste', function () {
+        setTimeout(setFromHSLInput, 1);
+      });
+
+      lumInput.change(setFromHSLInput);
+      lumInput.bind('paste', function () {
+        setTimeout(setFromHSLInput, 1);
+      });
+
       cancelButton.text(opts.cancelText);
       cancelButton.bind('click.spectrum', function (e) {
         e.stopPropagation();
         e.preventDefault();
-        revert();
-        hide();
+        if (visible) {
+          // only do the following if the color picker is actually being shown
+          revert();
+          hide();
+        }
       });
 
       clearButton.attr('title', opts.clearText);
@@ -601,6 +655,133 @@ export default function ($, undefined?: any) {
           textInput.addClass('sp-validation-error');
         }
       }
+      // Below code updates the RGB & HSL values
+      var color = get();
+      setRGBValues(color, false);
+      setHSLValues(color, false);
+    }
+
+    //Function to set RGB values
+    function setRGBValues(color, isRGBUpdated) {
+      if (isRGBUpdated) return;
+      var rgb = tinycolor(color).toRgb();
+      redInput.val(rgb.r);
+      greenInput.val(rgb.g);
+      blueInput.val(rgb.b);
+    }
+
+    //Function to set HSL values
+    function setHSLValues(color, isHSLUpdated) {
+      if (isHSLUpdated) return;
+      var hsl = tinycolor(color).toHsl();
+      hueInput.val(mathRound(hsl.h));
+      satInput.val(mathRound(hsl.s * 100));
+      lumInput.val(mathRound(hsl.l * 100));
+    }
+
+    //Function will be triggered with R or G or B value changes
+    function setFromRGBInput() {
+      var redVal = redInput.val();
+      var blueVal = blueInput.val();
+      var greenVal = greenInput.val();
+      var color = { redVal: redVal, blueVal: blueVal, greenVal: greenVal };
+
+      validateRGBInput(color);
+
+      var hexaColor = rgbaToHex(color.redVal, color.greenVal, color.blueVal, currentAlpha);
+      var currentColor = tinycolor(hexaColor);
+      if (currentColor.isValid() && !tinycolor.equals(currentColor, get())) {
+        isRGBInputUpdated = true;
+        set(currentColor);
+        move();
+        isRGBInputUpdated = false;
+      }
+    }
+
+    //Function will be triggered with H or S or L value changes
+    function setFromHSLInput() {
+      var hueVal = hueInput.val();
+      var satVal = satInput.val();
+      var lumVal = lumInput.val();
+      var color = { hueVal: hueVal, satVal: satVal, lumVal: lumVal };
+      validateHSLInput(color);
+
+      var rgb = hslToRgb(color.hueVal, color.satVal, color.lumVal);
+      var hexaColor = rgbaToHex(rgb.r, rgb.g, rgb.b, currentAlpha);
+      var currentColor = tinycolor(hexaColor);
+
+      if (currentColor.isValid() && !tinycolor.equals(currentColor, get())) {
+        isHSLInputUpdated = true;
+        set(currentColor);
+        move();
+        isHSLInputUpdated = false;
+      }
+    }
+
+    //Function validates the HSL input
+    function validateHSLInput(color) {
+      if (color.hueVal < 0) {
+        color.hueVal = 0;
+        hueInput.val(0);
+      }
+
+      if (color.hueVal > 360) {
+        color.hueVal = 360;
+        hueInput.val(360);
+      }
+
+      if (color.satVal < 0) {
+        color.satVal = 0;
+        satInput.val(0);
+      }
+
+      if (color.satVal > 100) {
+        color.satVal = 100;
+        satInput.val(100);
+      }
+
+      if (color.lumVal < 0) {
+        color.lumVal = 0;
+        lumInput.val(0);
+      }
+
+      if (color.lumVal > 100) {
+        color.lumVal = 100;
+        lumInput.val(100);
+      }
+    }
+
+    //Function validates the RGB input
+    function validateRGBInput(color) {
+      if (color.redVal < 0) {
+        color.redVal = 0;
+        redInput.val(0);
+      }
+
+      if (color.redVal > 255) {
+        color.redVal = 255;
+        redInput.val(255);
+      }
+
+      if (color.greenVal < 0) {
+        color.greenVal = 0;
+        greenInput.val(0);
+      }
+
+      if (color.greenVal > 255) {
+        color.greenVal = 255;
+        greenInput.val(255);
+      }
+
+      if (color.blueVal < 0) {
+        color.blueVal = 0;
+        blueInput.val(0);
+      }
+
+      if (color.blueVal > 255) {
+        color.blueVal = 255;
+        blueInput.val(255);
+      }
     }
 
     function toggle() {
@@ -815,6 +996,12 @@ export default function ($, undefined?: any) {
       if (opts.showInput) {
         textInput.val(displayColor);
       }
+
+      //Updates the HSL input boxes when the color is set through other ways
+      setRGBValues(tinycolor(displayColor), isRGBInputUpdated);
+
+      //Updates the RGB input boxes when the color is set through other ways
+      setHSLValues(tinycolor(displayColor), isHSLInputUpdated);
 
       if (opts.showPalette) {
         drawPalette();
@@ -1416,6 +1603,9 @@ export default function ($, undefined?: any) {
         ')'
       );
     },
+    getCurrentAlpha: function () {
+      return this._a;
+    },
     toString: function (format) {
       var formatSet = !!format;
       format = format || this._format;
@@ -1769,10 +1959,10 @@ export default function ($, undefined?: any) {
   // Returns an 8 character hex
   function rgbaToHex(r, g, b, a) {
     var hex = [
-      pad2(convertDecimalToHex(a)),
       pad2(mathRound(r).toString(16)),
       pad2(mathRound(g).toString(16)),
       pad2(mathRound(b).toString(16)),
+      pad2(convertDecimalToHex(a)),
     ];
 
     return hex.join('');
@@ -2037,14 +2227,14 @@ export default function ($, undefined?: any) {
   var names = (tinycolor.names = {
     aliceblue: 'f0f8ff',
     antiquewhite: 'faebd7',
-    aqua: '0ff',
+    aqua: '00ffff',
     aquamarine: '7fffd4',
     azure: 'f0ffff',
     beige: 'f5f5dc',
     bisque: 'ffe4c4',
-    black: '000',
+    black: '000000',
     blanchedalmond: 'ffebcd',
-    blue: '00f',
+    blue: '0000ff',
     blueviolet: '8a2be2',
     brown: 'a52a2a',
     burlywood: 'deb887',
@@ -2056,7 +2246,7 @@ export default function ($, undefined?: any) {
     cornflowerblue: '6495ed',
     cornsilk: 'fff8dc',
     crimson: 'dc143c',
-    cyan: '0ff',
+    cyan: '00ffff',
     darkblue: '00008b',
     darkcyan: '008b8b',
     darkgoldenrod: 'b8860b',
@@ -2084,7 +2274,7 @@ export default function ($, undefined?: any) {
     firebrick: 'b22222',
     floralwhite: 'fffaf0',
     forestgreen: '228b22',
-    fuchsia: 'f0f',
+    fuchsia: 'ff00ff',
     gainsboro: 'dcdcdc',
     ghostwhite: 'f8f8ff',
     gold: 'ffd700',
@@ -2114,14 +2304,14 @@ export default function ($, undefined?: any) {
     lightsalmon: 'ffa07a',
     lightseagreen: '20b2aa',
     lightskyblue: '87cefa',
-    lightslategray: '789',
-    lightslategrey: '789',
+    lightslategray: '778899',
+    lightslategrey: '778899',
     lightsteelblue: 'b0c4de',
     lightyellow: 'ffffe0',
-    lime: '0f0',
+    lime: '00ff00',
     limegreen: '32cd32',
     linen: 'faf0e6',
-    magenta: 'f0f',
+    magenta: 'ff00ff',
     maroon: '800000',
     mediumaquamarine: '66cdaa',
     mediumblue: '0000cd',
@@ -2156,7 +2346,7 @@ export default function ($, undefined?: any) {
     powderblue: 'b0e0e6',
     purple: '800080',
     rebeccapurple: '663399',
-    red: 'f00',
+    red: 'ff0000',
     rosybrown: 'bc8f8f',
     royalblue: '4169e1',
     saddlebrown: '8b4513',
@@ -2182,7 +2372,7 @@ export default function ($, undefined?: any) {
     wheat: 'f5deb3',
     white: 'fff',
     whitesmoke: 'f5f5f5',
-    yellow: 'ff0',
+    yellow: 'ffff00',
     yellowgreen: '9acd32',
   });
 
