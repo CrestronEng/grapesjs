@@ -1,6 +1,6 @@
 import { View } from '../../common';
 import { appendAtIndex } from '../../utils/dom';
-import PropertyView from '../../overrides/style_manager/view/PropertyView';
+import PropertyView from './PropertyView';
 
 export default class PropertiesView extends View {
   config?: any;
