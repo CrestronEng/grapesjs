@@ -568,7 +568,8 @@ export default class InputColor extends Input {
   }
 }
 
-InputColor.prototype.events = {
+// @ts-ignore
+InputColor.__proto__.events = {
   // @ts-ignore
   'change input': 'onInputColorChange',
   'change select': 'onColorUnitChange',
