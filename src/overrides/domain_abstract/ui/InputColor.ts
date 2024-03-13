@@ -537,7 +537,7 @@ export default class InputColor extends Input {
     if (isUndefined(value)) return;
     // Whenever there is any change in the color picker, this method is called, but there's no property which say if it's a change from input field or from the units
     // The below logic will check for the event tagname and decide if it's a change from the input or units
-    e.target.tagName == 'INPUT' ? (this.updateFromUnitColor = false) : (this.updateFromUnitColor = true);
+    this.updateFromUnitColor = e.target.tagName !== 'INPUT';
     this.__onInputChange(value);
   }
 
