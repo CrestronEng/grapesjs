@@ -20,6 +20,7 @@ export default class InputColor extends Input {
   currentColorValues: any;
   unitEl: any;
   isSettingValue?: boolean;
+  updateFromUnitColor?: boolean;
 
   template() {
     const ppfx = this.ppfx;
@@ -34,7 +35,7 @@ export default class InputColor extends Input {
     `;
   }
 
-  onColorChange(e: Event) {
+  onColorChange() {
     if (this.updateFromInputColor) {
       this.updateFromInputColor = false;
       return;
@@ -45,7 +46,7 @@ export default class InputColor extends Input {
     this.processSelectedColor();
   }
 
-  onInputColorChange(e: Event) {
+  onInputColorChange() {
     this.updateFromInputColor = true;
     if (this.getInputEl().value == '#' || this.getInputEl().value == 'RGB' || this.getInputEl().value == 'rgb') {
       this.refreshUnitsDropdown(this.getUnitEl().value, this.currentColorValues);
@@ -62,6 +63,7 @@ export default class InputColor extends Input {
    */
   onColorUnitChange(e: any) {
     this.updateFromInputColor = true;
+    this.updateFromUnitColor = true;
     const inputVal = this.getInputEl().value;
 
     if (inputVal == 'none' || inputVal == 'None') {
@@ -533,6 +535,9 @@ export default class InputColor extends Input {
     e.stopPropagation();
     const { value } = e.target;
     if (isUndefined(value)) return;
+    // Whenever there is any change in the color picker, this method is called, but there's no property which say if it's a change from input field or from the units
+    // The below logic will check for the event tagname and decide if it's a change from the input or units
+    e.target.tagName == 'INPUT' ? (this.updateFromUnitColor = false) : (this.updateFromUnitColor = true);
     this.__onInputChange(value);
   }
 
@@ -550,13 +555,19 @@ export default class InputColor extends Input {
       color && (value = color);
     }
 
-    onChange ? onChange(value) : model.set({ value }, { fromInput: 1 });
+    if (this.updateFromUnitColor) {
+      this.onColorUnitChange({});
+    } else {
+      onChange ? onChange(value) : model.set({ value }, { fromInput: 1 });
+    }
+    this.onColorChange();
   }
 
   render() {
     Input.prototype.render.call(this);
     this.unitEl = null;
     this.updateFromInputColor = false;
+    this.updateFromUnitColor = false;
     this.isSettingValue = false;
     this.getColorEl();
     const unit = this.getUnitEl();
@@ -567,11 +578,3 @@ export default class InputColor extends Input {
     return this;
   }
 }
-
-// @ts-ignore
-InputColor.__proto__.events = {
-  // @ts-ignore
-  'change input': 'onInputColorChange',
-  'change select': 'onColorUnitChange',
-  change: 'onColorChange',
-};
