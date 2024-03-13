@@ -22,12 +22,12 @@ export default function ($, undefined?: any) {
       // Options
       color: false,
       flat: false,
-      showInput: false,
+      showInput: true,
       allowEmpty: false,
       showButtons: true,
       clickoutFiresChange: true,
-      showInitial: false,
-      showPalette: false,
+      showInitial: true,
+      showPalette: true,
       showPaletteOnly: false,
       hideAfterPaletteSelect: false,
       togglePaletteOnly: false,
@@ -2547,10 +2547,10 @@ export default function ($, undefined?: any) {
     }
     if ((match = matchers.hex8.exec(color))) {
       return {
-        a: convertHexToDecimal(match[1]),
         r: parseIntFromHex(match[2]),
         g: parseIntFromHex(match[3]),
         b: parseIntFromHex(match[4]),
+        a: convertHexToDecimal(match[1]),
         format: named ? 'name' : 'hex8',
       };
     }
