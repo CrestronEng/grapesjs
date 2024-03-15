@@ -1,7 +1,7 @@
 import { isUndefined } from 'underscore';
 import Input from '../../../domain_abstract/ui/Input';
-import ColorPicker from '../../../utils/ColorPicker';
 import $ from '../../../utils/cash-dom';
+import ColorPicker from '../../utils/ColorPicker';
 
 $ && ColorPicker($);
 
