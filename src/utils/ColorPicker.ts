@@ -2370,7 +2370,7 @@ export default function ($, undefined?: any) {
     turquoise: '40e0d0',
     violet: 'ee82ee',
     wheat: 'f5deb3',
-    white: 'fff',
+    white: 'ffffff',
     whitesmoke: 'f5f5f5',
     yellow: 'ffff00',
     yellowgreen: '9acd32',
