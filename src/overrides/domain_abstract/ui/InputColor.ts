@@ -544,7 +544,7 @@ export default class InputColor extends Input {
   __onInputChange(val: string) {
     const { model, opts } = this;
     const { onChange } = opts;
-    let value = val;
+    let value = isNaN(Number(val)) ? val : model.attributes.value;
     const colorEl = this.getColorEl();
 
     // Check the color by using the ColorPicker's parser

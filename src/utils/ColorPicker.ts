@@ -2547,10 +2547,10 @@ export default function ($, undefined?: any) {
     }
     if ((match = matchers.hex8.exec(color))) {
       return {
-        r: parseIntFromHex(match[2]),
-        g: parseIntFromHex(match[3]),
-        b: parseIntFromHex(match[4]),
-        a: convertHexToDecimal(match[1]),
+        r: parseIntFromHex(match[1]),
+        g: parseIntFromHex(match[2]),
+        b: parseIntFromHex(match[3]),
+        a: convertHexToDecimal(match[4]),
         format: named ? 'name' : 'hex8',
       };
     }
