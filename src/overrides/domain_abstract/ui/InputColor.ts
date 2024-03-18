@@ -300,6 +300,7 @@ export default class InputColor extends Input {
       colorHex = colorHex.substring(1);
     }
     colorHex = colorHex.toLowerCase();
+
     // @ts-ignore
     const tinyColor = window.tinycolor;
     const name = tinyColor.hexNames[colorHex];
@@ -542,24 +543,9 @@ export default class InputColor extends Input {
   }
 
   __onInputChange(val: string) {
-    const { model, opts } = this;
-    const { onChange } = opts;
+    const { model } = this;
     let value = isNaN(Number(val)) ? val : model.attributes.value;
-    const colorEl = this.getColorEl();
-
-    // Check the color by using the ColorPicker's parser
-    if (colorEl) {
-      colorEl.spectrum('set', value);
-      const tc = colorEl.spectrum('get');
-      const color = value && getColor(tc);
-      color && (value = color);
-    }
-
-    if (this.updateFromUnitColor) {
-      this.onColorUnitChange({});
-    } else {
-      onChange ? onChange(value) : model.set({ value }, { fromInput: 1 });
-    }
+    model.set({ value }, { fromInput: 1 });
     this.onColorChange();
   }
 
