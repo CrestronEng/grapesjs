@@ -431,7 +431,7 @@ export default class InputColor extends Input {
           const cl = getColor(color);
           this.movedColor = cl;
           cpStyle.backgroundColor = cl;
-          handleChange(cl, false);
+          handleChange(cl, true);
         },
         change: (color: any) => {
           changed = true;
