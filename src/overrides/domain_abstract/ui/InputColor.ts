@@ -460,7 +460,6 @@ export default class InputColor extends Input {
 
       if (em && em.on!) {
         em.on('component:selected', () => {
-          this.movedColor && handleChange(this.movedColor);
           changed = true;
           this.movedColor = '';
           // @ts-ignore
