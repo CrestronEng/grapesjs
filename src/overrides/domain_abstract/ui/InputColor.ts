@@ -460,7 +460,15 @@ export default class InputColor extends Input {
 
       if (em && em.on!) {
         em.on('component:selected', () => {
-          this.movedColor && handleChange(this.movedColor);
+          // CCID-9329: Commenting out this call because it causes a global issue on the Omni side:
+          // The component's background is filled with white when deselected
+
+          // Issue is related to imcompatibility between native and custom CSS properties (like 'gaugeInactiveColor_background-color')
+          // This update has been added initially in the commit https://github.com/GrapesJS/grapesjs/commit/47d10eda10041ef6cb4765696ce5138fafb78358
+          // to fix the issue that is not reproducible now
+
+          // this.movedColor && handleChange(this.movedColor);
+
           changed = true;
           this.movedColor = '';
           // @ts-ignore
