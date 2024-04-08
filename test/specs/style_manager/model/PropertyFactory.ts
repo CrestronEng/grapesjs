@@ -29,8 +29,8 @@ describe('PropertyFactory', () => {
       {
         property: 'display',
         type: 'select',
-        default: 'Block',
-        options: [{ id: 'Block' }, { id: 'None' }],
+        default: 'block',
+        options: [{ id: 'block' }, { id: 'none' }],
       },
     ]);
   });
