@@ -444,6 +444,8 @@ export default class InputColor extends Input {
           changed = false;
           this.movedColor = '';
           previousColor = onChange ? model.getValue({ noDefault: true }) : getColor(color);
+          const propertyId = model.attributes.property;
+          em.trigger('inputcolor:show', this, propertyId, previousColor); // this event is not a native GrapesJS event, it was added for CCIDE
         },
         hide: () => {
           if (!changed && (previousColor || onChange)) {
