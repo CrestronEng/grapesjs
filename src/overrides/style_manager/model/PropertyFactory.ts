@@ -269,6 +269,10 @@ export default class PropertyFactory {
         },
         'display',
       ],
+      // CCID-9744: Commenting the below line because this list is never used by components,
+      // only "Roboto" is used which is handled from the adaptive-stylemanager.js file.
+      // The optsFonts list was shown in the properties manager by default in the Typography sector.
+      // ['font-family', { default: 'Arial, Helvetica, sans-serif', options: this.optsFonts }, 'display'],
       ['font-weight', { default: '400', options: this.optsWeight }, 'display'],
       ['border-style', { default: 'solid', options: this.optsBorderStyle }, 'display'],
       ['box-shadow-type', { default: '', options: this.optsShadowType }, 'display'],
