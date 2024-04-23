@@ -559,6 +559,7 @@ export default class InputColor extends Input {
   __onInputChange(val: string) {
     const { model } = this;
     let value = isNaN(Number(val)) ? val : model.attributes.value;
+    this.model.em.trigger('propertyview:change', this.model.view, this.model.em.getSelectedAll(), value);
     model.set({ value }, { fromInput: 1 });
     this.onColorChange();
   }
