@@ -1,7 +1,7 @@
 import { isUndefined, isString, bindAll } from 'underscore';
 import { getModel, isEscKey, isEnterKey } from 'utils/mixins';
 import Backbone from 'backbone';
-import ComponentView from 'dom_components/view/ComponentView';
+import ComponentView from 'overrides/dom_components/view/ComponentView';
 import { eventDrag } from 'dom_components/model/Component';
 
 const inputProp = 'contentEditable';
@@ -133,25 +133,11 @@ export default Backbone.View.extend({
   toggleVisibility(e) {
     e && e.stopPropagation();
     const { model, em } = this;
-    const layer = model.viewLayer.el;
     const prevDspKey = '__prev-display';
     const prevDisplay = model.get(prevDspKey);
     const style = model.getStyle();
-    let { display } = style;
-
-    if (display == undefined) {
-      if (layer.className.includes('gjs-layer-hidden')) {
-        display = 'none';
-      } else {
-        display = 'block';
-      }
-    }
+    const { display } = style;
     const hidden = display == 'none';
-
-    //const newValue = hidden ? prevDisplay : 'none';
-    const newValue =
-      hidden && prevDisplay ? prevDisplay : hidden ? 'block' : 'none';
-    em && em.trigger('itemview:toggled:display', this, model, newValue); // this event is not a native GrapesJS event, it was added for CCIDE
 
     if (hidden) {
       delete style.display;
@@ -159,9 +145,6 @@ export default Backbone.View.extend({
       if (prevDisplay) {
         style.display = prevDisplay;
         model.unset(prevDspKey);
-      } else {
-        model.set(prevDspKey, prevDisplay);
-        style.display = newValue;
       }
     } else {
       display && model.set(prevDspKey, display);
@@ -204,7 +187,6 @@ export default Backbone.View.extend({
     const name = inputEl.textContent;
     inputEl.scrollLeft = 0;
     inputEl[inputProp] = false;
-    em && em.trigger('itemview:change', this, this.model, name); // this event is not a native GrapesJS event, it was added for CCIDE
     this.model.set({ 'custom-name': name });
     em && em.setEditing(0);
     $el

@@ -45,7 +45,22 @@ export default () => ({
         case 'flex-basis':
           obj.fixedValues = ['initial', 'inherit', 'auto'];
           break;
-        case 'font-size': //fixed values updated for font-size
+        case 'font-size':
+          obj.fixedValues = [
+            'medium',
+            'xx-small',
+            'x-small',
+            'small',
+            'large',
+            'x-large',
+            'xx-large',
+            'smaller',
+            'larger',
+            'length',
+            'initial',
+            'inherit'
+          ];
+          break;
         case 'letter-spacing':
         case 'line-height':
           obj.fixedValues = ['normal', 'initial', 'inherit'];
@@ -128,8 +143,6 @@ export default () => ({
         case 'flex-grow':
         case 'flex-shrink':
         case 'flex-basis':
-        case 'row-gap':
-        case 'column-gap':
           obj.type = 'integer';
           break;
         case 'margin':
@@ -209,8 +222,6 @@ export default () => ({
         case 'transform-rotate-z':
         case 'order':
         case 'flex-grow':
-        case 'row-gap':
-        case 'column-gap':
           obj.defaults = 0;
           break;
         case 'border-top-left-radius':
@@ -329,6 +340,9 @@ export default () => ({
         case 'margin-bottom':
         case 'padding-top':
         case 'padding-bottom':
+        case 'min-height':
+        case 'max-height':
+        case 'height':
           obj.units = ['px', '%', 'vh'];
           break;
         case 'right':
@@ -337,6 +351,9 @@ export default () => ({
         case 'margin-left':
         case 'padding-right':
         case 'padding-left':
+        case 'min-width':
+        case 'max-width':
+        case 'width':
           obj.units = ['px', '%', 'vw'];
           break;
         case 'flex-basis':
@@ -355,8 +372,6 @@ export default () => ({
           obj.units = ['px', '%'];
           break;
         case 'font-size':
-          obj.units = ['px', '%', 'name'];
-          break;
         case 'letter-spacing':
         case 'line-height':
           obj.units = ['px', 'em', 'rem', '%'];
@@ -367,14 +382,6 @@ export default () => ({
         case 'box-shadow-blur':
         case 'box-shadow-spread':
         case 'perspective':
-        case 'row-gap':
-        case 'column-gap':
-        case 'min-width':
-        case 'max-width':
-        case 'width':
-        case 'min-height':
-        case 'max-height':
-        case 'height':
           obj.units = ['px'];
           break;
         case 'transition-duration':
@@ -528,7 +535,8 @@ export default () => ({
           obj.list = [
             { value: 'static' },
             { value: 'relative' },
-            { value: 'absolute' }
+            { value: 'absolute' },
+            { value: 'fixed' }
           ];
           break;
         case 'font-family':

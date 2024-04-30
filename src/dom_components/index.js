@@ -32,7 +32,7 @@ import { isEmpty, isObject, isArray, result } from 'underscore';
 import defaults from './config/config';
 import Component from './model/Component';
 import Components from './model/Components';
-import ComponentView from './view/ComponentView';
+import ComponentView from 'overrides/dom_components/view/ComponentView';
 import ComponentsView from './view/ComponentsView';
 import ComponentTableCell from './model/ComponentTableCell';
 import ComponentTableCellView from './view/ComponentTableCellView';

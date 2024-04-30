@@ -264,8 +264,7 @@ class Resizer {
     var attrName = 'data-' + config.prefix + 'handler';
     var rect = this.getElementPos(el, { target: 'el' });
     var parentRect = this.getElementPos(parentEl);
-    this.handlerAttr =
-      e.path[0].getAttribute(attrName) || e.target.getAttribute(attrName);
+    this.handlerAttr = e.target.getAttribute(attrName);
     this.clickedHandler = e.target;
     this.startDim = {
       t: rect.top,
@@ -438,8 +437,7 @@ class Resizer {
    * @param  {Event} e
    */
   handleMouseDown(e) {
-    var el = e.path[0] || e.target;
-
+    var el = e.target;
     if (this.isHandler(el)) {
       this.selectedHandler = el;
       this.start(e);

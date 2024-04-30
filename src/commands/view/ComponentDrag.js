@@ -27,7 +27,6 @@ export default {
       setPosition: this.setPosition,
       guidesStatic: () => this.guidesStatic,
       guidesTarget: () => this.guidesTarget,
-      zoom: editor.Canvas.getZoomDecimal(),
       ...dragger
     };
     this.setupGuides();
@@ -39,7 +38,6 @@ export default {
     this.guidesContainer = this.getGuidesContainer();
     this.guidesTarget = this.getGuidesTarget();
     this.guidesStatic = this.getGuidesStatic();
-    this.nativeDrag = event && event.type == 'dragstart'; // nativeDrag - when use component dragging directly, otherwise using arrows icon ("+")
     let drg = this.dragger;
 
     if (!drg) {
@@ -262,18 +260,17 @@ export default {
   },
 
   getPosition() {
-    const { target, isTran, editor } = this;
+    const { target, isTran } = this;
     const { left, top, transform } = target.getStyle();
     let x = 0;
     let y = 0;
-    const zoom = this.nativeDrag ? 1 : editor.Canvas.getZoomDecimal(); // Ignore zoom rate on native drag
 
     if (isTran) {
       x = this.getTranslate(transform);
       y = this.getTranslate(transform, 'y');
     } else {
-      x = parseFloat(left) * zoom; // Recalculate coordinates in zoom mode
-      y = parseFloat(top) * zoom;
+      x = parseFloat(left);
+      y = parseFloat(top);
     }
 
     return { x, y };
@@ -304,12 +301,10 @@ export default {
 
   _getDragData() {
     const { target } = this;
-    const selected = target.em.getSelectedAll();
     return {
       target,
       parent: target.parent(),
-      index: target.index(),
-      selected
+      index: target.index()
     };
   },
 

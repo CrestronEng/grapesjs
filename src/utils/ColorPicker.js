@@ -4,11 +4,9 @@
 // https://github.com/bgrins/spectrum
 // Author: Brian Grinstead
 // License: MIT
-import { hasWin } from './mixins';
 
 export default function($, undefined) {
   'use strict';
-  if (!hasWin()) return;
 
   var defaultOpts = {
       // Callbacks
@@ -21,19 +19,17 @@ export default function($, undefined) {
       // Options
       color: false,
       flat: false,
-      showInput: true,
+      showInput: false,
       allowEmpty: false,
       showButtons: true,
       clickoutFiresChange: true,
-      showInitial: true,
-      showPalette: true,
+      showInitial: false,
+      showPalette: false,
       showPaletteOnly: false,
       hideAfterPaletteSelect: false,
       togglePaletteOnly: false,
       showSelectionPalette: true,
       localStorageKey: false,
-      isRGBInputUpdated: false,
-      isHSLInputUpdated: false,
       appendTo: 'body',
       maxSelectionSize: 7,
       cancelText: 'cancel',
@@ -125,19 +121,9 @@ export default function($, undefined) {
         "<div class='sp-alpha'><div class='sp-alpha-inner'><div class='sp-alpha-handle'></div></div></div>",
         '</div>',
         "<div class='sp-input-container sp-cf'>",
-        "<input class='sp-input' type='text' spellcheck='false'  style='background-color:white;'/>",
+        "<input class='sp-input' type='text' spellcheck='false'  />",
+        '</div>',
         "<div class='sp-initial sp-thumb sp-cf'></div>",
-        '</div>',
-        "<div class='sp-input-container' style='background: lightgrey;border: #dae9f0;'>",
-        "<SPAN STYLE='font-weight:bold;color:#083d54;'> R<input type='number' min='0' max='255' class='sp-Red-Input' style='width:37px;height:20px;margin:3px;background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
-        "<SPAN STYLE='font-weight:bold;color:#083d54;'> G<input type='number' min='0' max='255' class='sp-Green-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
-        "<SPAN STYLE='font-weight:bold;color:#083d54;'> B<input type='number' min='0' max='255' class='sp-Blue-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
-        '</div>',
-        "<div class='sp-input-container' style='background: lightgrey;border: #dae9f0;margin-top: -5px;'>",
-        "<SPAN STYLE='font-weight:bold;color:#083d54;'> H<input type='number' min='0' class='sp-Hue-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
-        "<SPAN STYLE='font-weight:bold;color:#083d54;'> S<input type='number' min='0' class='sp-Sat-Input' style='width:39px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
-        "<SPAN STYLE='font-weight:bold;color:#083d54;'> L<input type='number' min='0' class='sp-Lum-Input' style='width:37px;height:20px;margin:3px; background-color:white;border: 1px solid #cad0c1;color:#083d54;'/></SPAN>",
-        '</div>',
         "<div class='sp-button-container sp-cf'>",
         "<a class='sp-cancel' href='#'></a>",
         "<button type='button' class='sp-choose'></button>",
@@ -216,14 +202,11 @@ export default function($, undefined) {
       flat = opts.flat,
       showSelectionPalette = opts.showSelectionPalette,
       localStorageKey = opts.localStorageKey,
-      isRGBInputUpdated = opts.isRGBInputUpdated,
-      isHSLInputUpdated = opts.isHSLInputUpdated,
       theme = opts.theme,
       callbacks = opts.callbacks,
       resize = throttle(reflow, 10),
       visible = false,
       isDragging = false,
-      isDefault = true,
       dragWidth = 0,
       dragHeight = 0,
       dragHelperHeight = 0,
@@ -263,12 +246,6 @@ export default function($, undefined) {
       cancelButton = container.find('.sp-cancel'),
       clearButton = container.find('.sp-clear'),
       chooseButton = container.find('.sp-choose'),
-      hueInput = container.find('.sp-Hue-Input'),
-      satInput = container.find('.sp-Sat-Input'),
-      lumInput = container.find('.sp-Lum-Input'),
-      redInput = container.find('.sp-Red-Input'),
-      greenInput = container.find('.sp-Green-Input'),
-      blueInput = container.find('.sp-Blue-Input'),
       toggleButton = container.find('.sp-palette-toggle'),
       isInput = boundElement.is('input'),
       isInputTypeColor =
@@ -390,46 +367,12 @@ export default function($, undefined) {
         }
       });
 
-      //Initializing the RGB & HSL Input box's events
-      redInput.change(setFromRGBInput);
-      redInput.bind('paste', function() {
-        setTimeout(setFromRGBInput, 1);
-      });
-
-      blueInput.change(setFromRGBInput);
-      blueInput.bind('paste', function() {
-        setTimeout(setFromRGBInput, 1);
-      });
-
-      greenInput.change(setFromRGBInput);
-      greenInput.bind('paste', function() {
-        setTimeout(setFromRGBInput, 1);
-      });
-
-      hueInput.change(setFromHSLInput);
-      hueInput.bind('paste', function() {
-        setTimeout(setFromHSLInput, 1);
-      });
-
-      satInput.change(setFromHSLInput);
-      satInput.bind('paste', function() {
-        setTimeout(setFromHSLInput, 1);
-      });
-
-      lumInput.change(setFromHSLInput);
-      lumInput.bind('paste', function() {
-        setTimeout(setFromHSLInput, 1);
-      });
-
       cancelButton.text(opts.cancelText);
       cancelButton.bind('click.spectrum', function(e) {
         e.stopPropagation();
         e.preventDefault();
-        if (visible) {
-          // only do the following if the color picker is actually being shown
-          revert();
-          hide();
-        }
+        revert();
+        hide();
       });
 
       clearButton.attr('title', opts.clearText);
@@ -556,7 +499,7 @@ export default function($, undefined) {
         // since the set function will not run (default color is black).
         updateUI();
         currentPreferredFormat =
-          opts.preferredFormat || tinycolor(initialColor).getFormat();
+          opts.preferredFormat || tinycolor(initialColor).format;
 
         addColorToSelectionPalette(initialColor);
       } else {
@@ -582,8 +525,8 @@ export default function($, undefined) {
               .data('color')
           );
           move();
+          updateOriginalInput(true);
           if (opts.hideAfterPaletteSelect) {
-            updateOriginalInput(true);
             hide();
           }
         }
@@ -733,138 +676,6 @@ export default function($, undefined) {
           textInput.addClass('sp-validation-error');
         }
       }
-      //Below code updates the RGB & HSL values
-      var color = get();
-      setRGBValues(color, false);
-      setHSLValues(color, false);
-    }
-
-    //Function to set RGB values
-    function setRGBValues(color, isRGBUpdated) {
-      if (isRGBUpdated) return;
-      var rgb = tinycolor(color).toRgb();
-      redInput.val(rgb.r);
-      greenInput.val(rgb.g);
-      blueInput.val(rgb.b);
-    }
-
-    //Function to set HSL values
-    function setHSLValues(color, isHSLUpdated) {
-      if (isHSLUpdated) return;
-      var hsl = tinycolor(color).toHsl();
-      hueInput.val(mathRound(hsl.h));
-      satInput.val(mathRound(hsl.s * 100));
-      lumInput.val(mathRound(hsl.l * 100));
-    }
-
-    //Function will be triggered with R or G or B value changes
-    function setFromRGBInput() {
-      var redVal = redInput.val();
-      var blueVal = blueInput.val();
-      var greenVal = greenInput.val();
-      var color = { redVal: redVal, blueVal: blueVal, greenVal: greenVal };
-
-      validateRGBInput(color);
-
-      var hexaColor = rgbaToHex(
-        color.redVal,
-        color.greenVal,
-        color.blueVal,
-        currentAlpha
-      );
-      var currentColor = tinycolor(hexaColor);
-      if (currentColor.isValid() && !tinycolor.equals(currentColor, get())) {
-        isRGBInputUpdated = true;
-        set(currentColor);
-        move();
-        isRGBInputUpdated = false;
-      }
-    }
-
-    //Function will be triggered with H or S or L value changes
-    function setFromHSLInput() {
-      var hueVal = hueInput.val();
-      var satVal = satInput.val();
-      var lumVal = lumInput.val();
-      var color = { hueVal: hueVal, satVal: satVal, lumVal: lumVal };
-      validateHSLInput(color);
-
-      var rgb = hslToRgb(color.hueVal, color.satVal, color.lumVal);
-      var hexaColor = rgbaToHex(rgb.r, rgb.g, rgb.b, currentAlpha);
-      var currentColor = tinycolor(hexaColor);
-
-      if (currentColor.isValid() && !tinycolor.equals(currentColor, get())) {
-        isHSLInputUpdated = true;
-        set(currentColor);
-        move();
-        isHSLInputUpdated = false;
-      }
-    }
-
-    //Function validates the HSL input
-    function validateHSLInput(color) {
-      if (color.hueVal < 0) {
-        color.hueVal = 0;
-        hueInput.val(0);
-      }
-
-      if (color.hueVal > 360) {
-        color.hueVal = 360;
-        hueInput.val(360);
-      }
-
-      if (color.satVal < 0) {
-        color.satVal = 0;
-        satInput.val(0);
-      }
-
-      if (color.satVal > 100) {
-        color.satVal = 100;
-        satInput.val(100);
-      }
-
-      if (color.lumVal < 0) {
-        color.lumVal = 0;
-        lumInput.val(0);
-      }
-
-      if (color.lumVal > 100) {
-        color.lumVal = 100;
-        lumInput.val(100);
-      }
-    }
-
-    //Function validates the RGB input
-    function validateRGBInput(color) {
-      if (color.redVal < 0) {
-        color.redVal = 0;
-        redInput.val(0);
-      }
-
-      if (color.redVal > 255) {
-        color.redVal = 255;
-        redInput.val(255);
-      }
-
-      if (color.greenVal < 0) {
-        color.greenVal = 0;
-        greenInput.val(0);
-      }
-
-      if (color.greenVal > 255) {
-        color.greenVal = 255;
-        greenInput.val(255);
-      }
-
-      if (color.blueVal < 0) {
-        color.blueVal = 0;
-        blueInput.val(0);
-      }
-
-      if (color.blueVal > 255) {
-        color.blueVal = 255;
-        blueInput.val(255);
-      }
     }
 
     function toggle() {
@@ -971,7 +782,6 @@ export default function($, undefined) {
         isEmpty = true;
       } else {
         isEmpty = false;
-        isDefault = !color; // if no color is available an empty string will be passed.  tinycolor will then set it to #000
         newColor = tinycolor(color);
         newHsv = newColor.toHsv();
 
@@ -1092,12 +902,6 @@ export default function($, undefined) {
         textInput.val(displayColor);
       }
 
-      //Updates the HSL input boxes when the color is set through other ways
-      setRGBValues(tinycolor(displayColor), isRGBInputUpdated);
-
-      //Updates the RGB input boxes when the color is set through other ways
-      setHSLValues(tinycolor(displayColor), isHSLInputUpdated);
-
       if (opts.showPalette) {
         drawPalette();
       }
@@ -1152,12 +956,12 @@ export default function($, undefined) {
     function updateOriginalInput(fireCallback) {
       var color = get(),
         displayColor = '',
-        hasChanged = isDefault ? true : !tinycolor.equals(color, colorOnShow);
+        hasChanged = !tinycolor.equals(color, colorOnShow);
 
       if (color) {
         displayColor = color.toString(currentPreferredFormat);
         // Update the selection palette with the current color
-        !visible && addColorToSelectionPalette(color);
+        addColorToSelectionPalette(color);
       }
 
       if (isInput) {
@@ -1715,9 +1519,6 @@ export default function($, undefined) {
         ')'
       );
     },
-    getCurrentAlpha: function() {
-      return this._a;
-    },
     toString: function(format) {
       var formatSet = !!format;
       format = format || this._format;
@@ -2092,10 +1893,10 @@ export default function($, undefined) {
   // Returns an 8 character hex
   function rgbaToHex(r, g, b, a) {
     var hex = [
+      pad2(convertDecimalToHex(a)),
       pad2(mathRound(r).toString(16)),
       pad2(mathRound(g).toString(16)),
-      pad2(mathRound(b).toString(16)),
-      pad2(convertDecimalToHex(a))
+      pad2(mathRound(b).toString(16))
     ];
 
     return hex.join('');
@@ -2360,14 +2161,14 @@ export default function($, undefined) {
   var names = (tinycolor.names = {
     aliceblue: 'f0f8ff',
     antiquewhite: 'faebd7',
-    aqua: '00ffff',
+    aqua: '0ff',
     aquamarine: '7fffd4',
     azure: 'f0ffff',
     beige: 'f5f5dc',
     bisque: 'ffe4c4',
-    black: '000000',
+    black: '000',
     blanchedalmond: 'ffebcd',
-    blue: '0000ff',
+    blue: '00f',
     blueviolet: '8a2be2',
     brown: 'a52a2a',
     burlywood: 'deb887',
@@ -2379,7 +2180,7 @@ export default function($, undefined) {
     cornflowerblue: '6495ed',
     cornsilk: 'fff8dc',
     crimson: 'dc143c',
-    cyan: '00ffff',
+    cyan: '0ff',
     darkblue: '00008b',
     darkcyan: '008b8b',
     darkgoldenrod: 'b8860b',
@@ -2407,7 +2208,7 @@ export default function($, undefined) {
     firebrick: 'b22222',
     floralwhite: 'fffaf0',
     forestgreen: '228b22',
-    fuchsia: 'ff00ff',
+    fuchsia: 'f0f',
     gainsboro: 'dcdcdc',
     ghostwhite: 'f8f8ff',
     gold: 'ffd700',
@@ -2437,14 +2238,14 @@ export default function($, undefined) {
     lightsalmon: 'ffa07a',
     lightseagreen: '20b2aa',
     lightskyblue: '87cefa',
-    lightslategray: '778899',
-    lightslategrey: '778899',
+    lightslategray: '789',
+    lightslategrey: '789',
     lightsteelblue: 'b0c4de',
     lightyellow: 'ffffe0',
-    lime: '00ff00',
+    lime: '0f0',
     limegreen: '32cd32',
     linen: 'faf0e6',
-    magenta: 'ff00ff',
+    magenta: 'f0f',
     maroon: '800000',
     mediumaquamarine: '66cdaa',
     mediumblue: '0000cd',
@@ -2479,7 +2280,7 @@ export default function($, undefined) {
     powderblue: 'b0e0e6',
     purple: '800080',
     rebeccapurple: '663399',
-    red: 'ff0000',
+    red: 'f00',
     rosybrown: 'bc8f8f',
     royalblue: '4169e1',
     saddlebrown: '8b4513',
@@ -2503,9 +2304,9 @@ export default function($, undefined) {
     turquoise: '40e0d0',
     violet: 'ee82ee',
     wheat: 'f5deb3',
-    white: 'ffffff',
+    white: 'fff',
     whitesmoke: 'f5f5f5',
-    yellow: 'ffff00',
+    yellow: 'ff0',
     yellowgreen: '9acd32'
   });
 
@@ -2690,10 +2491,10 @@ export default function($, undefined) {
     }
     if ((match = matchers.hex8.exec(color))) {
       return {
-        r: parseIntFromHex(match[1]),
-        g: parseIntFromHex(match[2]),
-        b: parseIntFromHex(match[3]),
-        a: convertHexToDecimal(match[4]),
+        a: convertHexToDecimal(match[1]),
+        r: parseIntFromHex(match[2]),
+        g: parseIntFromHex(match[3]),
+        b: parseIntFromHex(match[4]),
         format: named ? 'name' : 'hex8'
       };
     }

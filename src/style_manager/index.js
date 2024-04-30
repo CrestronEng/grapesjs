@@ -425,14 +425,6 @@ export default () => {
       SectView.remove();
       [c, properties, sectors, SectView].forEach(i => (i = {}));
       this.em = {};
-    },
-    disableCollectionUpdatedEventHandler() {
-      //** CCIDE select / deselect optimization
-      SectView.disableViewCollectionUpdatedEventHandler();
-    },
-    enableCollectionUpdatedEventHandler() {
-      //** CCIDE select / deselect optimization
-      SectView.enableViewCollectionUpdatedEventHandler();
     }
   };
 };

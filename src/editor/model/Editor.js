@@ -303,24 +303,20 @@ export default Backbone.Model.extend({
     const els = multiple ? el : [el];
     const selected = this.get('selected');
     const mltSel = this.getConfig('multipleSelection');
-    //let added;
-    const models = [];
+    let added;
+
     // If an array is passed remove all selected
     // expect those yet to be selected
     multiple && this.removeSelected(selected.filter(s => !contains(els, s)));
 
-    for (var i = 0; i < els.length; i += 1) {
-      const model = getModel(els[i], $);
-      if (model && !model.get('selectable')) continue;
+    els.forEach(el => {
+      const model = getModel(el, $);
+      if (model && !model.get('selectable')) return;
 
       // Hanlde multiple selection
-      /*
-      if ((ctrlKey && mltSel) || (shiftKey && mltSel)) {
+      if (ctrlKey && mltSel) {
         return this.toggleSelected(model);
       } else if (shiftKey && mltSel) {
-        return this.toggleSelected(model);
-
-      
         this.clearSelection(this.get('Canvas').getWindow());
         const coll = model.collection;
         const index = model.index();
@@ -357,19 +353,11 @@ export default Backbone.Model.extend({
 
         return this.addSelected(model);
       }
-*/
 
-      //added = model;
-      models.push(model);
-    }
-
-    if ((ctrlKey && mltSel) || (shiftKey && mltSel)) {
-      return this.toggleSelected(models);
-    }
-
-    !multiple &&
-      this.removeSelected(selected.filter(s => !models.includes(s, 0)));
-    models.length > 0 && this.addSelected(models, opts);
+      !multiple && this.removeSelected(selected.filter(s => s !== model));
+      this.addSelected(model, opts);
+      added = model;
+    });
   },
 
   /**
@@ -382,58 +370,12 @@ export default Backbone.Model.extend({
     const model = getModel(el, $);
     const models = isArray(model) ? model : [model];
 
-    //** CCIDE select / deselect optimization
-    // unhook event handlers in order  to stop views
-    // from updating for every collection update, except the last
-
-    //inline function
-    const addModel = function(model, selected, opts) {
+    models.forEach(model => {
       if (model && !model.get('selectable')) return;
+      const selected = this.get('selected');
       opts.forceChange && selected.remove(model, opts);
-      selected.add(model, opts);
-    };
-
-    const selected = this.get('selected');
-
-    const magicIndex = models.length - 1; //upper limit of for loop & index of last models element
-    if (magicIndex > 0) {
-      this.disableCollectionUpdateEventHandling();
-
-      for (let i = 0; i < magicIndex; i += 1) {
-        try {
-          addModel(models[i], selected, opts);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      this.enableCollectionUpdateEventHandling();
-    }
-
-    addModel(models[magicIndex], selected, opts);
-    this.trigger('traits:update');
-  },
-  dragSelect(els, opts = {}) {
-    const selected = this.get('selected');
-    selected.remove(selected.filter(s => !contains(els, s), opts));
-
-    //** CCIDE select / deselect optimization
-    // unhook event handlers in order  to stop views
-    // from updating for every collection update, except the last
-    if (els.length > 1) {
-      this.disableCollectionUpdateEventHandling();
-
-      const silentEls = [els.length - 1];
-      try {
-        for (let i = 0; i < els.length - 1; i++) {
-          silentEls[i] = els[i];
-        }
-        selected.add(silentEls, opts);
-      } catch (e) {
-        console.error(e);
-      }
-      this.enableCollectionUpdateEventHandling();
-    }
-    selected.add(els[els.length - 1], opts);
+      selected.push(model, opts);
+    });
   },
 
   /**
@@ -443,43 +385,7 @@ export default Backbone.Model.extend({
    * @private
    */
   removeSelected(el, opts = {}) {
-    const selected = this.get('selected');
-    const model = getModel(el, $);
-    const models = isArray(model) ? model : [model];
-
-    //** CCIDE select / deselect optimization
-    // unhook event handlers in order  to stop views
-    // from updating for every collection update, except the last
-    if (models) {
-      if (models.length > 1) {
-        this.disableCollectionUpdateEventHandling();
-
-        try {
-          const silentModels = [models.length - 1];
-          for (let i = 0; i < models.length - 1; i++) {
-            silentModels[i] = models[i];
-          }
-          selected.remove(silentModels, opts);
-        } catch (e) {
-          console.error(e);
-        }
-
-        this.enableCollectionUpdateEventHandling();
-      }
-      selected.remove(models[models.length - 1], opts);
-      this.trigger('traits:update');
-    }
-  },
-
-  disableCollectionUpdateEventHandling() {
-    //** CCIDE select / deselect optimization
-    this.get('TraitManager').disableCollectionUpdatedEventHandler();
-    this.get('StyleManager').disableCollectionUpdatedEventHandler();
-  },
-  enableCollectionUpdateEventHandling() {
-    //** CCIDE select / deselect optimization
-    this.get('TraitManager').enableCollectionUpdatedEventHandler();
-    this.get('StyleManager').enableCollectionUpdatedEventHandler();
+    this.get('selected').remove(getModel(el, $), opts);
   },
 
   /**
@@ -675,30 +581,6 @@ export default Backbone.Model.extend({
     return store;
   },
 
-  storeData() {
-    let result = {};
-    // Sync content if there is an active RTE
-    const editingCmp = this.getEditing();
-    editingCmp && editingCmp.trigger('sync:content', { noCount: true });
-
-    this.get('storables').forEach(m => {
-      result = { ...result, ...m.store(1) };
-    });
-    return result;
-  },
-
-  loadData(data = {}) {
-    const sm = this.get('StorageManager');
-    const result = sm.__clearKeys(data);
-
-    this.get('storables').forEach(module => {
-      module.load(result);
-      module.postLoad && module.postLoad(this);
-    });
-
-    return result;
-  },
-
   /**
    * Load data from the current storage
    * @param {Function} clb Callback function
@@ -806,9 +688,7 @@ export default Backbone.Model.extend({
   getCurrentMedia() {
     const config = this.config;
     const device = this.getDeviceModel();
-    const conditionMaxWidth = config.mediaConditionMaxWidth;
-    const conditionMaxHeight = config.mediaConditionMaxHeight;
-    const conditionOrientation = config.mediaConditionOrientation;
+    const condition = config.mediaCondition;
     const preview = config.devicePreviewMode;
     const maxWidth = device && parseInt(device.get('widthMedia'));
 
@@ -891,11 +771,6 @@ export default Backbone.Model.extend({
     const { config } = this;
     const editor = this.getEditor();
     const { editors = [] } = config.grapesjs || {};
-
-    //** CCIDE select / deselect optimization
-    //addresses performance issues closing an editor
-    this.disableCollectionUpdateEventHandling();
-
     this.stopDefault();
     this.get('modules')
       .slice()
@@ -908,25 +783,10 @@ export default Backbone.Model.extend({
     ['config', 'view', '_previousAttributes', '_events', '_listeners'].forEach(
       i => (this[i] = {})
     );
-
-    for (let [key, value] of editors.entries()) {
-      if (value.editor.cid === this.cid) {
-        editors.delete(key);
-        break;
-      }
-    }
-
-    // TODO: revert to this handler after updating to the latest GrapesJS version
-    // editors.splice(editors.indexOf(editor), 1);
-
+    editors.splice(editors.indexOf(editor), 1);
     $(config.el)
       .empty()
       .attr(this.attrsOrig);
-  },
-
-  getEditing() {
-    const res = this.get('editing');
-    return (res && res.model) || null;
   },
 
   setEditing(value) {

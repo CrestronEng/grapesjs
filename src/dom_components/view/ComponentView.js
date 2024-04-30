@@ -259,21 +259,10 @@ export default Backbone.View.extend({
    * @private
    * */
   updateClasses() {
-    var str = this.model
+    const str = this.model
       .get('classes')
       .pluck('name')
       .join(' ');
-
-    //This code is added to resolve CCID-8322.
-    if (str == '') {
-      var classVal = '';
-      const { el } = this;
-      for (const value of el.classList.values()) {
-        classVal = classVal + value + ' ';
-      }
-      str = classVal.trim();
-    }
-
     this.setAttribute('class', str);
 
     // Regenerate status class
@@ -324,16 +313,12 @@ export default Backbone.View.extend({
 
     // Remove all current attributes
     each(el.attributes, attr => attrs.push(attr.nodeName));
-    attrs.forEach(attr => {
-      //This code is added to resolve CCID-8322.
-      if (attr != 'class') {
-        $el.removeAttr(attr);
-      }
-    });
+    attrs.forEach(attr => $el.removeAttr(attr));
     const attr = {
       ...defaultAttr,
       ...model.getAttributes()
     };
+
     // Remove all `false` attributes
     keys(attr).forEach(key => attr[key] === false && delete attr[key]);
 

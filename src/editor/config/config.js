@@ -91,11 +91,10 @@ export default {
   // When enabled, on device change media rules won't be created
   devicePreviewMode: 0,
 
-  // THe conditions to use for media queries, eg. 'max-width'
+  // THe condition to use for media queries, eg. 'max-width'
   // Comes handy for mobile-first cases
-  mediaConditionMaxWidth: 'max-width',
-  mediaConditionMaxHeight: 'max-height',
-  mediaConditionOrientation: 'orientation',
+  mediaCondition: 'max-width',
+
   // Starting tag for variable inside scripts in Components
   tagVarStart: '{[ ',
 
@@ -218,35 +217,25 @@ export default {
       {
         id: 'desktop',
         name: 'Desktop',
-        width: '',
-        objNum: '1'
+        width: ''
       },
       {
         id: 'tablet',
         name: 'Tablet',
         width: '768px',
-        widthMedia: '992px',
-        objNum: '2',
-        height: '720px',
-        heightMedia: '720px'
+        widthMedia: '992px'
       },
       {
         id: 'mobileLandscape',
         name: 'Mobile landscape',
         width: '568px',
-        widthMedia: '768px',
-        objNum: '3',
-        height: '375px',
-        heightMedia: '375px'
+        widthMedia: '768px'
       },
       {
-        id: 'iPhone',
-        name: 'iPhone',
+        id: 'mobilePortrait',
+        name: 'Mobile portrait',
         width: '320px',
-        widthMedia: '480px',
-        objNum: '4',
-        height: '412px',
-        heightMedia: '412px'
+        widthMedia: '480px'
       }
     ]
   },

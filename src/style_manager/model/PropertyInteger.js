@@ -1,6 +1,6 @@
 import { isUndefined } from 'underscore';
 import Property from './Property';
-import InputNumber from 'domain_abstract/ui/InputNumber';
+import InputNumber from 'overrides/domain_abstract/ui/InputNumber';
 
 export default Property.extend({
   defaults: {

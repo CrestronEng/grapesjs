@@ -91,14 +91,6 @@ export default () => {
     destroy() {
       TraitsViewer.remove();
       [c, TraitsViewer].forEach(i => (i = {}));
-    },
-    disableCollectionUpdatedEventHandler() {
-      //** CCIDE select / deselect optimization
-      TraitsViewer.disableViewCollectionUpdatedEventHandler();
-    },
-    enableCollectionUpdatedEventHandler() {
-      //** CCIDE select / deselect optimization
-      TraitsViewer.enableViewCollectionUpdatedEventHandler();
     }
   };
 };

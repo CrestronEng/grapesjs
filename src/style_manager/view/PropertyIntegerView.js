@@ -1,5 +1,5 @@
 import Backbone from 'backbone';
-import PropertyView from './PropertyView';
+import PropertyView from 'overrides/style_manager/view/PropertyView';
 
 const $ = Backbone.$;
 

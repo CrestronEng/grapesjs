@@ -1,5 +1,5 @@
 import { isUndefined } from 'underscore';
-import TraitView from './TraitView';
+import TraitView from 'overrides/trait_manager/view/TraitView';
 
 export default TraitView.extend({
   appendInput: 0,

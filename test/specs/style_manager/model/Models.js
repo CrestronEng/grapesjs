@@ -5,7 +5,7 @@ import PropertyInteger from 'style_manager/model/PropertyInteger';
 import Properties from 'style_manager/model/Properties';
 import Layer from 'style_manager/model/Layer';
 import Layers from 'style_manager/model/Layers';
-import PropertyFactory from 'style_manager/model/PropertyFactory';
+import PropertyFactory from 'overrides/style_manager/model/PropertyFactory';
 
 describe('Sector', () => {
   var obj;

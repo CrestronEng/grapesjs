@@ -1,13 +1,14 @@
-import { isString, isObject } from 'underscore';
+import { isString, isObject, object } from 'underscore';
 import CategoryView from 'category/view/CategoryView';
 import DomainViews from 'domain_abstract/view/DomainViews';
-import TraitView from './TraitView';
+import TraitView from 'overrides/trait_manager/view/TraitView';
 import TraitSelectView from './TraitSelectView';
 import TraitCheckboxView from './TraitCheckboxView';
 import TraitNumberView from './TraitNumberView';
 import TraitColorView from './TraitColorView';
 import TraitButtonView from './TraitButtonView';
 import Filter from 'filter/view/FilterView';
+import Backbone from 'backbone';
 
 export default DomainViews.extend({
   ns: 'Traits',
@@ -35,12 +36,10 @@ export default DomainViews.extend({
     this.catsClass = `${this.ppfx}categories`;
     this.noCatClass = `${this.ppfx}no-cat`;
     this.contClass = `${this.ppfx}c`;
-    this.componentToggledListener = 'component:toggled'; //** CCIDE select / deselect optimization
+    const toListen = 'component:toggled';
     this.config.catClass = 'c';
 
-    //** CCIDE select / deselect optimization
-    this.enableViewCollectionUpdatedEventHandler();
-
+    this.listenTo(this.em, toListen, this.updatedCollection);
     if (this.config.showSearch) {
       this.searchField = new Filter({
         clb: this.inclusiveSearchCallBack.bind(this),
@@ -243,21 +242,5 @@ export default DomainViews.extend({
     this.$el.addClass(cls);
     this.onRender();
     return this;
-  },
-  disableViewCollectionUpdatedEventHandler() {
-    //** CCIDE select / deselect optimization
-    this.stopListening(
-      this.em,
-      this.componentToggledListener,
-      this.updatedCollection
-    );
-  },
-  enableViewCollectionUpdatedEventHandler() {
-    //** CCIDE select / deselect optimization
-    this.listenTo(
-      this.em,
-      this.componentToggledListener,
-      this.updatedCollection
-    );
   }
 });

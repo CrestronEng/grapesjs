@@ -59,6 +59,8 @@ const commandsDef = [
   ['component-drag', 'ComponentDrag']
 ];
 
+const modulesOverridden = ['SelectComponent'];
+
 export default () => {
   let em;
   let c = {};
@@ -195,7 +197,9 @@ export default () => {
       defaultCommands['core:redo'] = e => e.UndoManager.redo();
       commandsDef.forEach(item => {
         const oldCmd = item[2];
-        const cmd = require(`./view/${item[1]}`).default;
+        const cmd = modulesOverridden.includes(item[1])
+          ? require(`overrides/commands/view/${item[1]}`).default
+          : require(`./view/${item[1]}`).default;
         const cmdName = `core:${item[0]}`;
         defaultCommands[cmdName] = cmd;
         if (oldCmd) {
