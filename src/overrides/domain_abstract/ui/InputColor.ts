@@ -411,6 +411,11 @@ export default class InputColor extends Input {
         }
       };
 
+      // CCID-9739: Added to trigger Omni undo/redo event to get component style snapshot
+      const triggerUndoPropertyChangeEvent = (value: string) => {
+        em.trigger('propertyview:change', model.view, em.getSelectedAll(), value);
+      };
+
       // @ts-ignore
       colorEl.spectrum({
         color: model.getValue() || false,
@@ -437,6 +442,7 @@ export default class InputColor extends Input {
           changed = true;
           const cl = getColor(color);
           cpStyle.backgroundColor = cl;
+          triggerUndoPropertyChangeEvent(cl);
           handleChange(cl);
           this.noneColor = false;
         },
@@ -559,6 +565,7 @@ export default class InputColor extends Input {
   __onInputChange(val: string) {
     const { model } = this;
     let value = isNaN(Number(val)) ? val : model.attributes.value;
+    this.model.em.trigger('propertyview:change', this.model.view, this.model.em.getSelectedAll(), value);
     model.set({ value }, { fromInput: 1 });
     this.onColorChange();
   }

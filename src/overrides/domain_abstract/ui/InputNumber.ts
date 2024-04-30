@@ -49,6 +49,8 @@ export default class InputNumber extends Input {
       validObj.unit = valid.unit;
     }
 
+    const validValue = validObj.value + validObj.unit;
+    this.triggerUndoPropertyChangeEvent(validValue);
     this.model.set(validObj, opt);
 
     // Generally I get silent when I need to reflect data to view without
@@ -164,6 +166,8 @@ export default class InputNumber extends Input {
     value = this.normalizeValue(value + step);
     var valid = this.validateInputValue(value);
     const opt: ObjectAny = { fromInput: 1 };
+    const validValue = valid.value + valid.unit;
+    this.triggerUndoPropertyChangeEvent(validValue);
     model.set('value', valid.value, opt);
     this.elementUpdated();
   }
@@ -178,6 +182,8 @@ export default class InputNumber extends Input {
     this.setValue(this.normalizeValue(value - step));
     var valid = this.validateInputValue(value);
     const opt: ObjectAny = { fromInput: 1 };
+    const validValue = valid.value + valid.unit;
+    this.triggerUndoPropertyChangeEvent(validValue);
     model.set('value', valid.value, opt);
     this.elementUpdated();
   }
@@ -234,6 +240,11 @@ export default class InputNumber extends Input {
       var value = this.prValue - step;
       const opt: ObjectAny = { avoidStore: 1, fromInput: 1 };
       const optInput: ObjectAny = { fromInput: 1 };
+
+      const valid = this.validateInputValue(value + step, { deepCheck: 1 });
+      const validValue = valid.value + valid.unit;
+      this.triggerUndoPropertyChangeEvent(validValue);
+
       model.set('value', value, opt).set('value', value + step, optInput);
       this.elementUpdated();
     }
@@ -322,6 +333,13 @@ export default class InputNumber extends Input {
       value: val,
       unit,
     };
+  }
+
+  triggerUndoPropertyChangeEvent(value?: any) {
+    // @ts-ignore
+    const editor = this.model.em;
+    // @ts-ignore
+    editor.trigger('propertyview:change', this.model.view, editor.getSelectedAll(), value);
   }
 
   render() {
