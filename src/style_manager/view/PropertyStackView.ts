@@ -1,5 +1,5 @@
 import PropertyCompositeView from './PropertyCompositeView';
-import PropertiesView from './PropertiesView';
+import PropertiesView from '../../overrides/style_manager/view/PropertiesView';
 import LayersView from './LayersView';
 import PropertyStack from '../model/PropertyStack';
 
