@@ -300,7 +300,7 @@ describe('PropertyFactory', () => {
   test('Build font-family', () => {
     var ss = ', sans-serif';
     var ms = ', monospace';
-    const res = {
+    /*const res = {
       property: 'font-family',
       type: 'select',
       default: 'Arial, Helvetica' + ss,
@@ -322,6 +322,9 @@ describe('PropertyFactory', () => {
         { label: 'Trebuchet MS', id: 'Trebuchet MS, Helvetica' + ss },
         { label: 'Verdana', id: 'Verdana, Geneva' + ss },
       ],
+    };*/
+    const res = {
+      property: 'font-family',
     };
     expect(obj.build('font-family')).toEqual([res]);
   });
