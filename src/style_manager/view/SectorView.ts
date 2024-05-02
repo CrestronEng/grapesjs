@@ -3,7 +3,7 @@ import EditorModel from '../../editor/model/Editor';
 import html from '../../utils/html';
 import { StyleManagerConfig } from '../config/config';
 import Sector from '../model/Sector';
-import PropertiesView from './PropertiesView';
+import PropertiesView from '../../overrides/style_manager/view/PropertiesView';
 
 export default class SectorView extends View<Sector> {
   em: EditorModel;
