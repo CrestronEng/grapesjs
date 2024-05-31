@@ -185,10 +185,10 @@ export default class PropertyFactory {
     const propsToCreate: ([string, PartialProps, string] | [string, PartialProps])[] = [
       // Number types
       ['text-shadow-h', { type: typeNumber, default: '0', units: this.unitsSizeNoPerc }],
-      ['top', { default: 'auto', units: this.unitsSize, fixedValues }, 'text-shadow-h'],
+      ['top', { min: 0, default: 'auto', units: this.unitsSize, fixedValues }, 'text-shadow-h'],
       ['right', {}, 'top'],
       ['bottom', {}, 'top'],
-      ['left', {}, 'top'],
+      ['left', { min: 0 }, 'top'],
       ['margin-top', { default: '0' }, 'top'],
       ['margin-right', {}, 'margin-top'],
       ['margin-bottom', {}, 'margin-top'],
