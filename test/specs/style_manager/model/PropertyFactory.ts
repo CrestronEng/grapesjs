@@ -140,6 +140,7 @@ describe('PropertyFactory', () => {
 
   test('Build left, right', () => {
     const res = {
+      min: 0,
       type: 'number',
       units: obj.unitsSize,
       default: 'auto',
@@ -153,6 +154,7 @@ describe('PropertyFactory', () => {
 
   test('Build top, bottom', () => {
     const res = {
+      min: 0,
       type: 'number',
       units: obj.unitsSize,
       default: 'auto',
@@ -215,6 +217,7 @@ describe('PropertyFactory', () => {
       type: 'composite',
       properties: [
         {
+          min: 0,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-top',
           id: 'margin-top-sub',
@@ -223,6 +226,7 @@ describe('PropertyFactory', () => {
           default: '0',
         },
         {
+          min: 0,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-right',
           id: 'margin-right-sub',
@@ -231,6 +235,7 @@ describe('PropertyFactory', () => {
           default: '0',
         },
         {
+          min: 0,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-bottom',
           id: 'margin-bottom-sub',
@@ -239,6 +244,7 @@ describe('PropertyFactory', () => {
           default: '0',
         },
         {
+          min: 0,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-left',
           id: 'margin-left-sub',
@@ -343,6 +349,7 @@ describe('PropertyFactory', () => {
 
   test('Build letter-spacing', () => {
     const res = {
+      min: 0,
       type: 'number',
       units: obj.unitsSize,
       default: 'normal',
@@ -384,6 +391,7 @@ describe('PropertyFactory', () => {
 
   test('Build line-height', () => {
     const res = {
+      min: 0,
       type: 'number',
       units: obj.unitsSize,
       default: 'normal',
