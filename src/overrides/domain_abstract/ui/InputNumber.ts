@@ -180,7 +180,7 @@ export default class InputNumber extends Input {
     const step = model.get('step');
     const value = parseFloat(model.get('value'));
     this.setValue(this.normalizeValue(value - step));
-    var valid = this.validateInputValue(value);
+    var valid = this.validateInputValue(value - step);
     const opt: ObjectAny = { fromInput: 1 };
     const validValue = valid.value + valid.unit;
     this.triggerUndoPropertyChangeEvent(validValue);
