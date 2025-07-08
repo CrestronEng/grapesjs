@@ -27,6 +27,7 @@ export default {
       setPosition: this.setPosition,
       guidesStatic: () => this.guidesStatic,
       guidesTarget: () => this.guidesTarget,
+      zoom: editor.Canvas.getZoomDecimal(),
       ...dragger
     };
     this.setupGuides();
@@ -260,17 +261,17 @@ export default {
   },
 
   getPosition() {
-    const { target, isTran } = this;
+    const { target, isTran, editor } = this;
     const { left, top, transform } = target.getStyle();
     let x = 0;
     let y = 0;
-
+    const zoom = editor.Canvas.getZoomDecimal();
     if (isTran) {
       x = this.getTranslate(transform);
       y = this.getTranslate(transform, 'y');
     } else {
-      x = parseFloat(left);
-      y = parseFloat(top);
+      x = parseFloat(left) * zoom;
+      y = parseFloat(top) * zoom;
     }
 
     return { x, y };

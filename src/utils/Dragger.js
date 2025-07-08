@@ -61,7 +61,9 @@ export default class Dragger {
       doc: 0,
 
       // Scale result points, can also be a function
-      scale: 1
+      scale: 1,
+
+      zoom: 1
     };
     bindAll(this, 'drag', 'stop', 'keyHandle', 'handleScroll');
     this.setOptions(opts);
@@ -115,7 +117,7 @@ export default class Dragger {
     this.guidesStatic = result(opts, 'guidesStatic') || [];
     this.guidesTarget = result(opts, 'guidesTarget') || [];
     isFunction(onStart) && onStart(ev, this);
-    this.startPosition = this.getStartPosition();
+    this.startPosition = this.getStartPosition(ev);
     this.lastScrollDiff = resetPos();
     this.globScrollDiff = resetPos();
     this.drag(ev);
@@ -283,7 +285,8 @@ export default class Dragger {
   move(x, y, end) {
     const { el, opts } = this;
     const pos = this.startPosition;
-    if (!pos) return;
+    const ignoreStartMove = opts.zoom !== 1 && x === 0 && y === 0;
+    if (!pos || ignoreStartMove) return;
     const { setPosition } = opts;
     const xPos = pos.x + x;
     const yPos = pos.y + y;
@@ -348,17 +351,20 @@ export default class Dragger {
         };
   }
 
-  getStartPosition() {
+  getStartPosition(ev) {
     const { el, opts } = this;
     const getPos = opts.getPosition;
     let result = resetPos();
-
-    if (isFunction(getPos)) {
-      result = getPos();
-    } else if (el) {
+    if (el) {
       result = {
         x: parseFloat(el.style.left),
         y: parseFloat(el.style.top)
+      };
+    } else {
+      var mousePointerPos = this.getPointerPos(ev);
+      result = {
+        x: parseFloat(mousePointerPos.x),
+        y: parseFloat(mousePointerPos.y)
       };
     }
 
