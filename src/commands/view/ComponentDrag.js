@@ -315,7 +315,8 @@ export default {
     const { Canvas } = editor;
     const style = target.getStyle();
     const position = 'absolute';
-    onStart && onStart(this._getDragData());
+    var dragData = this._getDragData();
+    onStart && dragData && dragData.selected && onStart(dragData);
     if (isTran) return;
 
     if (style.position !== position) {
