@@ -316,7 +316,7 @@ export default {
     const style = target.getStyle();
     const position = 'absolute';
     var dragData = this._getDragData();
-    onStart && dragData && dragData.selected && onStart(dragData);
+    onStart && dragData && onStart(dragData);
     if (isTran) return;
 
     if (style.position !== position) {
