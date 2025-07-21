@@ -16,17 +16,28 @@ jobs:
   - checkout: self
     persistCredentials: true
 
+  # Install Node.js
+  - task: UseNode@1
+    inputs:
+      version: '14.x'
+      checkLatest: true
+
   # Install the node modules
-  - script: npm install
-    displayName: Install modules
+  - task: Npm@1
+    inputs:
+      command: 'ci'
 
   # Run the build operation
-  - script: npm run build
-    displayName: Run build
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: 'run build'
 
   # Run pack operation
-  - script: npm pack
-    displayName: Package GrapesJS
+  - task: Npm@1
+    inputs:
+      command: 'custom'
+      customCommand: 'pack'
 
   # Commit version
   - task: PowerShell@2
