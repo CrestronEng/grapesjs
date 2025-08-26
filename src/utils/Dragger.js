@@ -368,6 +368,22 @@ export default class Dragger {
       };
     }
 
+    //offsetX & offsetY is NAN when draging a component using glyph
+    if (ev.offsetX && ev.offsetY) {
+      let calculatedX = parseFloat(result.x - ev.offsetX);
+      let calculatedY = parseFloat(result.y - ev.offsetY);
+      if (calculatedX <= 0 || calculatedY <= 0) {
+        if (isFunction(getPos)) {
+          result = getPos();
+        } else {
+          result.x = ev.clientX;
+          result.y = ev.clientY;
+        }
+      } else {
+        result.x = calculatedX;
+        result.y = calculatedY;
+      }
+    }
     return result;
   }
 
