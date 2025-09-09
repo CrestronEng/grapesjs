@@ -1,6 +1,6 @@
 import { bindAll, isFunction, result, isUndefined } from 'underscore';
 import { on, off, isEscKey, getPointerEvent } from 'utils/mixins';
-
+import _ from 'lodash';
 const resetPos = () => ({ x: 0, y: 0 });
 
 export default class Dragger {
@@ -286,7 +286,12 @@ export default class Dragger {
     const { el, opts } = this;
     const pos = this.startPosition;
     const ignoreStartMove = opts.zoom !== 1 && x === 0 && y === 0;
-    if (!pos || ignoreStartMove) return;
+    //Below condition is added to avoid component jumping, When the zoom is not 100%
+    // and clicking on the dragicon makes the component jumping.
+    //CCID-15161 & CCID-15162
+    const isComponentJumping =
+      opts.zoom !== 1 && _.inRange(x, -8, 8) && _.inRange(y, -8, 8);
+    if (!pos || ignoreStartMove || isComponentJumping) return;
     const { setPosition } = opts;
     const xPos = pos.x + x;
     const yPos = pos.y + y;
