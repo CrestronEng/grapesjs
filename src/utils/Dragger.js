@@ -286,11 +286,10 @@ export default class Dragger {
     const { el, opts } = this;
     const pos = this.startPosition;
     const ignoreStartMove = opts.zoom !== 1 && x === 0 && y === 0;
-    //Below condition is added to avoid component jumping, When the zoom is not 100%
+    //Below condition is added to avoid component jumping
     // and clicking on the dragicon makes the component jumping.
     //CCID-15161 & CCID-15162
-    const isComponentJumping =
-      opts.zoom !== 1 && _.inRange(x, -8, 8) && _.inRange(y, -8, 8);
+    const isComponentJumping = _.inRange(x, -15, 15) && _.inRange(y, -15, 15);
     if (!pos || ignoreStartMove || isComponentJumping) return;
     const { setPosition } = opts;
     const xPos = pos.x + x;
