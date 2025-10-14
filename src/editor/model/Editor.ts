@@ -567,12 +567,7 @@ export default class EditorModel extends Model {
 
     models.forEach(model => {
       const { selected } = this;
-      if (
-        !model ||
-        !model.get('selectable') ||
-        // Avoid selecting children of selected components
-        model.parents().some((parent: Component) => selected.hasComponent(parent))
-      ) {
+      if (!model || !model.get('selectable')) {
         return;
       }
       opts.forceChange && this.removeSelected(model, opts);
