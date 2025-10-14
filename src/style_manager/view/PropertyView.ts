@@ -91,8 +91,8 @@ export default class PropertyView extends View<Property> {
     return `
       <span class="${pfx}icon ${icon}" title="${info}">
         ${model.getLabel()}
+        ${!parent ? `<div class="${pfx}clear" style="display: none" ${clearProp}>${iconClose}</div>` : ''}
       </span>
-      ${!parent ? `<div class="${pfx}clear" style="display: none" ${clearProp}>${iconClose}</div>` : ''}
     `;
   }
 
