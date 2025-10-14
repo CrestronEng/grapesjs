@@ -4,7 +4,7 @@ import { appendAtIndex } from '../../utils/dom';
 import { StyleManagerConfig } from '../config/config';
 import Sector from '../model/Sector';
 import Sectors from '../model/Sectors';
-import SectorView from './SectorView';
+import SectorView from '../../overrides/style_manager/view/SectorView';
 
 export default class SectorsView extends View {
   pfx: string;
