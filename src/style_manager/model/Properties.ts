@@ -14,7 +14,7 @@ import PropertyRadioView from './../view/PropertyRadioView';
 import PropertySlider from './PropertySlider';
 import PropertySliderView from './../view/PropertySliderView';
 import PropertyNumber from './PropertyNumber';
-import PropertyNumberView from '../../overrides/style_manager/view/PropertyNumberView';
+import PropertyNumberView from './../view/PropertyNumberView';
 import PropertyView from './../view/PropertyView';
 
 const TypeableCollectionExt = Collection.extend(TypeableCollection);
