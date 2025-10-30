@@ -813,7 +813,7 @@ export default class StyleManager extends ItemManagerModule<
         }
       }
     } else if (!hasVal) {
-      newValue = null;
+      newValue = prop.__getFullValue();
       const parentItem = parentStyles.filter(p => propDef(p.style[name]))[0];
 
       if (parentItem) {
@@ -823,7 +823,7 @@ export default class StyleManager extends ItemManagerModule<
     }
 
     prop.__setParentTarget(parentTarget);
-    canUpdate && prop.__getFullValue() !== newValue && prop.upValue(newValue, opt);
+    canUpdate && prop.upValue(newValue, opt);
     isStack && prop.__setLayers(newLayers || []);
     if (isComposite) {
       const props = prop.getProperties();

@@ -1,5 +1,5 @@
 import PropertyNumber from '../model/PropertyNumber';
-import PropertyNumberView from './PropertyNumberView';
+import PropertyNumberView from '../../overrides/style_manager/view/PropertyNumberView';
 
 export default class PropertySliderView extends PropertyNumberView {
   slider?: HTMLInputElement;

@@ -70,6 +70,7 @@ export interface PropertyProps {
 
   parentTarget?: any;
   __p?: any;
+  unit?: string;
 }
 
 export type OptionsUpdate = {
