@@ -1,5 +1,5 @@
 import InputColor from '../../overrides/domain_abstract/ui/InputColor';
-import PropertyNumberView from './PropertyNumberView';
+import PropertyNumberView from '../../overrides/style_manager/view/PropertyNumberView';
 
 export default class PropertyColorView extends PropertyNumberView {
   setValue(value: string) {

@@ -64,7 +64,8 @@ var _default = exports.default = {
         'open-layers': 'Open Layer Manager',
         'open-blocks': 'Open Blocks'
       }
-    }
+    },
+    searchLabel: 'filter'
   },
   selectorManager: {
     label: 'Classes',
@@ -92,12 +93,12 @@ var _default = exports.default = {
     // Default names for sub properties in Composite and Stack types.
     // Other labels are generated directly from their property names (eg. 'font-size' will be 'Font size').
     properties: {
-      'text-shadow-h': 'X',
-      'text-shadow-v': 'Y',
+      'text-shadow-h': 'X Position',
+      'text-shadow-v': 'Y Position',
       'text-shadow-blur': 'Blur',
       'text-shadow-color': 'Color',
-      'box-shadow-h': 'X',
-      'box-shadow-v': 'Y',
+      'box-shadow-h': 'X Position',
+      'box-shadow-v': 'Y Position',
       'box-shadow-blur': 'Blur',
       'box-shadow-spread': 'Spread',
       'box-shadow-color': 'Color',
