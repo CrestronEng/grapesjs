@@ -440,7 +440,7 @@ describe('PropertyFactory', () => {
           property: 'text-shadow-color',
           full: true,
           type: 'color',
-          default: '#ffffff',
+          default: 'black',
         },
       ],
     };
