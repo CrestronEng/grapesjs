@@ -201,6 +201,12 @@ export interface ResizerOptions {
   br?: boolean;
 
   /**
+   * Show resizer when focus is off canvas.
+   * @default true
+   */
+  showWhenFocusOffCanvas?: boolean;
+
+  /**
    * Class prefix.
    */
   prefix?: string;
@@ -287,6 +293,8 @@ export default class Resizer {
       bl: true,
       bc: true,
       br: true,
+      // When clicking away from the canvas, continue to show the resize handles
+      showWhenFocusOffCanvas: true,
     };
     this.opts = { ...this.defOpts };
     this.setOptions(opts);
@@ -640,10 +648,14 @@ export default class Resizer {
     if (this.isHandler(el)) {
       this.selectedHandler = el;
       this.start(e);
-    } else if (this.el && el.innerText === this.el.attributes.getNamedItem('componentname')?.nodeValue) {
-      // Keep focus if the component is clicked clider
     } else if (el !== this.el) {
-      delete this.selectedHandler;
+      this.selectedHandler = undefined;
+      // if the document of the clicked element is not the document that contains this
+      // component, don't blur it. (When clicking in property grid)
+      const docEls = this.getDocumentEl();
+      if (this.opts.showWhenFocusOffCanvas && docEls.length && el.ownerDocument !== docEls[0]) {
+        return;
+      }
       this.blur();
     }
   }
