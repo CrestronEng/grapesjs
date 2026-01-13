@@ -1,5 +1,5 @@
 import { ModuleView } from '../../abstract';
-import Resizer from '../../utils/Resizer';
+import Resizer from '../../overrides/utils/Resizer';
 import Panel from '../model/Panel';
 import ButtonsView from './ButtonsView';
 

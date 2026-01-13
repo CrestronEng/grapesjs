@@ -557,6 +557,8 @@ export default class InputColor extends Input {
     this.updateFromUnitColor = e.target.tagName !== 'INPUT';
     if (this.updateFromUnitColor) {
       this.onColorUnitChange({});
+      /*Fix for CCID-15808:Setting the color value to the model on unit change*/
+      this.model.set({ value: this.getInputEl().value }, { fromInput: 1 });
     } else {
       this.__onInputChange(value);
     }
