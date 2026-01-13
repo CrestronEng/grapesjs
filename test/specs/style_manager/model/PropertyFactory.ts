@@ -217,7 +217,7 @@ describe('PropertyFactory', () => {
       type: 'composite',
       properties: [
         {
-          min: 0,
+          min: Number.MIN_SAFE_INTEGER,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-top',
           id: 'margin-top-sub',
@@ -226,7 +226,7 @@ describe('PropertyFactory', () => {
           default: '0',
         },
         {
-          min: 0,
+          min: Number.MIN_SAFE_INTEGER,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-right',
           id: 'margin-right-sub',
@@ -235,7 +235,7 @@ describe('PropertyFactory', () => {
           default: '0',
         },
         {
-          min: 0,
+          min: Number.MIN_SAFE_INTEGER,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-bottom',
           id: 'margin-bottom-sub',
@@ -244,7 +244,7 @@ describe('PropertyFactory', () => {
           default: '0',
         },
         {
-          min: 0,
+          min: Number.MIN_SAFE_INTEGER,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-left',
           id: 'margin-left-sub',
@@ -278,7 +278,7 @@ describe('PropertyFactory', () => {
           type: 'number',
           units: obj.unitsSizeHorizontal,
           default: '0',
-          min: 0,
+          min: Number.MIN_SAFE_INTEGER,
         },
         {
           property: 'padding-bottom',
@@ -296,7 +296,7 @@ describe('PropertyFactory', () => {
           type: 'number',
           units: obj.unitsSizeHorizontal,
           default: '0',
-          min: 0,
+          min: Number.MIN_SAFE_INTEGER,
         },
       ],
     };
