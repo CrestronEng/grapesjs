@@ -234,7 +234,8 @@ export default class PropertyFactory {
 
       // Color types
       ['color', { type: this.typeColor, default: '#ffffff', full: true }],
-      ['text-shadow-color', {}, 'color'],
+      /*Fix for CCID-15826: Setting default color black for text-shadow-color property*/
+      ['text-shadow-color', { default: 'black' }, 'color'],
       ['border-color', {}, 'color'],
       ['box-shadow-color', {}, 'color'],
       ['background-color', { default: 'none' }, 'color'],
