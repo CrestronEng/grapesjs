@@ -46,7 +46,8 @@ export default class ItemView extends View {
     const clsTitle = `${this.clsTitle} ${addClass}`;
     const clsTitleC = `${this.clsTitleC}`;
     const clsInput = `${this.inputNameCls} ${clsNoEdit} ${ppfx}no-app`;
-    const level = opt.level || 0;
+    let level = opt.level || 0;
+    if (level > 1 && model.em.attributes.Editor.OmniPageType == 'widget') level = level - 1;
     let gut: string;
     if (level > 1) {
       gut = `${20 + level * 10}px`;
