@@ -596,8 +596,14 @@ export default {
           }
 
           if (em.getDragMode(model)) {
-            style.top = (rect.t > 0 ? rect.t : 0) + `${unitHeight}`;
-            style.left = (rect.l > 0 ? rect.l : 0) + `${unitWidth}`;
+            // Only update top if using a top handler (tl, tc, tr)
+            if (topHandler) {
+              style.top = (rect.t > 0 ? rect.t : 0) + `${unitHeight}`;
+            }
+            // Only update left if using a left handler (tl, cl, bl)
+            if (leftHandler) {
+              style.left = (rect.l > 0 ? rect.l : 0) + `${unitWidth}`;
+            }
           }
 
           const finalStyle = {

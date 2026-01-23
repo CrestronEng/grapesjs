@@ -820,6 +820,7 @@ export default class StyleManager extends ItemManagerModule<
         newValue = parentItem.style[name];
         parentTarget = parentItem.target;
       }
+      if (prop.attributes.status === 'updated') prop.attributes.status = '';
     }
 
     prop.__setParentTarget(parentTarget);
