@@ -606,10 +606,11 @@ export default class StyleManager extends ItemManagerModule<
         });
       };
 
-      // Componente related rule
+      // Component related rule
       if (cmp) {
         cmpRules = cssC.getRules(`#${cmp.getId()}`);
-        otherRules = sel ? rulesBySelectors(sel.getSelectors().getFullName(optsSel)) : [];
+        const selName = sel ? sel.getSelectors().getFullName(optsSel) : [];
+        otherRules = sel && selName.length > 0 ? rulesBySelectors(selName) : [];
         rules = otherRules.concat(cmpRules);
       } else {
         cmpRules = sel ? cssC.getRules(`#${sel.getId()}`) : [];
