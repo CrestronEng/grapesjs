@@ -606,11 +606,18 @@ export default class StyleManager extends ItemManagerModule<
         });
       };
 
+      const rulesBySelectorsString = (value: string) => {
+        return cssC.getRules().filter(rule => {
+          const rSelString = rule.getSelectorsString();
+          return rSelString.startsWith(value);
+        });
+      };
+
       // Component related rule
       if (cmp) {
         cmpRules = cssC.getRules(`#${cmp.getId()}`);
         const selName = sel ? sel.getSelectors().getFullName(optsSel) : [];
-        otherRules = sel && selName.length > 0 ? rulesBySelectors(selName) : [];
+        otherRules = sel && selName.length > 0 ? rulesBySelectors(selName) : rulesBySelectorsString(`#${cmp.getId()}`);
         rules = otherRules.concat(cmpRules);
       } else {
         cmpRules = sel ? cssC.getRules(`#${sel.getId()}`) : [];
@@ -814,14 +821,18 @@ export default class StyleManager extends ItemManagerModule<
         }
       }
     } else if (!hasVal) {
+      if (prop.attributes.status === 'updated') prop.attributes.status = '';
+
       newValue = prop.__getFullValue();
       const parentItem = parentStyles.filter(p => propDef(p.style[name]))[0];
 
       if (parentItem) {
         newValue = parentItem.style[name];
         parentTarget = parentItem.target;
+      } else {
+        newValue = '';
+        prop.view?.updateStatus();
       }
-      if (prop.attributes.status === 'updated') prop.attributes.status = '';
     }
 
     prop.__setParentTarget(parentTarget);
