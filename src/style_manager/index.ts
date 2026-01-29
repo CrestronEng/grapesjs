@@ -810,6 +810,8 @@ export default class StyleManager extends ItemManagerModule<
       const method = isStack ? '__getLayersFromStyle' : '__getPropsFromStyle';
       const parentItem = parentStyles.filter(p => prop[method](p.style) !== null)[0];
 
+      if (prop.attributes.status === 'updated') prop.attributes.status = '';
+
       if (parentItem) {
         newValue = parentItem.style[name];
         parentTarget = parentItem.target;
@@ -829,10 +831,9 @@ export default class StyleManager extends ItemManagerModule<
       if (parentItem) {
         newValue = parentItem.style[name];
         parentTarget = parentItem.target;
-      } else {
-        newValue = '';
-        prop.view?.updateStatus();
       }
+    } else {
+      prop.attributes.status = 'updated';
     }
 
     prop.__setParentTarget(parentTarget);
@@ -854,6 +855,8 @@ export default class StyleManager extends ItemManagerModule<
         prop.getProperties().map((pr: any) => pr.__setParentTarget(parentTarget));
       }
     }
+
+    prop.view?.updateStatus();
   }
 
   destroy() {
