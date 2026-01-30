@@ -599,6 +599,15 @@ export default class StyleManager extends ItemManagerModule<
       let otherRules: CssRule[] = [];
       let rules: CssRule[] = [];
 
+      const getOrientation = (target: StyleTarget): 'portrait' | 'landscape' | '' => {
+        const mediaText = target.get('mediaText') || '';
+        if (mediaText.includes('orientation: portrait')) return 'portrait';
+        if (mediaText.includes('orientation: landscape')) return 'landscape';
+        return '';
+      };
+
+      const targetOrientation = getOrientation(target);
+
       const rulesBySelectors = (values: string[]) => {
         return cssC.getRules().filter(rule => {
           const rSels = rule.getSelectors().map(s => s.getFullName());
@@ -619,7 +628,11 @@ export default class StyleManager extends ItemManagerModule<
       }
 
       const all = rules
-        .filter(rule => (!isUndefined(state) ? rule.get('state') === state : 1))
+        .filter(
+          rule =>
+            (!isUndefined(state) ? rule.get('state') === state : 1) &&
+            (targetOrientation === 'portrait' && getOrientation(rule) === 'landscape' ? false : true)
+        )
         .sort(cssGen.sortRules)
         .reverse();
 
