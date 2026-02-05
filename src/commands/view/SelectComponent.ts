@@ -6,7 +6,7 @@ import { isDoc, isTaggableNode, isVisible, off, on } from '../../utils/dom';
 import { getComponentModel, getComponentView, getUnitFromValue, getViewEl, hasWin, isObject } from '../../utils/mixins';
 import { CommandObject } from './CommandAbstract';
 import { CanvasSpotBuiltInTypes } from '../../canvas/model/CanvasSpot';
-import { ResizerOptions } from '../../utils/Resizer';
+import { ResizerOptions } from '../../overrides/utils/Resizer';
 
 let showOffsets: boolean;
 /**

@@ -56,6 +56,7 @@ export default class PropertyFactory {
   fixedFontSizes: string[];
   fixedLetSpace: string[];
   requireFlex: Record<string, any>;
+  unitsSizeHorizontal: string[];
 
   constructor() {
     this.typeNumber = 'number';
@@ -66,7 +67,8 @@ export default class PropertyFactory {
     this.typeSlider = 'slider';
     this.typeComposite = 'composite';
     this.typeStack = 'stack';
-    this.unitsSize = ['px', '%', 'vw'];
+    this.unitsSize = ['px', '%', 'vh'];
+    this.unitsSizeHorizontal = ['px', '%', 'vw'];
     this.units = ['px', '%', 'name'];
     this.unitsSizeNoPerc = ['px', 'em', 'rem', 'vh', 'vw'];
     this.unitsTime = ['s', 'ms'];
@@ -189,14 +191,14 @@ export default class PropertyFactory {
       ['right', {}, 'top'],
       ['bottom', {}, 'top'],
       ['left', { min: 0 }, 'top'],
-      ['margin-top', { default: '0' }, 'top'],
-      ['margin-right', {}, 'margin-top'],
+      ['margin-top', { min: Number.NEGATIVE_INFINITY, default: '0' }, 'top'],
+      ['margin-right', { min: Number.NEGATIVE_INFINITY, units: this.unitsSizeHorizontal }, 'margin-top'],
       ['margin-bottom', {}, 'margin-top'],
-      ['margin-left', {}, 'margin-top'],
+      ['margin-left', {}, 'margin-right'],
       ['padding-top', { min: 0 }, 'margin-top'],
-      ['padding-right', {}, 'padding-top'],
+      ['padding-right', {}, 'margin-right'],
       ['padding-bottom', {}, 'padding-top'],
-      ['padding-left', {}, 'padding-top'],
+      ['padding-left', {}, 'padding-right'],
       ['width', { min: 0, units: ['px'] }, 'top'],
       ['min-width', { units: ['px'] }, 'width'],
       ['max-width', { units: ['px'] }, 'width'],
