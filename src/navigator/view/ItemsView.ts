@@ -1,7 +1,7 @@
 import { View } from '../../common';
 import Component from '../../dom_components/model/Component';
 import EditorModel from '../../editor/model/Editor';
-import ItemView from './ItemView';
+import ItemView from '../../overrides/navigator/view/ItemView';
 
 export default class ItemsView extends View {
   items: ItemView[];

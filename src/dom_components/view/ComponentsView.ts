@@ -5,7 +5,7 @@ import { DomComponentsConfig } from '../config/config';
 import EditorModel from '../../editor/model/Editor';
 import Component from '../model/Component';
 import ComponentView from './ComponentView';
-import FrameView from '../../canvas/view/FrameView';
+import FrameView from '../../overrides/canvas/view/FrameView';
 import Components from '../model/Components';
 
 export default class ComponentsView extends View {

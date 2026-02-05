@@ -5,7 +5,7 @@ import Extender from '../../utils/extender';
 import { hasWin, isEmptyObj, wait } from '../../utils/mixins';
 import { AddOptions, Model, ObjectAny } from '../../common';
 import Selected from './Selected';
-import FrameView from '../../canvas/view/FrameView';
+import FrameView from '../../overrides/canvas/view/FrameView';
 import Editor from '..';
 import EditorView from '../view/EditorView';
 import { ILoadableModule, IModule, IStorableModule } from '../../abstract/Module';
@@ -567,12 +567,7 @@ export default class EditorModel extends Model {
 
     models.forEach(model => {
       const { selected } = this;
-      if (
-        !model ||
-        !model.get('selectable') ||
-        // Avoid selecting children of selected components
-        model.parents().some((parent: Component) => selected.hasComponent(parent))
-      ) {
+      if (!model || !model.get('selectable')) {
         return;
       }
       opts.forceChange && this.removeSelected(model, opts);

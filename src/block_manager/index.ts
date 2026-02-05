@@ -28,16 +28,16 @@
  */
 import { debounce, isArray } from 'underscore';
 import { ItemManagerModule } from '../abstract/Module';
-import FrameView from '../canvas/view/FrameView';
+import FrameView from '../overrides/canvas/view/FrameView';
 import Component from '../dom_components/model/Component';
 import EditorModel from '../editor/model/Editor';
 import defaults, { BlockManagerConfig } from './config/config';
 import Block, { BlockProperties } from './model/Block';
 import Blocks from './model/Blocks';
-import Categories from './model/Categories';
-import Category from './model/Category';
+import Categories from '../abstract/ModuleCategories';
+import Category from '../abstract/ModuleCategory';
 import { BlocksEvents } from './types';
-import BlocksView from './view/BlocksView';
+import BlocksView from '../overrides/block_manager/view/BlocksView';
 
 export type BlockEvent = `${BlocksEvents}`;
 

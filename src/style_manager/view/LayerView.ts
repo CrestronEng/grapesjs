@@ -98,8 +98,8 @@ export default class LayerView extends View<Layer> {
 
   updateLabel() {
     const { model } = this;
-    const label = model.getLabel();
-    this.getLabelEl().innerHTML = label;
+    // const label = model.getLabel();
+    this.getLabelEl().innerHTML = this.getLabelEl().innerText;
 
     if (model.hasPreview()) {
       const prvEl = this.getPreviewEl();

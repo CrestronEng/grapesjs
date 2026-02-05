@@ -1,7 +1,7 @@
 import { Model } from '../../common';
 import { isFunction } from 'underscore';
 import Editor from '../../editor';
-import { BlockCategoryProperties } from './Category';
+import { CategoryProperties } from '../../abstract/ModuleCategory';
 import { ComponentDefinition } from '../../dom_components/model/types';
 
 /** @private */
@@ -23,7 +23,7 @@ export interface BlockProperties {
    * Block category, eg. `Basic blocks`
    * @default ''
    */
-  category?: string | BlockCategoryProperties;
+  category?: string | CategoryProperties;
   /**
    * If true, triggers the `active` event on the dropped component.
    * @default false
@@ -61,6 +61,8 @@ export interface BlockProperties {
    * @deprecated
    */
   activeOnRender?: boolean;
+
+  visible?: boolean;
 }
 
 /**
@@ -90,6 +92,7 @@ export default class Block extends Model<BlockProperties> {
       disable: false,
       onClick: undefined,
       attributes: {},
+      visible: true,
     };
   }
 

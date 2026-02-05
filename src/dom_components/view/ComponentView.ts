@@ -1,6 +1,6 @@
 import { each, isEmpty, keys, result } from 'underscore';
 import { CanvasSpotBuiltInTypes } from '../../canvas/model/CanvasSpot';
-import FrameView from '../../canvas/view/FrameView';
+import FrameView from '../../overrides/canvas/view/FrameView';
 import { DisableOptions, ExtractMethods, ObjectAny, View } from '../../common';
 import { GetSetRuleOptions } from '../../css_composer';
 import Editor from '../../editor';

@@ -1,5 +1,5 @@
 import PropertyView from './PropertyView';
-import PropertiesView from './PropertiesView';
+import PropertiesView from '../../overrides/style_manager/view/PropertiesView';
 import PropertyComposite from '../model/PropertyComposite';
 
 export default class PropertyCompositeView extends PropertyView {

@@ -58,6 +58,7 @@ export default class FrameView extends ModuleView<Frame, HTMLIFrameElement> {
     const cvModel = this.getCanvasModel();
     this.listenTo(model, 'change:head', this.updateHead);
     this.listenTo(cvModel, 'change:styles', this.renderStyles);
+    //@ts-ignore
     model.view = this;
     setViewEl(el, this);
   }

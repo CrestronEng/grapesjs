@@ -1,6 +1,6 @@
 import PropertyCompositeView from './PropertyCompositeView';
-import PropertiesView from './PropertiesView';
-import LayersView from './LayersView';
+import PropertiesView from '../../overrides/style_manager/view/PropertiesView';
+import LayersView from '../../overrides/style_manager/view/LayersView';
 import PropertyStack from '../model/PropertyStack';
 
 export default class PropertyStackView extends PropertyCompositeView {

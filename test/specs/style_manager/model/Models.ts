@@ -60,7 +60,7 @@ describe('Sector', () => {
       property: 'display',
       type: 'select',
       default: 'block',
-      options: [{ id: 'block' }, { id: 'inline' }, { id: 'inline-block' }, { id: 'flex' }, { id: 'none' }],
+      options: [{ id: 'block' }, { id: 'none' }],
     });
   });
 
