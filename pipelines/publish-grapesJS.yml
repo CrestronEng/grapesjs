@@ -31,7 +31,7 @@ jobs:
   - task: Npm@1
     inputs:
       command: 'custom'
-      customCommand: 'run build'
+      customCommand: 'run build-all'
 
   # Run pack operation
   - task: Npm@1
