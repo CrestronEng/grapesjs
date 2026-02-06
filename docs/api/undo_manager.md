@@ -9,33 +9,26 @@ Once the editor is instantiated you can use its API. Before using these methods 
 const um = editor.UndoManager;
 ```
 
--   [getConfig][1]
--   [add][2]
--   [remove][3]
--   [removeAll][4]
--   [start][5]
--   [stop][6]
--   [undo][7]
--   [undoAll][8]
--   [redo][9]
--   [redoAll][10]
--   [hasUndo][11]
--   [hasRedo][12]
--   [getStack][13]
--   [clear][14]
+*   [getConfig][1]
+*   [add][2]
+*   [remove][3]
+*   [removeAll][4]
+*   [start][5]
+*   [stop][6]
+*   [undo][7]
+*   [undoAll][8]
+*   [redo][9]
+*   [redoAll][10]
+*   [hasUndo][11]
+*   [hasRedo][12]
+*   [getStack][13]
+*   [clear][14]
 
 ## getConfig
 
-Get module configurations
+Get configuration object
 
-### Examples
-
-```javascript
-const config = um.getConfig();
-// { ... }
-```
-
-Returns **[Object][15]** Configuration object
+Returns **[Object][15]** 
 
 ## add
 
@@ -44,7 +37,7 @@ Note: New Components and CSSRules will be added automatically
 
 ### Parameters
 
--   `entity` **(Model | Collection)** Entity to track
+*   `entity` **(Model | Collection)** Entity to track
 
 ### Examples
 
@@ -60,7 +53,7 @@ Remove and stop tracking the entity (Model/Collection)
 
 ### Parameters
 
--   `entity` **(Model | Collection)** Entity to remove
+*   `entity` **(Model | Collection)** Entity to remove
 
 ### Examples
 
@@ -112,7 +105,7 @@ Undo last change
 
 ### Parameters
 
--   `all`   (optional, default `true`)
+*   `all`   (optional, default `true`)
 
 ### Examples
 
@@ -140,7 +133,7 @@ Redo last change
 
 ### Parameters
 
--   `all`   (optional, default `true`)
+*   `all`   (optional, default `true`)
 
 ### Examples
 
@@ -186,6 +179,18 @@ um.hasRedo();
 
 Returns **[Boolean][16]** 
 
+## isRegistered
+
+Check if the entity (Model/Collection) to tracked
+Note: New Components and CSSRules will be added automatically
+
+### Parameters
+
+*   `obj` **any** 
+*   `entity` **(Model | Collection)** Entity to track
+
+Returns **[Boolean][16]** 
+
 ## getStack
 
 Get stack of changes
@@ -198,18 +203,6 @@ stack.each(item => ...);
 ```
 
 Returns **Collection** 
-
-## getStackGroup
-
-Get grouped undo manager stack.
-The difference between `getStack` is when you do multiple operations at a time,
-like appending multiple components:
-`editor.getWrapper().append(`<div>C1</div><div>C2</div>`);`
-`getStack` will return a collection length of 2.
- `getStackGroup` instead will group them as a single operation (the first
-inserted component will be returned in the list) by returning an array length of 1.
-
-Returns **[Array][17]** 
 
 ## clear
 
@@ -254,5 +247,3 @@ Returns **this**
 [15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
 [16]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
-
-[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array

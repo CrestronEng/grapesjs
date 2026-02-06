@@ -7,16 +7,22 @@ exports.default = void 0;
 var traitInputAttr = {
   placeholder: 'eg. 텍스트 입력'
 };
-var _default = {
+var _default = exports.default = {
   assetManager: {
     addButton: '이미지 추가',
     inputPlh: 'http://path/to/the/image.jpg',
     modalTitle: '이미지 선택',
     uploadTitle: '원하는 파일을 여기에 놓거나 업로드를 위해 클릭'
   },
+  // Here just as a reference, GrapesJS core doesn't contain any block,
+  // so this should be omitted from other local files
   blockManager: {
-    labels: {},
-    categories: {}
+    labels: {
+      // 'block-id': 'Block Label',
+    },
+    categories: {
+      // 'category-id': 'Category Label',
+    }
   },
   domComponents: {
     names: {
@@ -83,13 +89,23 @@ var _default = {
       flex: 'Flex',
       dimension: '크기 및 위치'
     },
-    properties: {}
+    // The core library generates the name by their `property` name
+    properties: {
+      // float: 'Float',
+    }
   },
   traitManager: {
     empty: 'Trait Manager 사용하려면, 먼저 element를 선택해주세요',
     label: 'Component 설정',
     traits: {
-      labels: {},
+      // The core library generates the name by their `name` property
+      labels: {
+        // id: 'Id',
+        // alt: 'Alt',
+        // title: 'Title',
+        // href: 'Href',
+      },
+      // In a simple trait, like text input, these are used on input attributes
       attributes: {
         id: traitInputAttr,
         alt: traitInputAttr,
@@ -98,6 +114,7 @@ var _default = {
           placeholder: 'eg. https://google.com'
         }
       },
+      // In a trait like select, these are used to translate option names
       options: {
         target: {
           false: '현재 창',
@@ -107,4 +124,3 @@ var _default = {
     }
   }
 };
-exports.default = _default;

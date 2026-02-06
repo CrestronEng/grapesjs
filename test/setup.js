@@ -1,8 +1,6 @@
+import 'regenerator-runtime/runtime';
 import 'whatwg-fetch';
 import _ from 'underscore';
-import Backbone from 'backbone';
-import sinon from 'sinon';
-import grapesjs from './../src';
 
 const localStorage = {
   getItem(key) {
@@ -13,12 +11,11 @@ const localStorage = {
   },
   removeItem(key, value) {
     delete this[key];
-  }
+  },
 };
 
-global.Backbone = Backbone;
 global._ = _;
-global.sinon = sinon;
-global.grapesjs = grapesjs;
-global.$ = Backbone.$;
+global.__GJS_VERSION__ = '';
+global.grapesjs = require('./../src').default;
+global.$ = global.grapesjs.$;
 global.localStorage = localStorage;

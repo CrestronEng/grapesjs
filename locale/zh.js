@@ -7,7 +7,7 @@ exports.default = void 0;
 var traitInputAttr = {
   placeholder: '例子. 输入文字'
 };
-var _default = {
+var _default = exports.default = {
   assetManager: {
     addButton: '添加图片',
     inputPlh: 'http://path/to/the/image.jpg',
@@ -79,12 +79,16 @@ var _default = {
       flex: '盒子模型',
       dimension: '尺寸'
     },
-    properties: {}
+    // The core library generates the name by their `property` name
+    properties: {
+      // float: 'Float',
+    }
   },
   traitManager: {
     empty: '用设置项前选择一个组件',
     label: '组件设置',
     traits: {
+      // In a simple trait, like text input, these are used on input attributes
       attributes: {
         id: traitInputAttr,
         alt: traitInputAttr,
@@ -93,6 +97,7 @@ var _default = {
           placeholder: 'eg. https://google.com'
         }
       },
+      // In a trait like select, these are used to translate option names
       options: {
         target: {
           false: '本窗口',
@@ -102,4 +107,3 @@ var _default = {
     }
   }
 };
-exports.default = _default;

@@ -18,14 +18,14 @@ Once the editor is instantiated you can use its API. Before using these methods 
 const panelManager = editor.Panels;
 ```
 
--   [addPanel][2]
--   [addButton][3]
--   [getButton][4]
--   [getPanel][5]
--   [getPanels][6]
--   [getPanelsEl][7]
--   [removePanel][8]
--   [removeButton][9]
+*   [addPanel][2]
+*   [addButton][3]
+*   [getButton][4]
+*   [getPanel][5]
+*   [getPanels][6]
+*   [getPanelsEl][7]
+*   [removePanel][8]
+*   [removeButton][9]
 
 ## getPanels
 
@@ -45,15 +45,15 @@ Add new panel to the collection
 
 ### Parameters
 
--   `panel` **([Object][11] | Panel)** Object with right properties or an instance of Panel
+*   `panel` **([Object][11] | Panel)** Object with right properties or an instance of Panel
 
 ### Examples
 
 ```javascript
-var newPanel = panelManager.addPanel({
-  id: 'myNewPanel',
- visible  : true,
- buttons  : [...],
+const newPanel = panelManager.addPanel({
+ id: 'myNewPanel',
+ visible: true,
+ buttons: [...],
 });
 ```
 
@@ -65,21 +65,19 @@ Remove a panel from the collection
 
 ### Parameters
 
--   `panel` **([Object][11] | Panel | [String][12])** Object with right properties or an instance of Panel or Painel id
+*   `panel` **(Panel | [String][12])** Panel instance or panel id
 
 ### Examples
 
 ```javascript
-const newPanel = panelManager.removePanel({
-  id: 'myNewPanel',
- visible  : true,
- buttons  : [...],
-});
+const somePanel = panelManager.getPanel('somePanel');
+const removedPanel = panelManager.removePanel(somePanel);
 
-const newPanel = panelManager.removePanel('myNewPanel');
+// or by id
+const removedPanel = panelManager.removePanel('myNewPanel');
 ```
 
-Returns **Panel** Removed panel. Useful in case passed argument was an Object
+Returns **Panel** Removed panel
 
 ## getPanel
 
@@ -87,12 +85,12 @@ Get panel by ID
 
 ### Parameters
 
--   `id` **[string][12]** Id string
+*   `id` **[string][12]** Id string
 
 ### Examples
 
 ```javascript
-var myPanel = panelManager.getPanel('myNewPanel');
+const myPanel = panelManager.getPanel('myPanel');
 ```
 
 Returns **(Panel | null)** 
@@ -103,13 +101,13 @@ Add button to the panel
 
 ### Parameters
 
--   `panelId` **[string][12]** Panel's ID
--   `button` **([Object][11] | Button)** Button object or instance of Button
+*   `panelId` **[string][12]** Panel's ID
+*   `button` **([Object][11] | Button)** Button object or instance of Button
 
 ### Examples
 
 ```javascript
-var newButton = panelManager.addButton('myNewPanel',{
+const newButton = panelManager.addButton('myNewPanel',{
   id: 'myNewButton',
   className: 'someClass',
   command: 'someCommand',
@@ -142,9 +140,9 @@ Remove button from the panel
 
 ### Parameters
 
--   `panelId` **[String][12]** Panel's ID
--   `button`  
--   `buttonId` **[String][12]** Button's ID
+*   `panelId` **[String][12]** Panel's ID
+*   `button` **any** 
+*   `buttonId` **[String][12]** Button's ID
 
 ### Examples
 
@@ -168,18 +166,18 @@ Get button from the panel
 
 ### Parameters
 
--   `panelId` **[string][12]** Panel's ID
--   `id` **[string][12]** Button's ID
+*   `panelId` **[string][12]** Panel's ID
+*   `id` **[string][12]** Button's ID
 
 ### Examples
 
 ```javascript
-var button = panelManager.getButton('myPanel','myButton');
+const button = panelManager.getButton('myPanel', 'myButton');
 ```
 
 Returns **(Button | null)** 
 
-[1]: https://github.com/artf/grapesjs/blob/master/src/panels/config/config.js
+[1]: https://github.com/GrapesJS/grapesjs/blob/master/src/panels/config/config.ts
 
 [2]: #addpanel
 

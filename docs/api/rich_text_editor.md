@@ -15,17 +15,36 @@ const editor = grapesjs.init({
 })
 ```
 
-Once the editor is instantiated you can use its API. Before using these methods you should get the module from the instance
+Once the editor is instantiated you can use its API and listen to its events. Before using these methods, you should get the module from the instance.
 
 ```js
+// Listen to events
+editor.on('rte:enable', () => { ... });
+
+// Use the API
 const rte = editor.RichTextEditor;
+rte.add(...);
 ```
 
--   [add][3]
--   [get][4]
--   [getAll][5]
--   [remove][6]
--   [getToolbarEl][7]
+## Available Events
+
+*   `rte:enable` - RTE enabled. The view, on which RTE is enabled, is passed as an argument
+*   `rte:disable` - RTE disabled. The view, on which RTE is disabled, is passed as an argument
+
+## Methods
+
+*   [add][3]
+*   [get][4]
+*   [run][5]
+*   [getAll][6]
+*   [remove][7]
+*   [getToolbarEl][8]
+
+## getConfig
+
+Get configuration object
+
+Returns **[Object][9]** 
 
 ## add
 
@@ -33,8 +52,8 @@ Add a new action to the built-in RTE toolbar
 
 ### Parameters
 
--   `name` **[string][8]** Action name
--   `action` **[Object][9]** Action options (optional, default `{}`)
+*   `name` **[string][10]** Action name
+*   `action` **[Object][9]** Action options (optional, default `{}`)
 
 ### Examples
 
@@ -46,8 +65,8 @@ rte.add('bold', {
 });
 rte.add('link', {
   icon: document.getElementById('t'),
-  attributes: {title: 'Link',}
-  // Example on it's easy to wrap a selected content
+  attributes: { title: 'Link' },
+  // Example on how to wrap selected content
   result: rte => rte.insertHTML(`<a href="#">${rte.selection()}</a>`)
 });
 // An example with fontSize
@@ -102,7 +121,7 @@ Get the action by its name
 
 ### Parameters
 
--   `name` **[string][8]** Action name
+*   `name` **[string][10]** Action name
 
 ### Examples
 
@@ -117,7 +136,7 @@ Returns **[Object][9]**
 
 Get all actions
 
-Returns **[Array][10]** 
+Returns **[Array][11]** 
 
 ## remove
 
@@ -125,7 +144,7 @@ Remove the action from the toolbar
 
 ### Parameters
 
--   `name` **[string][8]** 
+*   `name` **[string][10]** 
 
 ### Examples
 
@@ -136,30 +155,47 @@ const action = rte.remove('bold');
 
 Returns **[Object][9]** Removed action
 
+## run
+
+Run action command.
+
+### Parameters
+
+*   `action` **([string][10] | RichTextEditorAction)** Action to run
+
+### Examples
+
+```javascript
+const action = rte.get('bold');
+rte.run(action) // or rte.run('bold')
+```
+
 ## getToolbarEl
 
 Get the toolbar element
 
-Returns **[HTMLElement][11]** 
+Returns **[HTMLElement][12]** 
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
 
-[2]: https://github.com/artf/grapesjs/blob/master/src/rich_text_editor/config/config.js
+[2]: https://github.com/GrapesJS/grapesjs/blob/master/src/rich_text_editor/config/config.ts
 
 [3]: #add
 
 [4]: #get
 
-[5]: #getall
+[5]: #run
 
-[6]: #remove
+[6]: #getall
 
-[7]: #gettoolbarel
+[7]: #remove
 
-[8]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[8]: #gettoolbarel
 
 [9]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[10]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[10]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[11]: https://developer.mozilla.org/docs/Web/HTML/Element
+[11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[12]: https://developer.mozilla.org/docs/Web/HTML/Element

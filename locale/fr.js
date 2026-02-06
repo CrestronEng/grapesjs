@@ -7,7 +7,7 @@ exports.default = void 0;
 var traitInputAttr = {
   placeholder: 'ex. Votre texte ici'
 };
-var _default = {
+var _default = exports.default = {
   assetManager: {
     addButton: 'Ajouter image',
     inputPlh: 'http://chemin/vers/image.jpg',
@@ -15,8 +15,12 @@ var _default = {
     uploadTitle: 'Déposez des fichiers ici ou cliquez pour envoyer des fichiers'
   },
   blockManager: {
-    labels: {},
-    categories: {}
+    labels: {
+      // 'block-id': 'Identifiant du bloc',
+    },
+    categories: {
+      // 'category-id': 'Identifiant de la catégorie',
+    }
   },
   domComponents: {
     names: {
@@ -83,6 +87,7 @@ var _default = {
       flex: 'Flex',
       dimension: 'Dimension'
     },
+    // The core library generates the name by their `property` name
     properties: {
       float: 'Flottant',
       display: 'Affichage',
@@ -172,12 +177,14 @@ var _default = {
     empty: 'Veuillez sélectionner un élément pour modifier les paramètres de cet élément',
     label: 'Paramètres composant',
     traits: {
+      // The core library generates the name by their `name` property
       labels: {
         id: 'Identifiant',
         alt: 'Texte alternatif',
         title: 'Titre',
         href: 'Source lien'
       },
+      // In a simple trait, like text input, these are used on input attributes
       attributes: {
         id: traitInputAttr,
         alt: traitInputAttr,
@@ -186,6 +193,7 @@ var _default = {
           placeholder: 'eg. https://google.com'
         }
       },
+      // In a trait like select, these are used to translate option names
       options: {
         target: {
           false: 'Cette fenêtre',
@@ -195,4 +203,3 @@ var _default = {
     }
   }
 };
-exports.default = _default;

@@ -7,16 +7,22 @@ exports.default = void 0;
 var traitInputAttr = {
   placeholder: 'متن را اینجا وارد کنید'
 };
-var _default = {
+var _default = exports.default = {
   assetManager: {
     addButton: 'افزودن تصویر',
     inputPlh: 'http://path/to/the/image.jpg',
     modalTitle: 'انتخاب تصویر',
     uploadTitle: 'فایل را انتخاب کنید یا در این مکان رها کنید'
   },
+  // Here just as a reference, GrapesJS core doesn't contain any block,
+  // so this should be omitted from other local files
   blockManager: {
-    labels: {},
-    categories: {}
+    labels: {
+      // 'block-id': 'Block Label',
+    },
+    categories: {
+      // 'category-id': 'Category Label',
+    }
   },
   domComponents: {
     names: {
@@ -83,12 +89,22 @@ var _default = {
       flex: 'فلکس',
       dimension: 'ابعاد'
     },
-    properties: {},
+    // The core library generates the name by their `property` name
+    properties: {
+      // float: 'Float',
+    },
     traitManager: {
       empty: 'قبل از استفاده از مدیر ویژگی ، یک عنصر را انتخاب کنید',
       label: 'تنظیمات جزء',
       traits: {
-        labels: {},
+        // The core library generates the name by their `name` property
+        labels: {
+          // id: 'Id',
+          // alt: 'Alt',
+          // title: 'Title',
+          // href: 'Href',
+        },
+        // In a simple trait, like text input, these are used on input attributes
         attributes: {
           id: traitInputAttr,
           alt: traitInputAttr,
@@ -97,6 +113,7 @@ var _default = {
             placeholder: 'مثال: https://google.com'
           }
         },
+        // In a trait like select, these are used to translate option names
         options: {
           target: {
             false: 'پنجره فعلی',
@@ -107,4 +124,3 @@ var _default = {
     }
   }
 };
-exports.default = _default;

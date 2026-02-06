@@ -4,7 +4,7 @@ title: Component Manager
 
 # Component Manager
 
-The Component is a base element of the template. It might be something simple and atomic like an image or a text box, but also complex structures, more probably composed by other components, like sections or pages. The concept of the component was made to allow the developer to bind different behaviors to different elements. For example, opening the Asset Manager on double click of the image is a custom behavior binded to that particular type of element.
+The Component is a base element of the template. It might be something simple and atomic like an image or a text box, but also complex structures, more probably composed by other components, like sections or pages. The concept of the component was made to allow the developer to bind different behaviors to different elements. For example, opening the Asset Manager on double click of the image is a custom behavior bound to that particular type of element.
 
 ::: warning
 This guide is referring to GrapesJS v0.15.8 or higher
@@ -42,7 +42,7 @@ editor.getWrapper().append(`<div>...`);
 ```
 
 ::: tip
-If you need to append a component in at a specific position, you can use `at` option. So, to add a component on top of all others (in the same collection) you would use
+If you need to append a component at a specific position, you can use `at` option. So, to add a component on top of all others (in the same collection) you would use
 ```js
 component.append('<div>...', { at: 0 })
 ```
@@ -89,7 +89,7 @@ At this point, a good question would be, how the editor assigns those types by s
 
 ### Component Recognition and Component Type Stack
 
-As we mentioned before, when you pass an HTML string as a component to the editor, that string is parsed and compiled to the [Component Definition] with a new `type` property. To understand what `type` should be assigned, for each parsed HTML Element, the editor iterates over all the defined components, called **Component Type Stack**, and checks via `isComponent` method (we will see it later) if that component type is appropriate for that element. The Component Type Stack is just a simple array of component types but what is matter is the order of those types. Any new added custom **Component Type** (we'll see later how to create them) goes on top of the Component Type Stack and each element returned from the parser iterates the stack from top to bottom (the last element of the stack is the `default` one), the iteration stops once one of the component returns a truthy value from the `isComponent` method.
+As we mentioned before, when you pass an HTML string as a component to the editor, that string is parsed and compiled to the [Component Definition] with a new `type` property. To understand what `type` should be assigned, for each parsed HTML Element, the editor iterates over all the defined components, called **Component Type Stack**, and checks via `isComponent` method (we will see it later) if that component type is appropriate for that element. The Component Type Stack is just a simple array of component types but what matters is the order of those types. Any new added custom **Component Type** (we'll see later how to create them) goes on top of the Component Type Stack and each element returned from the parser iterates the stack from top to bottom (the last element of the stack is the `default` one), the iteration stops once one of the component returns a truthy value from the `isComponent` method.
 
 <img :src="$withBase('/component-type-stack.svg')" class="img-ctr">
 
@@ -116,7 +116,7 @@ You can read properties with the `get` method, like, for example, the `type`
 ```js
 const componentType = component.get('type'); // eg. 'image'
 ```
-and to update properties you'd use `set`, which might change the way a component behavies in the canvas.
+and to update properties you'd use `set`, which might change the way a component behaves in the canvas.
 ```js
 // Make the component not draggable
 component.set('draggable', false);
@@ -189,24 +189,24 @@ A more advanced use case of custom components is an implementation of a custom r
 
 Here below you can see the list of built-in component types, ordered by their position in the **Component Type Stack**
 
-* [`cell`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentTableCell.js) - Component for handle `<td>` and `<th>` elements
-* [`row`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentTableRow.js) - Component for handle `<tr>` elements
-* [`table`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentTable.js) - Component for handle `<table>` elements
-* [`thead`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentTableHead.js) - Component for handle `<thead>` elements
-* [`tbody`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentTableBody.js) - Component for handle `<tbody>` elements
-* [`tfoot`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentTableFoot.js) - Component for handle `<tfoot>` elements
-* [`map`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentMap.js) - Component for handle `<a>` elements
-* [`link`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentLink.js) - Component for handle `<a>` elements
-* [`label`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentLabel.js) - Component for handle properly `<label>` elements
-* [`video`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentVideo.js) - Component for videos
-* [`image`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentImage.js) - Component for images
-* [`script`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentScript.js) - Component for handle `<script>` elements
-* [`svg`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentSvg.js) - Component for handle SVG elements
-* [`comment`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentComment.js) - Component for comments (might be useful for email editors)
-* [`textnode`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentTextNode.js) - Similar to the textnode in DOM definition, so a text element without a tag element.
-* [`text`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentText.js) - A simple text component that can be edited inline
-* [`wrapper`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/ComponentWrapper.js) - The canvas need to contain a root component, a wrapper, this component was made to identify it
-* [`default`](https://github.com/artf/grapesjs/blob/dev/src/dom_components/model/Component.js) - Default base component
+* [`cell`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentTableCell.ts) - Component for handle `<td>` and `<th>` elements
+* [`row`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentTableRow.ts) - Component for handle `<tr>` elements
+* [`table`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentTable.ts) - Component for handle `<table>` elements
+* [`thead`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentTableHead.ts) - Component for handle `<thead>` elements
+* [`tbody`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentTableBody.ts) - Component for handle `<tbody>` elements
+* [`tfoot`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentTableFoot.ts) - Component for handle `<tfoot>` elements
+* [`map`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentMap.ts) - Component for handle `<a>` elements
+* [`link`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentLink.ts) - Component for handle `<a>` elements
+* [`label`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentLabel.ts) - Component for handle properly `<label>` elements
+* [`video`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentVideo.ts) - Component for videos
+* [`image`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentImage.ts) - Component for images
+* [`script`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentScript.ts) - Component for handle `<script>` elements
+* [`svg`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentSvg.ts) - Component for handle SVG elements
+* [`comment`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentComment.ts) - Component for comments (might be useful for email editors)
+* [`textnode`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentTextNode.ts) - Similar to the textnode in DOM definition, so a text element without a tag element.
+* [`text`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentText.ts) - A simple text component that can be edited inline
+* [`wrapper`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/ComponentWrapper.ts) - The canvas need to contain a root component, a wrapper, this component was made to identify it
+* [`default`](https://github.com/GrapesJS/grapesjs/blob/dev/src/dom_components/model/Component.ts) Default base component
 
 
 
@@ -365,7 +365,7 @@ The `model` is probably the one you'll use the most as is what is used for the d
 
 The model defines also what you will see as the resultant HTML (the export code) and you've probably noticed the use of `tagName` (if not specified the `div` will be used) and `attributes` properties on the model.
 
-One another important property (not used because `<input/>` doesn't need it) might be `components`, which defines default internal components
+One another important property (not used in our input component integration because `<input/>` doesn't need it) might be `components`, which defines default internal components
 
 ```js
 defaults: {
@@ -747,6 +747,115 @@ editor.on(`component:remove`, model => console.log('Global hook: component:remov
 
 
 
+## Components & CSS
+
+::: warning
+This section is referring to GrapesJS v0.17.27 or higher
+:::
+
+If you need to add component-related styles, you can do it via `styles` property.
+
+```js
+domc.addType('component-css', {
+  model: {
+    defaults: {
+      attributes: { class: 'cmp-css' },
+      components: `
+        <span>Component with styles<span>
+        <div class="cmp-css-a">Component A</div>
+        <div class="cmp-css-b">Component B</div>
+      `,
+      styles: `
+        .cmp-css { color: red }
+        .cmp-css-a { color: green }
+        .cmp-css-b { color: blue }
+
+        @media (max-width: 992px) {
+          .cmp-css{ color: darkred; }
+          .cmp-css-a { color: darkgreen }
+          .cmp-css-b { color: darkblue }
+        }
+      `,
+    },
+  },
+});
+```
+This approach allows the editor to group these styles ([CssRule] instances) and remove them accordingly in case all references of the same component are removed.
+
+::: danger Important caveat
+&nbsp;
+:::
+
+In the example above we used one custom component and default sub-components. Styles are declared on our custom component only, that means if you remove all `.cmp-css-a` and `.cmp-css-b` instances from the canvas, their CssRules will still be stored in the project (**here we're not talking about the CSS export, which is able to skip not used rules, but instances stored in your project JSON**).
+
+The cleanest approach would be to follow component-oriented styling, where you declare styles only in the scope of the component itself. This is how it would look like with the example above.
+
+```js
+domc.addType('cmp-a', {
+  model: {
+    defaults: {
+      attributes: { class: 'cmp-css-a' },
+      components: 'Component A',
+      styles: `
+        .cmp-css-a { color: green }
+        @media (max-width: 992px) {
+          .cmp-css-a { color: darkgreen }
+        }
+      `,
+    }
+  },
+});
+domc.addType('cmp-b', {
+  model: {
+    defaults: {
+      attributes: { class: 'cmp-css-b' },
+      components: 'Component B',
+      styles: `
+        .cmp-css-b { color: blue }
+        @media (max-width: 992px) {
+          .cmp-css-b { color: darkblue }
+        }
+      `,
+    }
+  },
+});
+domc.addType('component-css', {
+  model: {
+    defaults: {
+      attributes: { class: 'cmp-css' },
+      components: [
+        '<span>Component with styles<span>',
+        { type: 'cmp-a' },
+        { type: 'cmp-b' },
+      ],
+      styles: `
+        .cmp-css { color: red }
+        @media (max-width: 992px) {
+          .cmp-css{ color: darkred; }
+        }
+      `,
+    },
+  },
+});
+```
+::: tip Component-first styling
+By default, when you select a component in the canvas and apply styles on it, changes will be applied on its existent classes. This will result on changing of all the components with those applied classes. If you need the style to be applied only on the specific selected component you have to select componentFirst strategy in this way.
+```js
+grapesjs.init({
+  ...
+  selectorManager: {
+    componentFirst: true,
+  },
+})
+```
+:::
+
+### External CSS
+
+If you need to load external component-specific CSS, you have to rely on the `script` property. For more details please refer to [Components & JS](Components-js.html).
+
+
+
 ## Components & JS
 
 If you want to know how to create Components with javascript attached (eg. counters, galleries, slideshows, etc.) check the dedicated page
@@ -760,10 +869,10 @@ If you want to know how to create Components with javascript attached (eg. count
 
 ### JSX syntax
 
-If you're importing big chunks of HTML string into the editor (eg. defined via Blocks) JSX might be a great compromise between perfomances and code readibility as it allows you to skip the parsing and the component recognition steps by keeping the HTML syntax.
+If you're importing big chunks of HTML string into the editor (eg. defined via Blocks) JSX might be a great compromise between performances and code readibility as it allows you to skip the parsing and the component recognition steps by keeping the HTML syntax.
 By default, GrapesJS understands objects generated from React JSX preset, so, if you're working in the React app probably you're already using JSX and you don't need to do anything else, your environment is already configured to parse JSX in javascript files.
 
-So, intead of writing this:
+So, instead of writing this:
 ```js
 // I'm adding a string, so the parsing and the component recognition steps will be executed
 editor.addComponents(`<div>
@@ -839,4 +948,5 @@ For Babel users, it's just a matter of adding few plugins: `@babel/plugin-syntax
 
   [Component Definition]: <#component-definition>
   [Component]: </api/component.html>
+  [CssRule]: </api/css_rule.html>
   [Component API]: </api/component.html>

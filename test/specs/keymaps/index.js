@@ -1,5 +1,4 @@
-import Editor from 'editor/index';
-import Keymaps from 'keymaps';
+import Editor from 'editor';
 
 describe('Keymaps', () => {
   describe('Main', () => {
@@ -8,8 +7,9 @@ describe('Keymaps', () => {
     let editor;
 
     beforeEach(() => {
-      editor = Editor().init();
+      editor = new Editor({ keymaps: { defaults: [] } });
       em = editor.getModel();
+      em.loadOnStart();
       obj = editor.Keymaps;
     });
 
@@ -64,13 +64,13 @@ describe('Keymaps', () => {
       it('Should run the handler', () => {
         const handler = {
           run: jest.fn(),
-          callRun: jest.fn()
+          callRun: jest.fn(),
         };
         obj.add('test', 'ctrl+a', handler);
         const keyboardEvent = new KeyboardEvent('keydown', {
           keyCode: 65,
           which: 65,
-          ctrlKey: true
+          ctrlKey: true,
         });
         document.dispatchEvent(keyboardEvent);
 
@@ -86,13 +86,13 @@ describe('Keymaps', () => {
       it('Should not run the handler', () => {
         const handler = {
           run: jest.fn(),
-          callRun: jest.fn()
+          callRun: jest.fn(),
         };
         obj.add('test', 'ctrl+a', handler);
         const keyboardEvent = new KeyboardEvent('keydown', {
           keyCode: 65,
           which: 65,
-          ctrlKey: true
+          ctrlKey: true,
         });
         document.dispatchEvent(keyboardEvent);
 
@@ -102,13 +102,13 @@ describe('Keymaps', () => {
       it('Should run the handler if checked as force', () => {
         const handler = {
           run: jest.fn(),
-          callRun: jest.fn()
+          callRun: jest.fn(),
         };
         obj.add('test', 'ctrl+a', handler, { force: true });
         const keyboardEvent = new KeyboardEvent('keydown', {
           keyCode: 65,
           which: 65,
-          ctrlKey: true
+          ctrlKey: true,
         });
         document.dispatchEvent(keyboardEvent);
 
