@@ -107,7 +107,7 @@ const rule3 = css.getRule('.myclass1', {
 });
 ```
 
-Returns **[CssRule]**&#x20;
+Returns **[CssRule]** 
 
 ## getRules
 
@@ -128,7 +128,7 @@ console.log(rules.map(rule => rule.toCSS()))
 console.log(css.getRules())
 ```
 
-Returns **[Array][9]<[CssRule]>**&#x20;
+Returns **[Array][9]<[CssRule]>** 
 
 ## remove
 
@@ -137,7 +137,7 @@ Remove rule, by CssRule or matching selector (eg. the selector will match also a
 ### Parameters
 
 *   `rule` **([String][8] | [CssRule] | [Array][9]<[CssRule]>)** CssRule or matching selector.
-*   `opts` **any?**&#x20;
+*   `opts` **any?** 
 
 ### Examples
 
@@ -159,7 +159,7 @@ Remove all rules
 
 *   `opts`   (optional, default `{}`)
 
-Returns **this**&#x20;
+Returns **this** 
 
 [1]: https://github.com/GrapesJS/grapesjs/blob/master/src/css_composer/config/config.ts
 

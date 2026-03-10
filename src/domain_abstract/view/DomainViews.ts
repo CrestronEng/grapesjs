@@ -8,7 +8,7 @@ export default class DomainViews extends View {
   itemView?: any;
 
   // Defines the View per type
-  itemsView = '' as any;
+  itemsView = '';
 
   itemType = 'type';
 

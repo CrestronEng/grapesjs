@@ -101,9 +101,10 @@ export default class InputColor extends Input {
       const ppfx = this.ppfx;
       const { onChange } = opts;
 
-      const colorEl = $(`<div class="${this.ppfx}field-color-picker"></div>`);
-      const cpStyle = colorEl.get(0)!.style;
-      const colorPickerConfig = (em && em.getConfig && em.getConfig().colorPicker) || {};
+      var colorEl = $(`<div class="${this.ppfx}field-color-picker"></div>`);
+      var cpStyle = colorEl.get(0)!.style;
+      var elToAppend = em && em.config ? em.config.el : '';
+      var colorPickerConfig = (em && em.getConfig && em.getConfig().colorPicker) || {};
 
       this.movedColor = '';
       let changed = false;
@@ -122,7 +123,8 @@ export default class InputColor extends Input {
       // @ts-ignore
       colorEl.spectrum({
         color: model.getValue() || false,
-        containerClassName: `${ppfx}one-bg ${ppfx}two-color ${ppfx}editor-sp`,
+        containerClassName: `${ppfx}one-bg ${ppfx}two-color`,
+        appendTo: elToAppend || 'body',
         maxSelectionSize: 8,
         showPalette: true,
         showAlpha: true,

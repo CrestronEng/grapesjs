@@ -10,14 +10,6 @@ export interface GetBoxRectOptions extends ToScreenOption {
   local?: boolean;
 }
 
-export interface CanvasRefreshOptions {
-  /**
-   * Refresh canvas spots.
-   */
-  spots?: boolean;
-  all?: boolean;
-}
-
 /**{START_EVENTS}*/
 export enum CanvasEvents {
   /**
@@ -108,16 +100,6 @@ export enum CanvasEvents {
    * });
    */
   pointer = 'canvas:pointer',
-
-  /**
-   * @event `canvas:refresh` Canvas was refreshed to update elements on top,
-   * like spots/tools (eg. via `editor.Canvas.refresh()` or on frame resize).
-   * @example
-   * editor.on('canvas:refresh', (canvasRefreshOptions) => {
-   *  console.log('Canvas refreshed with options:', canvasRefreshOptions);
-   * });
-   */
-  refresh = 'canvas:refresh',
 
   /**
    * @event `canvas:frame:load` Frame loaded in canvas.

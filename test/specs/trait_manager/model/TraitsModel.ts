@@ -12,13 +12,13 @@ describe('TraitModels', () => {
 
   beforeEach(() => {
     em = new Editor().getModel();
-    target = new Component({}, { em, config: em.Components.config });
+    target = new Component({}, { em });
     trait = new Trait(
       {
         name: modelName,
         target,
       },
-      em,
+      em
     );
   });
 

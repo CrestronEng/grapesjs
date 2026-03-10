@@ -70,7 +70,7 @@ export const grapesjs = {
     const em = editor.getModel();
 
     // Load plugins
-    initConfig.plugins!.forEach((pluginId) => {
+    initConfig.plugins!.forEach(pluginId => {
       const plugin = getPlugin(pluginId, plugins);
       const plgOptions = initConfig.pluginsOpts![pluginId as string] || {};
 
@@ -91,11 +91,6 @@ export const grapesjs = {
     return editor;
   },
 };
-
-/**
- * @deprecated Changed to CategoryProperties
- */
-export type { CategoryProperties as BlockCategoryProperties } from './abstract/ModuleCategory';
 
 // Exports for TS
 export type { default as Asset } from './asset_manager/model/Asset';

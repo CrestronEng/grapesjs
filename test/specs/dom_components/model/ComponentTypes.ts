@@ -25,7 +25,7 @@ describe('Component Types', () => {
   afterEach(() => {
     wrapper.components().reset();
     editor = new Editor({ allowScripts: true } as any);
-    editor.getModel().Pages.onLoad();
+    editor.getModel().get('PageManager').onLoad();
     wrapper = editor.getWrapper()!;
   });
 

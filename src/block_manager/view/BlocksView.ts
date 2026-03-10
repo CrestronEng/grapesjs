@@ -126,24 +126,38 @@ export default class BlocksView extends View {
    * */
   add(model: Block, fragment?: DocumentFragment) {
     const { config, renderedCategories } = this;
-    const attributes = model.get('attributes');
-    const view = new BlockView({ model, attributes }, config);
+    const view = new BlockView(
+      {
+        model,
+        attributes: model.get('attributes'),
+      },
+      config
+    );
     const rendered = view.render().el;
-    const category = model.parent.initCategory(model);
+    let category = model.get('category');
 
     // Check for categories
     if (category && this.categories && !config.ignoreCategories) {
-      const catId = category.getId();
+      if (isString(category)) {
+        category = { id: category, label: category };
+      } else if (isObject(category) && !category.id) {
+        category.id = category.label;
+      }
+
+      const catModel = this.categories.add(category);
+      const catId = catModel.get('id')!;
       const categories = this.getCategoriesEl();
       let catView = renderedCategories.get(catId);
+      // @ts-ignore
+      model.set('category', catModel, { silent: true });
 
       if (!catView && categories) {
-        catView = new CategoryView({ model: category }, config, 'block').render();
+        catView = new CategoryView({ model: catModel }, config, 'block').render();
         renderedCategories.set(catId, catView);
         categories.appendChild(catView.el);
       }
 
-      catView?.append(rendered);
+      catView && catView.append(rendered);
       return;
     }
 
@@ -184,7 +198,7 @@ export default class BlocksView extends View {
       </div>
     `;
 
-    this.collection.each((model) => this.add(model, frag));
+    this.collection.each(model => this.add(model, frag));
     this.append(frag);
     const cls = `${this.blockContClass}s ${ppfx}one-bg ${ppfx}two-color`;
     this.$el.addClass(cls);

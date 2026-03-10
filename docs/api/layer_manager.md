@@ -58,7 +58,7 @@ const component = editor.getSelected();
 layers.setRoot(component);
 ```
 
-Returns **[Component]**&#x20;
+Returns **[Component]** 
 
 ## getRoot
 
@@ -70,7 +70,7 @@ Get the current root layer.
 const layerRoot = layers.getRoot();
 ```
 
-Returns **[Component]**&#x20;
+Returns **[Component]** 
 
 ## getComponents
 
@@ -88,7 +88,7 @@ const components = layers.getComponents(component);
 console.log(components);
 ```
 
-Returns **[Array][14]<[Component]>**&#x20;
+Returns **[Array][14]<[Component]>** 
 
 ## setOpen
 
@@ -97,7 +97,7 @@ Update the layer open state of the component.
 ### Parameters
 
 *   `component` **[Component]** Component to update
-*   `value` **[Boolean][15]**&#x20;
+*   `value` **[Boolean][15]** 
 
 ## isOpen
 
@@ -105,9 +105,9 @@ Check the layer open state of the component.
 
 ### Parameters
 
-*   `component` **[Component]**&#x20;
+*   `component` **[Component]** 
 
-Returns **[Boolean][15]**&#x20;
+Returns **[Boolean][15]** 
 
 ## setVisible
 
@@ -116,7 +116,7 @@ Update the layer visibility state of the component.
 ### Parameters
 
 *   `component` **[Component]** Component to update
-*   `value` **[Boolean][15]**&#x20;
+*   `value` **[Boolean][15]** 
 
 ## isVisible
 
@@ -124,9 +124,9 @@ Check the layer visibility state of the component.
 
 ### Parameters
 
-*   `component` **[Component]**&#x20;
+*   `component` **[Component]** 
 
-Returns **[Boolean][15]**&#x20;
+Returns **[Boolean][15]** 
 
 ## setLocked
 
@@ -135,7 +135,7 @@ Update the layer locked state of the component.
 ### Parameters
 
 *   `component` **[Component]** Component to update
-*   `value` **[Boolean][15]**&#x20;
+*   `value` **[Boolean][15]** 
 
 ## isLocked
 
@@ -143,9 +143,9 @@ Check the layer locked state of the component.
 
 ### Parameters
 
-*   `component` **[Component]**&#x20;
+*   `component` **[Component]** 
 
-Returns **[Boolean][15]**&#x20;
+Returns **[Boolean][15]** 
 
 ## setName
 
@@ -162,7 +162,7 @@ Get the layer name of the component.
 
 ### Parameters
 
-*   `component` **[Component]**&#x20;
+*   `component` **[Component]** 
 
 Returns **[String][13]** Component layer name
 

@@ -1,6 +1,6 @@
 import PropertyCompositeView from './PropertyCompositeView';
-import PropertiesView from './PropertiesView';
-import LayersView from './LayersView';
+import PropertiesView from '../../overrides/style_manager/view/PropertiesView';
+import LayersView from '../../overrides/style_manager/view/LayersView';
 import PropertyStack from '../model/PropertyStack';
 
 export default class PropertyStackView extends PropertyCompositeView {
@@ -32,8 +32,7 @@ export default class PropertyStackView extends PropertyCompositeView {
 
   init() {
     const { model } = this;
-    this.listenTo(model.layers, 'change reset', this.updateStatus);
-    this.listenTo(model, 'change:isEmptyValue', this.updateStatus);
+    this.listenTo(model.__getLayers(), 'change reset', this.updateStatus);
   }
 
   addLayer() {
@@ -76,7 +75,7 @@ export default class PropertyStackView extends PropertyCompositeView {
       propsView.render();
 
       const layersView = new LayersView({
-        collection: model.layers,
+        collection: model.__getLayers(),
         // @ts-ignore
         config,
         propertyView: this,

@@ -15,7 +15,7 @@ export default class Pages extends Collection<Page> {
   }
 
   onReset(m: Page, opts?: { previousModels?: Pages }) {
-    opts?.previousModels?.map((p) => this.onRemove(p));
+    opts?.previousModels?.map(p => this.onRemove(p));
   }
 
   onRemove(removed?: Page) {

@@ -3,30 +3,26 @@ import TraitView from '../../../../src/trait_manager/view/TraitView';
 import Component from '../../../../src/dom_components/model/Component';
 import EditorModel from '../../../../src/editor/model/Editor';
 import Editor from '../../../../src/editor';
-import { ComponentOptions } from '../../../../src/dom_components/model/types';
 
 describe('TraitView', () => {
-  let obj: TraitView;
-  let trait: Trait;
-  let modelName = 'title';
-  let target: Component;
-  let em: EditorModel;
-  let config: ComponentOptions;
+  var obj: TraitView;
+  var trait: Trait;
+  var modelName = 'title';
+  var target: Component;
+  var em: EditorModel;
 
   beforeEach(() => {
     em = new Editor().getModel();
-    config = { em, config: em.Components.config };
-    target = new Component({}, config);
+    target = new Component();
     trait = new Trait(
       {
         name: modelName,
         target,
       },
-      em,
+      em
     );
     obj = new TraitView({
       model: trait,
-      config,
     });
   });
 
@@ -38,34 +34,34 @@ describe('TraitView', () => {
 
   test('On update of the value updates the target attributes', () => {
     trait.set('value', 'test');
-    const eq = { [modelName]: 'test' };
+    var eq = { [modelName]: 'test' };
     expect(target.get('attributes')).toEqual(eq);
   });
 
   test('Updates on different models do not alter other targets', () => {
-    const target1 = new Component({}, config);
-    const target2 = new Component({}, config);
-    const trait1 = new Trait(
+    var target1 = new Component();
+    var target2 = new Component();
+    var trait1 = new Trait(
       {
         name: modelName,
         target: target1,
       },
-      em,
+      em
     );
-    const trait2 = new Trait(
+    var trait2 = new Trait(
       {
         name: modelName,
         target: target2,
       },
-      em,
+      em
     );
-    const obj1 = new TraitView({ model: trait1 });
-    const obj2 = new TraitView({ model: trait2 });
+    var obj1 = new TraitView({ model: trait1 });
+    var obj2 = new TraitView({ model: trait2 });
 
     trait1.set('value', 'test1');
     trait2.set('value', 'test2');
-    const eq1 = { [modelName]: 'test1' };
-    const eq2 = { [modelName]: 'test2' };
+    var eq1 = { [modelName]: 'test1' };
+    var eq2 = { [modelName]: 'test2' };
     expect(target1.get('attributes')).toEqual(eq1);
     expect(target2.get('attributes')).toEqual(eq2);
   });

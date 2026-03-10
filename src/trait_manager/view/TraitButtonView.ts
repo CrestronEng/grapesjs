@@ -1,5 +1,5 @@
 import { isString } from 'underscore';
-import TraitView from './TraitView';
+import TraitView from '../../overrides/trait_manager/view/TraitView';
 
 export default class TraitButtonView extends TraitView {
   templateInput() {
@@ -11,7 +11,16 @@ export default class TraitButtonView extends TraitView {
   }
 
   handleClick() {
-    this.model.runCommand();
+    const { model, em } = this;
+    const command = model.get('command');
+
+    if (command) {
+      if (isString(command)) {
+        em.Commands.run(command);
+      } else {
+        command(em.Editor, model);
+      }
+    }
   }
 
   renderLabel() {

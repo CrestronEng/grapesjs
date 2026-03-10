@@ -28,16 +28,16 @@
  */
 import { debounce, isArray } from 'underscore';
 import { ItemManagerModule } from '../abstract/Module';
-import FrameView from '../canvas/view/FrameView';
+import FrameView from '../overrides/canvas/view/FrameView';
 import Component from '../dom_components/model/Component';
 import EditorModel from '../editor/model/Editor';
 import defaults, { BlockManagerConfig } from './config/config';
 import Block, { BlockProperties } from './model/Block';
 import Blocks from './model/Blocks';
 import Categories from '../abstract/ModuleCategories';
-import Category, { getItemsByCategory } from '../abstract/ModuleCategory';
-import { BlocksByCategory, BlocksEvents } from './types';
-import BlocksView from './view/BlocksView';
+import Category from '../abstract/ModuleCategory';
+import { BlocksEvents } from './types';
+import BlocksView from '../overrides/block_manager/view/BlocksView';
 
 export type BlockEvent = `${BlocksEvents}`;
 
@@ -61,20 +61,17 @@ export default class BlockManager extends ItemManagerModule<BlockManagerConfig, 
   storageKey = '';
 
   constructor(em: EditorModel) {
-    super(em, 'BlockManager', new Blocks(em.config.blockManager?.blocks || [], { em }), BlocksEvents, defaults);
+    super(em, 'BlockManager', new Blocks(em.config.blockManager?.blocks || []), BlocksEvents, defaults);
 
     // Global blocks collection
     this.blocks = this.all;
-    this.blocksVisible = new Blocks(this.blocks.models, { em });
-    this.categories = new Categories([], {
-      em,
-      events: { update: BlocksEvents.categoryUpdate },
-    });
+    this.blocksVisible = new Blocks(this.blocks.models);
+    this.categories = new Categories();
 
     // Setup the sync between the global and public collections
-    this.blocks.on('add', (model) => this.blocksVisible.add(model));
-    this.blocks.on('remove', (model) => this.blocksVisible.remove(model));
-    this.blocks.on('reset', (coll) => this.blocksVisible.reset(coll.models));
+    this.blocks.on('add', model => this.blocksVisible.add(model));
+    this.blocks.on('remove', model => this.blocksVisible.remove(model));
+    this.blocks.on('reset', coll => this.blocksVisible.reset(coll.models));
 
     this.__onAllEvent = debounce(() => this.__trgCustom(), 0);
 
@@ -109,13 +106,13 @@ export default class BlockManager extends ItemManagerModule<BlockManagerConfig, 
     const content = block.getContent ? block.getContent() : block;
     this._dragBlock = block;
     em.set({ dragResult: null, dragContent: content });
-    [em, blocks].map((i) => i.trigger(events.dragStart, block, ev));
+    [em, blocks].map(i => i.trigger(events.dragStart, block, ev));
   }
 
   __drag(ev: Event) {
     const { em, events, blocks } = this;
     const block = this._dragBlock;
-    [em, blocks].map((i) => i.trigger(events.drag, block, ev));
+    [em, blocks].map(i => i.trigger(events.drag, block, ev));
   }
 
   __endDrag(opts: { component?: Component } = {}) {
@@ -148,13 +145,13 @@ export default class BlockManager extends ItemManagerModule<BlockManagerConfig, 
     em.set({ dragResult: null, dragContent: null });
 
     if (block) {
-      [em, blocks].map((i) => i.trigger(events.dragEnd, cmp, block));
+      [em, blocks].map(i => i.trigger(events.dragEnd, cmp, block));
     }
   }
 
   __getFrameViews(): FrameView[] {
     return this.em.Canvas.getFrames()
-      .map((frame) => frame.view!)
+      .map(frame => frame.view!)
       .filter(Boolean);
   }
 
@@ -171,11 +168,11 @@ export default class BlockManager extends ItemManagerModule<BlockManagerConfig, 
 
   startDrag(block: Block, ev?: Event) {
     this.__startDrag(block, ev);
-    this.__getFrameViews().forEach((fv) => fv.droppable?.startCustom());
+    this.__getFrameViews().forEach(fv => fv.droppable?.startCustom());
   }
 
   endDrag(cancel?: boolean) {
-    this.__getFrameViews().forEach((fv) => fv.droppable?.endCustom(cancel));
+    this.__getFrameViews().forEach(fv => fv.droppable?.endCustom(cancel));
     this.__endDrag();
   }
 
@@ -282,23 +279,6 @@ export default class BlockManager extends ItemManagerModule<BlockManagerConfig, 
   }
 
   /**
-   * Get blocks by category.
-   * @example
-   * blockManager.getBlocksByCategory();
-   * // Returns an array of items of this type
-   * // > { category?: Category; items: Block[] }
-   *
-   * // NOTE: The item without category is the one containing blocks without category.
-   *
-   * // You can also get the same output format by passing your own array of Blocks
-   * const myFilteredBlocks: Block[] = [...];
-   * blockManager.getBlocksByCategorymyFilteredBlocks
-   */
-  getBlocksByCategory(blocks?: Block[]): BlocksByCategory[] {
-    return getItemsByCategory<Block>(blocks || this.getAll().models);
-  }
-
-  /**
    * Render blocks
    * @param  {Array} blocks Blocks to render, without the argument will render all global blocks
    * @param  {Object} [opts={}] Options
@@ -331,7 +311,7 @@ export default class BlockManager extends ItemManagerModule<BlockManagerConfig, 
     const toRender = blocks || this.getAll().models;
 
     if (opts.external) {
-      const collection = new Blocks(toRender, { em });
+      const collection = new Blocks(toRender);
       return new BlocksView({ collection, categories }, { em, ...config, ...opts }).render().el;
     }
 
@@ -350,8 +330,8 @@ export default class BlockManager extends ItemManagerModule<BlockManagerConfig, 
 
   destroy() {
     const colls = [this.blocks, this.blocksVisible, this.categories];
-    colls.map((c) => c.stopListening());
-    colls.map((c) => c.reset());
+    colls.map(c => c.stopListening());
+    colls.map(c => c.reset());
     this.blocksView?.remove();
   }
 }

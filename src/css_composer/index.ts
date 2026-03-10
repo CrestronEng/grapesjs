@@ -39,7 +39,6 @@ import { ItemManagerModule } from '../abstract/Module';
 import EditorModel from '../editor/model/Editor';
 import Component from '../dom_components/model/Component';
 import { ObjectAny, PrevToNewIdMap } from '../common';
-import { UpdateStyleOptions } from '../domain_abstract/model/StyleableModel';
 
 /** @private */
 interface RuleOptions {
@@ -54,7 +53,7 @@ interface RuleOptions {
 }
 
 /** @private */
-interface SetRuleOptions extends RuleOptions, UpdateStyleOptions {
+interface SetRuleOptions extends RuleOptions {
   /**
    * If the rule exists already, merge passed styles instead of replacing them.
    */
@@ -62,7 +61,7 @@ interface SetRuleOptions extends RuleOptions, UpdateStyleOptions {
 }
 
 /** @private */
-export interface GetSetRuleOptions extends UpdateStyleOptions {
+export interface GetSetRuleOptions {
   state?: string;
   mediaText?: string;
   addOpts?: ObjectAny;
@@ -195,7 +194,7 @@ export default class CssComposer extends ItemManagerModule<CssComposerConfig & {
     selectors: any,
     state?: string,
     width?: string,
-    ruleProps?: Omit<CssRuleProperties, 'selectors'>,
+    ruleProps?: Omit<CssRuleProperties, 'selectors'>
   ): CssRule | undefined {
     let slc = selectors;
     if (isString(selectors)) {
@@ -204,7 +203,7 @@ export default class CssComposer extends ItemManagerModule<CssComposerConfig & {
       const node = this.em.Parser.parserCss.checkNode({ selectors: singleSel } as any)[0];
       slc = sm.get(node.selectors as string[]);
     }
-    return this.rules.find((rule) => rule.compare(slc, state, width, ruleProps)) || null;
+    return this.rules.find(rule => rule.compare(slc, state, width, ruleProps)) || null;
   }
 
   getAll() {
@@ -375,8 +374,8 @@ export default class CssComposer extends ItemManagerModule<CssComposerConfig & {
     const rules = this.getAll();
     if (!selector) return [...rules.models];
     const optRuleSel = { sort: true };
-    const sels = isString(selector) ? selector.split(',').map((s) => s.trim()) : selector;
-    const result = rules.filter((r) => sels.indexOf(r.getSelectors().getFullString(null, optRuleSel)) >= 0);
+    const sels = isString(selector) ? selector.split(',').map(s => s.trim()) : selector;
+    const result = rules.filter(r => sels.indexOf(r.getSelectors().getFullString(null, optRuleSel)) >= 0);
     return result;
   }
 
@@ -497,7 +496,7 @@ export default class CssComposer extends ItemManagerModule<CssComposerConfig & {
       mediaText = this.em.getCurrentMedia();
     }
     const id = cmp.getId();
-    const rules = this.getAll().filter((r) => {
+    const rules = this.getAll().filter(r => {
       if (!isUndefined(state) && r.get('state') !== state) return false;
       if (!isUndefined(mediaText) && r.get('mediaText') !== mediaText) return false;
       return r.getSelectorsString() === `#${id}`;
@@ -526,7 +525,7 @@ export default class CssComposer extends ItemManagerModule<CssComposerConfig & {
     if (!Object.keys(idMap).length) return changed;
 
     const rules = Array.isArray(rule) ? rule : [rule];
-    rules.forEach((rule) => {
+    rules.forEach(rule => {
       const sel = rule.selectors;
 
       if (sel && sel.length == 1) {

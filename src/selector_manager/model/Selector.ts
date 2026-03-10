@@ -1,7 +1,6 @@
 import { result, forEach, keys } from 'underscore';
 import { Model } from '../../common';
 import EditorModel from '../../editor/model/Editor';
-import { SelectorManagerConfig } from '../config/config';
 
 const TYPE_CLASS = 1;
 const TYPE_ID = 2;
@@ -15,15 +14,6 @@ export interface SelectorProps {
   protected?: boolean;
 }
 
-export interface SelectorPropsCustom extends SelectorProps {
-  [key: string]: unknown;
-}
-
-export interface SelectorOptions {
-  config?: SelectorManagerConfig;
-  em?: EditorModel;
-}
-
 /**
  * @typedef Selector
  * @property {String} name Selector name, eg. `my-class`
@@ -33,7 +23,7 @@ export interface SelectorOptions {
  * @property {Boolean} [private=false] If true, it can't be seen by the Style Manager, but it will be rendered in the canvas and in export code.
  * @property {Boolean} [protected=false] If true, it can't be removed from the attached component.
  */
-export default class Selector extends Model<SelectorPropsCustom> {
+export default class Selector extends Model<SelectorProps & { [key: string]: unknown }> {
   defaults() {
     return {
       name: '',
@@ -50,12 +40,12 @@ export default class Selector extends Model<SelectorPropsCustom> {
   static readonly TYPE_CLASS = TYPE_CLASS;
   static readonly TYPE_ID = TYPE_ID;
 
-  em?: EditorModel;
+  em: EditorModel;
 
   /**
    * @hideconstructor
    */
-  constructor(props: SelectorPropsCustom, opts: SelectorOptions = {}) {
+  constructor(props: any, opts: any = {}) {
     super(props, opts);
     const { config = {} } = opts;
     const name = this.get('name');
@@ -169,7 +159,7 @@ export default class Selector extends Model<SelectorPropsCustom> {
     let obj = Model.prototype.toJSON.call(this, [opts]);
     const defaults = result(this, 'defaults');
 
-    if (em?.getConfig().avoidDefaults) {
+    if (em && em.getConfig().avoidDefaults) {
       forEach(defaults, (value, key) => {
         if (obj[key] === value) {
           delete obj[key];
@@ -201,7 +191,7 @@ export default class Selector extends Model<SelectorPropsCustom> {
    * @private
    */
   static escapeName(name: string) {
-    return `${name}`.trim().replace(/\s+/g, '-');
+    return `${name}`.trim().replace(/([^a-z0-9\w-\\:@\\/]+)/gi, '-');
   }
 }
 

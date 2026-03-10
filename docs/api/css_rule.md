@@ -6,7 +6,7 @@
 
 ### Parameters
 
-*   `props` **CssRuleProperties**&#x20;
+*   `props` **CssRuleProperties** 
 *   `opt` **any**  (optional, default `{}`)
 
 ### Properties
@@ -35,7 +35,7 @@ const cssRule = editor.Css.setRule('.class1', { color: 'red' }, {
 cssRule.getAtRule(); // "@media (min-width: 500px)"
 ```
 
-Returns **[String][3]**&#x20;
+Returns **[String][3]** 
 
 ### selectorsToString
 
@@ -55,7 +55,7 @@ cssRule.selectorsToString(); // ".class1:hover"
 cssRule.selectorsToString({ skipState: true }); // ".class1"
 ```
 
-Returns **[String][3]**&#x20;
+Returns **[String][3]** 
 
 ### getDeclaration
 
@@ -75,7 +75,7 @@ const cssRule = editor.Css.setRule('.class1', { color: 'red' }, {
 cssRule.getDeclaration() // ".class1{color:red;}"
 ```
 
-Returns **[String][3]**&#x20;
+Returns **[String][3]** 
 
 ### getDevice
 
@@ -88,7 +88,7 @@ const device = rule.getDevice();
 console.log(device?.getName());
 ```
 
-Returns **([Device] | null)**&#x20;
+Returns **([Device] | null)** 
 
 ### getState
 
@@ -101,7 +101,7 @@ const state = rule.getState();
 console.log(state?.getLabel());
 ```
 
-Returns **([State] | null)**&#x20;
+Returns **([State] | null)** 
 
 ### getComponent
 
@@ -114,7 +114,7 @@ const cmp = rule.getComponent();
 console.log(cmp?.toHTML());
 ```
 
-Returns **([Component] | null)**&#x20;
+Returns **([Component] | null)** 
 
 ### toCSS
 

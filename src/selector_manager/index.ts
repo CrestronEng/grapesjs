@@ -87,7 +87,6 @@ import { ItemManagerModule } from '../abstract/Module';
 import { StyleModuleParam } from '../style_manager';
 import StyleableModel from '../domain_abstract/model/StyleableModel';
 import CssRule from '../css_composer/model/CssRule';
-import { ComponentsEvents } from '../dom_components/types';
 
 export type SelectorEvent = 'selector:add' | 'selector:remove' | 'selector:update' | 'selector:state' | 'selector';
 
@@ -149,7 +148,7 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
     this.selected = new Selectors([], { em, config });
     this.states = new Collection<State>(
       config.states!.map((state: any) => new State(state)),
-      { model: State },
+      { model: State }
     );
     this.model = new Model({ cFirst: config.componentFirst, _undo: true });
     this.__update = debounce(() => this.__trgCustom(), 0);
@@ -159,9 +158,9 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
     });
     em.on('change:state', (m, value) => em.trigger(evState, value));
     this.model.on('change:cFirst', (m, value) => em.trigger('selector:type', value));
-    const eventCmpUpdateCls = `${ComponentsEvents.update}:classes`;
-    em.on(`component:toggled ${eventCmpUpdateCls}`, this.__updateSelectedByComponents);
-    const listenTo = `component:toggled ${eventCmpUpdateCls} change:device styleManager:update selector:state selector:type style:target`;
+    em.on('component:toggled component:update:classes', this.__updateSelectedByComponents);
+    const listenTo =
+      'component:toggled component:update:classes change:device styleManager:update selector:state selector:type style:target';
     this.model.listenTo(em, listenTo, () => this.__update());
   }
 
@@ -203,10 +202,8 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
     this.selected.reset(this.__getCommonSelectors(toSelect));
     const selTags = this.selectorTags;
     const res = toSelect
-      .filter((i) => i)
-      .map((sel) =>
-        isComponent(sel) ? sel : isRule(sel) && !sel.get('selectorsAdd') ? sel : sel.getSelectorsString(),
-      );
+      .filter(i => i)
+      .map(sel => (isComponent(sel) ? sel : isRule(sel) && !sel.get('selectorsAdd') ? sel : sel.getSelectorsString()));
     selTags && selTags.componentChanged({ targets: res });
     return this;
   }
@@ -272,7 +269,7 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
     const cOpts = isString(props) ? {} : opts;
     // Keep support for arrays but avoid it in docs
     if (isArray(props)) {
-      return props.map((item) => this.addSelector(item, opts, cOpts));
+      return props.map(item => this.addSelector(item, opts, cOpts));
     } else {
       return this.addSelector(props, opts, cOpts);
     }
@@ -296,7 +293,7 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
       classes = classes.trim().split(' ');
     }
 
-    classes.forEach((name) => added.push(this.addSelector(name) as Selector));
+    classes.forEach(name => added.push(this.addSelector(name) as Selector));
     return added;
   }
 
@@ -313,8 +310,8 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
     // Keep support for arrays but avoid it in docs
     if (isArray(name)) {
       const result: Selector[] = [];
-      const selectors = name.map((item) => this.getSelector(item)).filter(Boolean) as Selector[];
-      selectors.forEach((item) => result.indexOf(item) < 0 && result.push(item));
+      const selectors = name.map(item => this.getSelector(item)).filter(Boolean) as Selector[];
+      selectors.forEach(item => result.indexOf(item) < 0 && result.push(item));
       // @ts-ignore
       return result;
     } else {
@@ -393,8 +390,8 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
    */
   setStates(states: State[], opts?: any) {
     return this.states.reset(
-      states.map((state) => new State(state)),
-      opts,
+      states.map(state => new State(state)),
+      opts
     );
   }
 
@@ -428,7 +425,7 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
    */
   addSelected(props: SelectorStringObject) {
     const added = this.add(props);
-    this.em.getSelectedAll().forEach((target) => {
+    this.em.getSelectedAll().forEach(target => {
       target.getSelectors().add(added);
     });
     // TODO: update selected collection
@@ -441,7 +438,7 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
    * selectorManager.removeSelected('.myclass');
    */
   removeSelected(selector: Selector) {
-    this.em.getSelectedAll().forEach((trg) => {
+    this.em.getSelectedAll().forEach(trg => {
       !selector.get('protected') && trg && trg.getSelectors().remove(selector);
     });
   }
@@ -456,7 +453,7 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
     const rule = em.Css.get(commonSelectors, state, media);
     const styleToApply = rule?.getStyle();
 
-    em.getSelectedAll().forEach((component) => {
+    em.getSelectedAll().forEach(component => {
       const selectors = component.getSelectors();
       if (selectors.includes(selector)) {
         const suffix = opts.suffix || ' copy';
@@ -563,7 +560,7 @@ export default class SelectorManager extends ItemManagerModule<SelectorManagerCo
   }
 
   __getCommonSelectors(components: Component[], opts = {}) {
-    const selectors = components.map((cmp) => cmp.getSelectors && cmp.getSelectors().getValid(opts)).filter(Boolean);
+    const selectors = components.map(cmp => cmp.getSelectors && cmp.getSelectors().getValid(opts)).filter(Boolean);
     return this.__common(...selectors);
   }
 

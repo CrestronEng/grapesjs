@@ -26,15 +26,6 @@ export interface CategoryProperties {
   attributes?: Record<string, any>;
 }
 
-export interface ItemsByCategory<T> {
-  category?: Category;
-  items: T[];
-}
-
-export interface ModelWithCategory {
-  category?: Category;
-}
-
 export default class Category extends Model<CategoryProperties> {
   view?: CategoryView;
 
@@ -46,42 +37,4 @@ export default class Category extends Model<CategoryProperties> {
       attributes: {},
     };
   }
-
-  getId() {
-    return this.get('id')!;
-  }
-
-  getLabel() {
-    return this.get('label')!;
-  }
-}
-
-export function getItemsByCategory<T extends ModelWithCategory>(allItems: T[]) {
-  const categorySet = new Set<Category>();
-  const categoryMap = new Map<Category, T[]>();
-  const emptyItem: ItemsByCategory<T> = { items: [] };
-
-  allItems.forEach((item) => {
-    const { category } = item;
-
-    if (category) {
-      categorySet.add(category);
-      const categoryItems = categoryMap.get(category);
-
-      if (categoryItems) {
-        categoryItems.push(item);
-      } else {
-        categoryMap.set(category, [item]);
-      }
-    } else {
-      emptyItem.items.push(item);
-    }
-  });
-
-  const categoryWithItems = Array.from(categorySet).map((category) => ({
-    category,
-    items: categoryMap.get(category) || [],
-  }));
-
-  return [...categoryWithItems, emptyItem];
 }

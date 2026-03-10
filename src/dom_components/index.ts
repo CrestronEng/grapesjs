@@ -53,7 +53,7 @@
  *
  * @module Components
  */
-import { debounce, isArray, isBoolean, isEmpty, isFunction, isString, isSymbol, result } from 'underscore';
+import { debounce, isArray, isEmpty, isFunction, isString, result } from 'underscore';
 import { ItemManagerModule } from '../abstract/Module';
 import { AddOptions, ObjectAny } from '../common';
 import EditorModel from '../editor/model/Editor';
@@ -101,19 +101,6 @@ import ComponentVideoView from './view/ComponentVideoView';
 import ComponentView, { IComponentView } from './view/ComponentView';
 import ComponentWrapperView from './view/ComponentWrapperView';
 import ComponentsView from './view/ComponentsView';
-import ComponentHead, { type as typeHead } from './model/ComponentHead';
-import {
-  getSymbolMain,
-  getSymbolInstances,
-  getSymbolsToUpdate,
-  isSymbolMain,
-  isSymbolInstance,
-  detachSymbolInstance,
-  isSymbolRoot,
-} from './model/SymbolUtils';
-import { ComponentsEvents, SymbolInfo } from './types';
-import Symbols from './model/Symbols';
-import { BlockProperties } from '../block_manager/model/Block';
 
 export type ComponentEvent =
   | 'component:create'
@@ -147,7 +134,6 @@ export interface AddComponentTypeOptions {
   isComponent?: (el: HTMLElement) => boolean | ComponentDefinitionDefined | undefined;
   model?: Partial<ComponentModelDefinition> & ThisType<ComponentModelDefinition & Component>;
   view?: Partial<ComponentViewDefinition> & ThisType<ComponentViewDefinition & ComponentView>;
-  block?: boolean | Partial<BlockProperties>;
   extend?: string;
   extendView?: string;
   extendFn?: string[];
@@ -265,19 +251,14 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
       view: ComponentTextNodeView,
     },
     {
-      id: typeHead,
-      model: ComponentHead,
-      view: ComponentView,
+      id: 'text',
+      model: ComponentText,
+      view: ComponentTextView,
     },
     {
       id: 'wrapper',
       model: ComponentWrapper,
       view: ComponentWrapperView,
-    },
-    {
-      id: 'text',
-      model: ComponentText,
-      view: ComponentTextView,
     },
     {
       id: 'default',
@@ -305,11 +286,8 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
   //name = "DomComponents";
 
   storageKey = 'components';
-  keySymbols = 'symbols';
 
   shallow?: Component;
-  symbols: Symbols;
-  events = ComponentsEvents;
 
   /**
    * Initialize module. Called on a new instance of the editor with configurations passed
@@ -319,20 +297,18 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
    */
   constructor(em: EditorModel) {
     super(em, 'DomComponents', new Components(undefined, { em }));
-    const { config } = this;
-    this.symbols = new Symbols([], { em, config, domc: this });
 
     if (em) {
       //@ts-ignore
       this.config.components = em.config.components || this.config.components;
     }
 
-    for (let name in defaults) {
+    for (var name in defaults) {
       //@ts-ignore
       if (!(name in this.config)) this.config[name] = defaults[name];
     }
 
-    const ppfx = this.config.pStylePrefix;
+    var ppfx = this.config.pStylePrefix;
     if (ppfx) this.config.stylePrefix = ppfx + this.config.stylePrefix;
 
     // Load dependencies
@@ -348,14 +324,8 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
     return this;
   }
 
-  postLoad() {
-    const { em, symbols } = this;
-    const { UndoManager } = em;
-    UndoManager.add(symbols);
-  }
-
   load(data: any) {
-    const result = this.loadProjectData(data, {
+    return this.loadProjectData(data, {
       onResult: (result: Component) => {
         let wrapper = this.getWrapper()!;
 
@@ -374,16 +344,10 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
         }
       },
     });
-
-    this.symbols.reset(data[this.keySymbols] || []);
-
-    return result;
   }
 
   store() {
-    return {
-      [this.keySymbols]: this.symbols,
-    };
+    return {};
   }
 
   /**
@@ -495,7 +459,7 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
   clear(opts = {}) {
     const components = this.getComponents();
     //@ts-ignore
-    components?.filter(Boolean).forEach((i) => i.remove(opts));
+    components?.filter(Boolean).forEach(i => i.remove(opts));
     return this;
   }
 
@@ -519,12 +483,12 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
    */
   addType(type: string, methods: AddComponentTypeOptions) {
     const { em } = this;
-    const { model = {}, view = {}, isComponent, extend, extendView, extendFn = [], extendFnView = [], block } = methods;
+    const { model = {}, view = {}, isComponent, extend, extendView, extendFn = [], extendFnView = [] } = methods;
     const compType = this.getType(type);
     const extendType = this.getType(extend!);
     const extendViewType = this.getType(extendView!);
     const typeToExtend = extendType ? extendType : compType ? compType : this.getType('default');
-    const modelToExt = typeToExtend.model as typeof Component;
+    const modelToExt = typeToExtend.model;
     const viewToExt = extendViewType ? extendViewType.view : typeToExtend.view;
 
     // Function for extending source object methods
@@ -545,18 +509,14 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
     if (typeof model === 'object') {
       const modelDefaults = { defaults: model.defaults };
       delete model.defaults;
-      const typeExtends = new Set(modelToExt.typeExtends);
-      typeExtends.add(modelToExt.getDefaults().type);
-
       methods.model = modelToExt.extend(
         {
           ...model,
           ...getExtendedObj(extendFn, model, modelToExt),
         },
         {
-          typeExtends,
           isComponent: compType && !extendType && !isComponent ? modelToExt.isComponent : isComponent || (() => 0),
-        },
+        }
       );
       // Reassign the defaults getter to the model
       Object.defineProperty(methods.model!.prototype, 'defaults', {
@@ -581,16 +541,6 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
       // @ts-ignore
       methods.id = type;
       this.componentTypes.unshift(methods as any);
-    }
-
-    if (block) {
-      const defBlockProps: BlockProperties = {
-        id: type,
-        label: type,
-        content: { type },
-      };
-      const blockProps: BlockProperties = block === true ? defBlockProps : { ...defBlockProps, ...block };
-      em.Blocks.add(blockProps.id || type, blockProps);
     }
 
     const event = `component:type:${compType ? 'update' : 'add'}`;
@@ -646,7 +596,7 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
       component.set({
         status: 'selected',
       });
-      ['component:selected', 'component:toggled'].forEach((event) => this.em.trigger(event, component, opts));
+      ['component:selected', 'component:toggled'].forEach(event => this.em.trigger(event, component, opts));
     }
   }
 
@@ -657,7 +607,7 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
         status: '',
         state: '',
       });
-      ['component:deselected', 'component:toggled'].forEach((event) => this.em.trigger(event, component, opts));
+      ['component:deselected', 'component:toggled'].forEach(event => this.em.trigger(event, component, opts));
     }
   }
 
@@ -695,7 +645,7 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
         const events = [keyUpdate, keyUpdateInside].join(' ');
         shallow.on(
           events,
-          debounce(() => shallow?.components(''), 100),
+          debounce(() => shallow?.components(''), 100)
         );
       }
       this.shallow = shallow;
@@ -714,87 +664,6 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
    */
   isComponent(obj?: ObjectAny): obj is Component {
     return isComponent(obj);
-  }
-
-  /**
-   * Add a new symbol from a component.
-   * If the passed component is not a symbol, it will be converted to an instance and will return the main symbol.
-   * If the passed component is already an instance, a new instance will be created and returned.
-   * If the passed component is the main symbol, a new instance will be created and returned.
-   * @param {[Component]} component Component from which create a symbol.
-   * @returns {[Component]}
-   * @example
-   * const symbol = cmp.addSymbol(editor.getSelected());
-   * // cmp.getSymbolInfo(symbol).isSymbol === true;
-   */
-  addSymbol(component: Component) {
-    if (isSymbol(component) && !isSymbolRoot(component)) {
-      return;
-    }
-
-    const symbol = component.clone({ symbol: true });
-    isSymbolMain(symbol) && this.symbols.add(symbol);
-    this.em.trigger('component:toggled');
-
-    return symbol;
-  }
-
-  /**
-   * Get the array of main symbols.
-   * @returns {Array<[Component]>}
-   * @example
-   * const symbols = cmp.getSymbols();
-   * // [Component, Component, ...]
-   * // Removing the main symbol will detach all the relative instances.
-   * symbols[0].remove();
-   */
-  getSymbols() {
-    return [...this.symbols.models];
-  }
-
-  /**
-   * Detach symbol instance from the main one.
-   * The passed symbol instance will become a regular component.
-   * @param {[Component]} component The component symbol to detach.
-   * @example
-   * const cmpInstance = editor.getSelected();
-   * // cmp.getSymbolInfo(cmpInstance).isInstance === true;
-   * cmp.detachSymbol(cmpInstance);
-   * // cmp.getSymbolInfo(cmpInstance).isInstance === false;
-   */
-  detachSymbol(component: Component) {
-    if (isSymbolInstance(component)) {
-      detachSymbolInstance(component);
-    }
-  }
-
-  /**
-   * Get info about the symbol.
-   * @param {[Component]} component Component symbol from which to get the info.
-   * @returns {Object} Object containing symbol info.
-   * @example
-   * cmp.getSymbolInfo(editor.getSelected());
-   * // > { isSymbol: true, isMain: false, isInstance: true, ... }
-   */
-  getSymbolInfo(component: Component, opts: { withChanges?: string } = {}): SymbolInfo {
-    const isMain = isSymbolMain(component);
-    const mainRef = getSymbolMain(component);
-    const isInstance = !!mainRef;
-    const instances = (isMain ? getSymbolInstances(component) : getSymbolInstances(mainRef)) || [];
-    const main = mainRef || (isMain ? component : undefined);
-    const relatives = getSymbolsToUpdate(component, { changed: opts.withChanges });
-    const isSymbol = isMain || isInstance;
-    const isRoot = isSymbol && isSymbolRoot(component);
-
-    return {
-      isSymbol,
-      isMain,
-      isInstance,
-      isRoot,
-      main,
-      instances: instances,
-      relatives: relatives || [],
-    };
   }
 
   /**
@@ -886,8 +755,8 @@ export default class ComponentManager extends ItemManagerModule<DomComponentsCon
 
   destroy() {
     const all = this.allById();
-    Object.keys(all).forEach((id) => all[id] && all[id].remove());
+    Object.keys(all).forEach(id => all[id] && all[id].remove());
     this.componentView?.remove();
-    [this.em, this.componentsById, this.componentView].forEach((i) => (i = {}));
+    [this.em, this.componentsById, this.componentView].forEach(i => (i = {}));
   }
 }

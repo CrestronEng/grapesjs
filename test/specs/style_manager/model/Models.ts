@@ -60,7 +60,7 @@ describe('Sector', () => {
       property: 'display',
       type: 'select',
       default: 'block',
-      options: [{ id: 'block' }, { id: 'inline' }, { id: 'inline-block' }, { id: 'flex' }, { id: 'none' }],
+      options: [{ id: 'block' }, { id: 'none' }],
     });
   });
 
@@ -83,7 +83,6 @@ describe('Sector', () => {
 
   test('Extend composed properties', () => {
     obj = sm.addSector('test', {
-      name: 'test',
       buildProps: ['margin', 'float'],
       properties: [
         {

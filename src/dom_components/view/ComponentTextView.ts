@@ -1,5 +1,5 @@
 import { bindAll } from 'underscore';
-import { AddOptions, DisableOptions, ObjectAny, WithHTMLParserOptions } from '../../common';
+import { DisableOptions, ObjectAny } from '../../common';
 import RichTextEditorModule from '../../rich_text_editor';
 import RichTextEditor from '../../rich_text_editor/model/RichTextEditor';
 import { off, on } from '../../utils/dom';
@@ -10,7 +10,7 @@ import ComponentText from '../model/ComponentText';
 import { ComponentDefinition } from '../model/types';
 import ComponentView from './ComponentView';
 
-export default class ComponentTextView<TComp extends ComponentText = ComponentText> extends ComponentView<TComp> {
+export default class ComponentTextView extends ComponentView<ComponentText> {
   rte?: RichTextEditorModule;
   rteEnabled?: boolean;
   activeRte?: RichTextEditor;
@@ -108,7 +108,7 @@ export default class ComponentTextView<TComp extends ComponentText = ComponentTe
    * Disable element content editing
    * @private
    * */
-  async disableEditing(opts: DisableOptions & WithHTMLParserOptions = {}) {
+  async disableEditing(opts: DisableOptions = {}) {
     const { model, rte, activeRte, em } = this;
     // There are rare cases when disableEditing is called when the view is already removed
     // so, we have to check for the model, this will avoid breaking stuff.
@@ -171,7 +171,7 @@ export default class ComponentTextView<TComp extends ComponentText = ComponentTe
     }
   }
 
-  insertComponent(content: ComponentDefinition, opts: AddOptions & { useDomContent?: boolean } = {}) {
+  insertComponent(content: ComponentDefinition, opts = {}) {
     const { model, el } = this;
     const doc = el.ownerDocument;
     const selection = doc.getSelection();
@@ -185,10 +185,10 @@ export default class ComponentTextView<TComp extends ComponentText = ComponentTe
 
       if (textModel && textModel.is?.('textnode')) {
         const cmps = textModel.collection;
-        cmps.forEach((cmp) => {
+        cmps.forEach(cmp => {
           if (cmp === textModel) {
             const type = 'textnode';
-            const cnt = opts.useDomContent ? textNode.textContent || '' : cmp.content;
+            const cnt = cmp.content;
             newCmps.push({ type, content: cnt.slice(0, offset) });
             newCmps.push(content);
             newCmps.push({ type, content: cnt.slice(offset) });

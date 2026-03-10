@@ -85,7 +85,7 @@ sm.add(...);
 
 Get configuration object
 
-Returns **[Object][18]**&#x20;
+Returns **[Object][18]** 
 
 ## add
 
@@ -107,7 +107,7 @@ const selector = selectorManager.add('.my-class');
 console.log(selector.toString()) // `.my-class`
 ```
 
-Returns **[Selector]**&#x20;
+Returns **[Selector]** 
 
 ## get
 
@@ -116,7 +116,7 @@ Get the selector by its name/type
 ### Parameters
 
 *   `name` **[String][19]** Selector name or string identifier
-*   `type` **[number][20]?**&#x20;
+*   `type` **[number][20]?** 
 
 ### Examples
 
@@ -126,7 +126,7 @@ const selector = selectorManager.get('.my-class');
 const selectorId = selectorManager.get('#my-id');
 ```
 
-Returns **([Selector] | null)**&#x20;
+Returns **([Selector] | null)** 
 
 ## remove
 
@@ -135,7 +135,7 @@ Remove Selector.
 ### Parameters
 
 *   `selector` **([String][19] | [Selector])** Selector instance or Selector string identifier
-*   `opts` **RemoveOptions?**&#x20;
+*   `opts` **RemoveOptions?** 
 
 ### Examples
 
@@ -155,7 +155,7 @@ Rename Selector.
 
 *   `selector` **[Selector]** Selector to update.
 *   `name` **[String][19]** New name for the selector.
-*   `opts` **SetOptions?**&#x20;
+*   `opts` **SetOptions?** 
 
 ### Examples
 
@@ -181,19 +181,19 @@ Change the selector state
 selectorManager.setState('hover');
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## getState
 
 Get the current selector state value
 
-Returns **[String][19]**&#x20;
+Returns **[String][19]** 
 
 ## getStates
 
 Get states
 
-Returns **[Array][21]<[State]>**&#x20;
+Returns **[Array][21]<[State]>** 
 
 ## setStates
 
@@ -202,7 +202,7 @@ Set a new collection of states
 ### Parameters
 
 *   `states` **[Array][21]<[Object][18]>** Array of new states
-*   `opts` **any?**&#x20;
+*   `opts` **any?** 
 
 ### Examples
 
@@ -213,7 +213,7 @@ const states = selectorManager.setStates([
 ]);
 ```
 
-Returns **[Array][21]<[State]>**&#x20;
+Returns **[Array][21]<[State]>** 
 
 ## getSelected
 
@@ -226,7 +226,7 @@ const selected = selectorManager.getSelected();
 console.log(selected.map(s => s.toString()))
 ```
 
-Returns **[Array][21]<[Selector]>**&#x20;
+Returns **[Array][21]<[Selector]>** 
 
 ## getSelectedAll
 
@@ -239,7 +239,7 @@ const selected = selectorManager.getSelectedAll();
 console.log(selected.map(s => s.toString()))
 ```
 
-Returns **[Array][21]<[Selector]>**&#x20;
+Returns **[Array][21]<[Selector]>** 
 
 ## addSelected
 
@@ -280,7 +280,7 @@ const targetsToStyle = selectorManager.getSelectedTargets();
 console.log(targetsToStyle.map(target => target.getSelectorsString()))
 ```
 
-Returns **[Array][21]<([Component] | [CssRule])>**&#x20;
+Returns **[Array][21]<([Component] | [CssRule])>** 
 
 ## setComponentFirst
 
@@ -290,19 +290,19 @@ of selectors (which would change styles on all components with those classes).
 
 ### Parameters
 
-*   `value` **[Boolean][22]**&#x20;
+*   `value` **[Boolean][22]** 
 
 ## getComponentFirst
 
 Get the value of component-first option.
 
-Returns **[Boolean][22]**&#x20;
+Returns **[Boolean][22]** 
 
 ## getAll
 
 Get all selectors
 
-Returns **Collection<[Selector]>**&#x20;
+Returns **Collection<[Selector]>** 
 
 [1]: https://github.com/GrapesJS/grapesjs/blob/master/src/selector_manager/config/config.ts
 

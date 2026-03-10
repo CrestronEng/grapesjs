@@ -25,7 +25,7 @@ console.log(selector.toString());
 // -> `#my-selector`
 ```
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 ### getName
 
@@ -39,7 +39,7 @@ console.log(selector.getName());
 // -> `my-selector`
 ```
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 ### getLabel
 
@@ -53,7 +53,7 @@ console.log(selector.getLabel());
 // -> `My selector`
 ```
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 ### setLabel
 
@@ -76,7 +76,7 @@ console.log(selector.getLabel());
 
 Get selector active state.
 
-Returns **[Boolean][3]**&#x20;
+Returns **[Boolean][3]** 
 
 ### setActive
 

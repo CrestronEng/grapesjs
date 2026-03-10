@@ -1,4 +1,3 @@
-import AssetManager from '..';
 import { View } from '../../common';
 import EditorModel from '../../editor/model/Editor';
 import fetch from '../../utils/fetch';
@@ -19,7 +18,7 @@ export default class FileUploaderView extends View {
   pfx: string;
   ppfx: string;
   em: EditorModel;
-  module: AssetManager;
+  module: any;
   target: any;
   uploadId: string;
   disabled: boolean;
@@ -81,7 +80,7 @@ export default class FileUploaderView extends View {
    */
   onUploadStart() {
     const { module } = this;
-    module?.__propEv(module.events.uploadStart);
+    module && module.__propEv('asset:upload:start');
   }
 
   /**
@@ -91,7 +90,7 @@ export default class FileUploaderView extends View {
    */
   onUploadEnd(res: any) {
     const { $el, module } = this;
-    module?.__propEv(module.events.uploadEnd, res);
+    module && module.__propEv('asset:upload:end', res);
     const input = $el.find('input');
     input && input.val('');
   }
@@ -105,7 +104,7 @@ export default class FileUploaderView extends View {
     const { module } = this;
     console.error(err);
     this.onUploadEnd(err);
-    module?.__propEv(module.events.uploadError, err);
+    module && module.__propEv('asset:upload:error', err);
   }
 
   /**
@@ -122,7 +121,7 @@ export default class FileUploaderView extends View {
       json = text;
     }
 
-    module?.__propEv(module.events.uploadResponse, json);
+    module && module.__propEv('asset:upload:response', json);
 
     if (config.autoAdd && target) {
       target.add(json.data, { at: 0 });
@@ -156,7 +155,7 @@ export default class FileUploaderView extends View {
 
     if (this.multiUpload) {
       for (let i = 0; i < files.length; i++) {
-        body.append(`${config.uploadName}${config.multiUploadSuffix}`, files[i]);
+        body.append(`${config.uploadName}[]`, files[i]);
       }
     } else if (files.length) {
       body.append(config.uploadName!, files[0]);
@@ -182,7 +181,7 @@ export default class FileUploaderView extends View {
       const fetchResult = customFetch
         ? customFetch(url, fetchOptsResult)
         : fetch(url, fetchOptsResult).then((res: any) =>
-            ((res.status / 200) | 0) == 1 ? res.text() : res.text().then((text: string) => Promise.reject(text)),
+            ((res.status / 200) | 0) == 1 ? res.text() : res.text().then((text: string) => Promise.reject(text))
           );
       return fetchResult
         .then((text: string) => this.onUploadResponse(text, clb))
@@ -269,7 +268,7 @@ export default class FileUploaderView extends View {
     cleanEditorElCls();
 
     if ('draggable' in edEl) {
-      [edEl, frameEl].forEach((item) => {
+      [edEl, frameEl].forEach(item => {
         item.ondragover = onDragOver;
         item.ondragleave = onDragLeave;
         item.ondrop = onDrop;
@@ -286,7 +285,7 @@ export default class FileUploaderView extends View {
         disabled: this.disabled,
         multiUpload: this.multiUpload,
         pfx,
-      }),
+      })
     );
     this.initDrop();
     $el.attr('class', pfx + 'file-uploader');
@@ -314,7 +313,7 @@ export default class FileUploaderView extends View {
       // and a promise (to track and merge results and errors)
       const promise = new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.addEventListener('load', (event) => {
+        reader.addEventListener('load', event => {
           let type;
           const name = file.name;
 
@@ -357,7 +356,7 @@ export default class FileUploaderView extends View {
             };
 
             const image = new Image();
-            image.addEventListener('error', (error) => {
+            image.addEventListener('error', error => {
               reject(error);
             });
             image.addEventListener('load', () => {
@@ -379,10 +378,10 @@ export default class FileUploaderView extends View {
             resolve(reader.result);
           }
         });
-        reader.addEventListener('error', (error) => {
+        reader.addEventListener('error', error => {
           reject(error);
         });
-        reader.addEventListener('abort', (error) => {
+        reader.addEventListener('abort', error => {
           reject('Aborted');
         });
 
@@ -393,15 +392,15 @@ export default class FileUploaderView extends View {
     }
 
     return Promise.all(promises).then(
-      (data) => {
+      data => {
         response.data = data;
         // @ts-ignore
         this.onUploadResponse(response, clb);
       },
-      (error) => {
+      error => {
         // @ts-ignore
         this.onUploadError(error);
-      },
+      }
     );
   }
 }

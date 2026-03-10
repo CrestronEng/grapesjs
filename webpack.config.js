@@ -8,39 +8,30 @@ module.exports = ({ config, pkg, webpack }) => {
     ...config,
     output: {
       ...config.output,
-      filename: BUILD_MODULE ? 'grapes.mjs' : 'grapes.min.js',
-      ...(BUILD_MODULE
-        ? {
-            libraryTarget: 'module',
-            library: { type: 'module' },
-          }
-        : {
-            libraryExport: 'default',
-          }),
-    },
-    optimization: {
-      ...config.optimization,
-      minimize: !BUILD_MODULE,
+      filename: 'grapes.min.js',
+      libraryExport: 'default',
     },
     devServer: {
-      ...config.devServer,
-      static: [rootDir],
       headers: { 'Access-Control-Allow-Origin': '*' },
-      allowedHosts: 'all',
-    },
-    experiments: {
-      outputModule: !!BUILD_MODULE,
+      disableHostCheck: true,
     },
     resolve: {
       ...config.resolve,
-      modules: [...(config.resolve && config.resolve.modules), 'src'],
+      modules: [
+        ...(config.resolve && config.resolve.modules),
+        'src',
+        'node_modules'
+      ],
       alias: {
         ...(config.resolve && config.resolve.alias),
         jquery: 'utils/cash-dom',
         backbone: `${rootDir}/node_modules/backbone`,
         underscore: `${rootDir}/node_modules/underscore`,
-      },
+      }
     },
-    plugins: [new webpack.DefinePlugin({ __GJS_VERSION__: `'${pkg.version}'` }), ...config.plugins],
-  };
+    plugins: [
+      new webpack.DefinePlugin({ __GJS_VERSION__: `'${pkg.version}'` }),
+      ...config.plugins,
+    ]
+  }
 };

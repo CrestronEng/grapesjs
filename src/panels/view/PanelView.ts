@@ -1,5 +1,5 @@
 import { ModuleView } from '../../abstract';
-import Resizer from '../../utils/Resizer';
+import Resizer from '../../overrides/utils/Resizer';
 import Panel from '../model/Panel';
 import ButtonsView from './ButtonsView';
 
@@ -83,7 +83,7 @@ export default class PanelView extends ModuleView<Panel> {
         avoidContainerUpdate: true,
         prefix: editor.getConfig().stylePrefix,
         onEnd() {
-          em.Canvas.refresh({ all: true });
+          em && em.trigger('change:canvasOffset');
         },
         posFetcher: (el: HTMLElement, { target }: any) => {
           const style = el.style as any;

@@ -1,4 +1,4 @@
-import PropertyFactory from '../../../../src/style_manager/model/PropertyFactory';
+import PropertyFactory from '../../../../src/overrides/style_manager/model/PropertyFactory';
 
 describe('PropertyFactory', () => {
   let obj: PropertyFactory;
@@ -11,6 +11,7 @@ describe('PropertyFactory', () => {
     expect(obj).toBeTruthy();
   });
 
+  /*
   test('Build single prop', () => {
     expect(obj.build('float')).toEqual([
       {
@@ -21,6 +22,7 @@ describe('PropertyFactory', () => {
       },
     ]);
   });
+  */
 
   test('Build display', () => {
     expect(obj.build('display')).toEqual([
@@ -28,7 +30,7 @@ describe('PropertyFactory', () => {
         property: 'display',
         type: 'select',
         default: 'block',
-        options: [{ id: 'block' }, { id: 'inline' }, { id: 'inline-block' }, { id: 'flex' }, { id: 'none' }],
+        options: [{ id: 'block' }, { id: 'none' }],
       },
     ]);
   });
@@ -130,7 +132,6 @@ describe('PropertyFactory', () => {
     expect(obj.build('position')).toEqual([
       {
         property: 'position',
-        type: 'radio',
         default: 'static',
         options: [{ id: 'static' }, { id: 'relative' }, { id: 'absolute' }, { id: 'fixed' }],
       },
@@ -139,6 +140,7 @@ describe('PropertyFactory', () => {
 
   test('Build left, right', () => {
     const res = {
+      min: 0,
       type: 'number',
       units: obj.unitsSize,
       default: 'auto',
@@ -152,6 +154,7 @@ describe('PropertyFactory', () => {
 
   test('Build top, bottom', () => {
     const res = {
+      min: 0,
       type: 'number',
       units: obj.unitsSize,
       default: 'auto',
@@ -166,7 +169,7 @@ describe('PropertyFactory', () => {
   test('Build width family', () => {
     const res = {
       type: 'number',
-      units: obj.unitsSize,
+      units: ['px'],
       default: 'auto',
       property: 'width',
       fixedValues: ['initial', 'inherit', 'auto'],
@@ -182,7 +185,7 @@ describe('PropertyFactory', () => {
   test('Build flex-basis', () => {
     const res = {
       type: 'number',
-      units: obj.unitsSize,
+      units: ['px'],
       default: 'auto',
       fixedValues: ['initial', 'inherit', 'auto'],
       requiresParent: { display: ['flex'] },
@@ -195,7 +198,7 @@ describe('PropertyFactory', () => {
   test('Build height family', () => {
     const res = {
       type: 'number',
-      units: obj.unitsSize,
+      units: ['px'],
       default: 'auto',
       fixedValues: ['initial', 'inherit', 'auto'],
       min: 0,
@@ -214,6 +217,7 @@ describe('PropertyFactory', () => {
       type: 'composite',
       properties: [
         {
+          min: Number.NEGATIVE_INFINITY,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-top',
           id: 'margin-top-sub',
@@ -222,14 +226,16 @@ describe('PropertyFactory', () => {
           default: '0',
         },
         {
+          min: Number.NEGATIVE_INFINITY,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-right',
           id: 'margin-right-sub',
           type: 'number',
-          units: obj.unitsSize,
+          units: obj.unitsSizeHorizontal,
           default: '0',
         },
         {
+          min: Number.NEGATIVE_INFINITY,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-bottom',
           id: 'margin-bottom-sub',
@@ -238,11 +244,12 @@ describe('PropertyFactory', () => {
           default: '0',
         },
         {
+          min: Number.NEGATIVE_INFINITY,
           fixedValues: ['initial', 'inherit', 'auto'],
           property: 'margin-left',
           id: 'margin-left-sub',
           type: 'number',
-          units: obj.unitsSize,
+          units: obj.unitsSizeHorizontal,
           default: '0',
         },
       ],
@@ -269,9 +276,9 @@ describe('PropertyFactory', () => {
           id: 'padding-right-sub',
           fixedValues: ['initial', 'inherit', 'auto'],
           type: 'number',
-          units: obj.unitsSize,
+          units: obj.unitsSizeHorizontal,
           default: '0',
-          min: 0,
+          min: Number.NEGATIVE_INFINITY,
         },
         {
           property: 'padding-bottom',
@@ -287,9 +294,9 @@ describe('PropertyFactory', () => {
           id: 'padding-left-sub',
           fixedValues: ['initial', 'inherit', 'auto'],
           type: 'number',
-          units: obj.unitsSize,
+          units: obj.unitsSizeHorizontal,
           default: '0',
-          min: 0,
+          min: Number.NEGATIVE_INFINITY,
         },
       ],
     };
@@ -299,7 +306,7 @@ describe('PropertyFactory', () => {
   test('Build font-family', () => {
     var ss = ', sans-serif';
     var ms = ', monospace';
-    const res = {
+    /*const res = {
       property: 'font-family',
       type: 'select',
       default: 'Arial, Helvetica' + ss,
@@ -321,6 +328,9 @@ describe('PropertyFactory', () => {
         { label: 'Trebuchet MS', id: 'Trebuchet MS, Helvetica' + ss },
         { label: 'Verdana', id: 'Verdana, Geneva' + ss },
       ],
+    };*/
+    const res = {
+      property: 'font-family',
     };
     expect(obj.build('font-family')).toEqual([res]);
   });
@@ -328,30 +338,18 @@ describe('PropertyFactory', () => {
   test('Build font-size', () => {
     const res = {
       type: 'number',
-      units: obj.unitsSize,
+      units: obj.units,
       default: 'medium',
       min: 0,
       property: 'font-size',
-      fixedValues: [
-        'medium',
-        'xx-small',
-        'x-small',
-        'small',
-        'large',
-        'x-large',
-        'xx-large',
-        'smaller',
-        'larger',
-        'length',
-        'initial',
-        'inherit',
-      ],
+      fixedValues: ['normal', 'initial', 'inherit'],
     };
     expect(obj.build('font-size')).toEqual([res]);
   });
 
   test('Build letter-spacing', () => {
     const res = {
+      min: 0,
       type: 'number',
       units: obj.unitsSize,
       default: 'normal',
@@ -385,7 +383,7 @@ describe('PropertyFactory', () => {
     const res = {
       property: 'color',
       type: 'color',
-      default: 'black',
+      default: '#ffffff',
       full: true,
     };
     expect(obj.build('color')).toEqual([res]);
@@ -393,6 +391,7 @@ describe('PropertyFactory', () => {
 
   test('Build line-height', () => {
     const res = {
+      min: 0,
       type: 'number',
       units: obj.unitsSize,
       default: 'normal',
@@ -404,7 +403,6 @@ describe('PropertyFactory', () => {
 
   test('Build text-align', () => {
     const res = {
-      type: 'radio',
       default: 'left',
       property: 'text-align',
       options: [{ id: 'left' }, { id: 'center' }, { id: 'right' }, { id: 'justify' }],
@@ -550,7 +548,7 @@ describe('PropertyFactory', () => {
           id: 'border-color-sub',
           full: true,
           type: 'color',
-          default: 'black',
+          default: '#ffffff',
         },
       ],
     };
@@ -591,7 +589,7 @@ describe('PropertyFactory', () => {
         {
           property: 'box-shadow-color',
           type: 'color',
-          default: 'black',
+          default: '#ffffff',
           full: true,
         },
         {

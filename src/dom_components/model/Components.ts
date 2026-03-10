@@ -1,27 +1,17 @@
 import { isEmpty, isArray, isString, isFunction, each, includes, extend, flatten, keys } from 'underscore';
 import Component from './Component';
-import { AddOptions, Collection } from '../../common';
+import { AddOptions, Collection, ObjectAny } from '../../common';
 import { DomComponentsConfig } from '../config/config';
 import EditorModel from '../../editor/model/Editor';
 import ComponentManager from '..';
 import CssRule from '../../css_composer/model/CssRule';
-
-import {
-  ComponentAdd,
-  ComponentAddType,
-  ComponentDefinition,
-  ComponentDefinitionDefined,
-  ComponentProperties,
-} from './types';
+import { ComponentAdd, ComponentProperties } from './types';
 import ComponentText from './ComponentText';
-import ComponentWrapper from './ComponentWrapper';
-import { ComponentsEvents, ParseStringOptions } from '../types';
-import { isSymbolInstance, isSymbolRoot, updateSymbolComps } from './SymbolUtils';
 
 export const getComponentIds = (cmp?: Component | Component[] | Components, res: string[] = []) => {
   if (!cmp) return [];
   const cmps = (isArray(cmp) || isFunction((cmp as Components).map) ? cmp : [cmp]) as Component[];
-  cmps.map((cmp) => {
+  cmps.map(cmp => {
     res.push(cmp.getId());
     getComponentIds(cmp.components().models, res);
   });
@@ -31,13 +21,13 @@ export const getComponentIds = (cmp?: Component | Component[] | Components, res:
 const getComponentsFromDefs = (
   items: ReturnType<Components['parseString']>,
   all: ReturnType<ComponentManager['allById']> = {},
-  opts: any = {},
+  opts: any = {}
 ) => {
   opts.visitedCmps = opts.visitedCmps || {};
   const { visitedCmps } = opts;
   const itms = isArray(items) ? items : [items];
 
-  return itms.map((item) => {
+  return itms.map(item => {
     const { attributes = {}, components, tagName, style } = item;
     let { id, draggable, ...restAttr } = attributes;
     let result = item;
@@ -79,14 +69,9 @@ const getComponentsFromDefs = (
 };
 
 export interface ComponentsOptions {
-  em: EditorModel;
+  em?: EditorModel;
   config?: DomComponentsConfig;
   domc?: ComponentManager;
-}
-
-interface AddComponentOptions extends AddOptions {
-  previousModels?: Component[];
-  keepIds?: string[];
 }
 
 export default class Components extends Collection</**
@@ -95,35 +80,31 @@ export default class Components extends Collection</**
 Component> {
   opt!: ComponentsOptions;
   config?: DomComponentsConfig;
-  em: EditorModel;
+  em!: EditorModel;
   domc?: ComponentManager;
   parent?: Component;
+  __firstAdd?: any;
 
-  constructor(models: any, opt: ComponentsOptions) {
-    super(models, opt);
+  initialize(models: any, opt: ComponentsOptions = {}) {
     this.opt = opt;
     this.listenTo(this, 'add', this.onAdd);
     this.listenTo(this, 'remove', this.removeChildren);
     this.listenTo(this, 'reset', this.resetChildren);
     const { em, config } = opt;
     this.config = config;
-    this.em = em;
+    this.em = em!;
     this.domc = opt.domc || em?.Components;
-  }
-
-  get events() {
-    return this.domc?.events!;
   }
 
   resetChildren(models: Components, opts: { previousModels?: Component[]; keepIds?: string[] } = {}) {
     const coll = this;
     const prev = opts.previousModels || [];
-    const toRemove = prev.filter((prev) => !models.get(prev.cid));
+    const toRemove = prev.filter(prev => !models.get(prev.cid));
     const newIds = getComponentIds(models);
-    const idsToKeep = getComponentIds(prev).filter((pr) => newIds.indexOf(pr) >= 0);
+    const idsToKeep = getComponentIds(prev).filter(pr => newIds.indexOf(pr) >= 0);
     opts.keepIds = (opts.keepIds || []).concat(idsToKeep);
-    toRemove.forEach((md) => this.removeChildren(md, coll, opts));
-    models.each((model) => this.onAdd(model));
+    toRemove.forEach(md => this.removeChildren(md, coll, opts));
+    models.each(model => this.onAdd(model));
   }
 
   resetFromString(input = '', opts: { visitedCmps?: Record<string, Component[]>; keepIds?: string[] } = {}) {
@@ -136,15 +117,15 @@ Component> {
     const { visitedCmps = {} } = opts;
 
     // Clone styles for duplicated components
-    Object.keys(visitedCmps).forEach((id) => {
+    Object.keys(visitedCmps).forEach(id => {
       const cmps = visitedCmps[id];
       if (cmps.length) {
         // Get all available rules of the component
         const rulesToClone = cssc?.getRules(`#${id}`) || [];
 
         if (rulesToClone.length) {
-          cmps.forEach((cmp) => {
-            rulesToClone.forEach((rule) => {
+          cmps.forEach(cmp => {
+            rulesToClone.forEach(rule => {
               const newRule = rule.clone();
               // @ts-ignore
               newRule.set('selectors', [`#${cmp.attributes.id}`]);
@@ -184,31 +165,26 @@ Component> {
       const rulesRemoved = (
         canRemoveStyle
           ? rules.remove(
-              rules.filter((r) => r.getSelectors().getFullString() === `#${id}`),
-              opts,
+              rules.filter(r => r.getSelectors().getFullString() === `#${id}`),
+              opts
             )
           : []
       ) as CssRule[];
 
       // Clean selectors
-      sels.remove(rulesRemoved.map((rule) => rule.getSelectors().at(0)));
+      sels.remove(rulesRemoved.map(rule => rule.getSelectors().at(0)));
 
       if (!removed.opt.temporary) {
-        em.Commands.run('core:component-style-clear', { target: removed });
+        em.Commands.run('core:component-style-clear', {
+          target: removed,
+        });
         removed.removed();
         removed.trigger('removed');
-        em.trigger(ComponentsEvents.remove, removed);
-
-        if (domc && isSymbolInstance(removed) && isSymbolRoot(removed)) {
-          domc.symbols.__trgEvent(domc.events.symbolInstanceRemove, { component: removed }, true);
-        }
+        em.trigger('component:remove', removed);
       }
 
       const inner = removed.components();
-      inner.forEach((it) => {
-        updateSymbolComps(it, it, inner, { ...opts, skipRefsUp: true });
-        this.removeChildren(it, coll, opts);
-      });
+      inner.forEach(it => this.removeChildren(it, coll, opts));
     }
 
     // Remove stuff registered in DomComponents.handleChanges
@@ -252,27 +228,12 @@ Component> {
     return new model(attrs, options) as Component;
   }
 
-  parseString(value: string, opt: ParseStringOptions = {}) {
-    const { em, domc, parent } = this;
-    const asDocument = opt.asDocument && parent?.is('wrapper');
+  parseString(value: string, opt: AddOptions & { temporary?: boolean; keepIds?: string[] } = {}) {
+    const { em, domc } = this;
     const cssc = em.Css;
-    const parsed = em.Parser.parseHtml(value, { asDocument, ...opt.parserOptions });
-    let components = parsed.html;
-
-    if (asDocument) {
-      const root = parent as ComponentWrapper;
-      const { components: bodyCmps, ...restBody } = (parsed.html as ComponentDefinitionDefined) || {};
-      const { components: headCmps, ...restHead } = parsed.head || {};
-      components = bodyCmps!;
-      root.set(restBody as any, opt);
-      root.head.set(restHead as any, opt);
-      root.head.components(headCmps, opt);
-      root.docEl.set(parsed.root as any, opt);
-      root.set({ doctype: parsed.doctype });
-    }
-
+    const parsed = em.Parser.parseHtml(value);
     // We need this to avoid duplicate IDs
-    Component.checkId(components, parsed.css, domc!.componentsById, opt);
+    Component.checkId(parsed.html!, parsed.css, domc!.componentsById, opt);
 
     if (parsed.css && cssc && !opt.temporary) {
       const { at, ...optsToPass } = opt;
@@ -282,20 +243,17 @@ Component> {
       });
     }
 
-    return components;
+    return parsed.html;
   }
 
-  add(model: Exclude<ComponentAddType, string>, opt?: AddComponentOptions): Component;
-  add(models: ComponentAddType[], opt?: AddComponentOptions): Component[];
-  add(models: ComponentAdd, opt?: AddComponentOptions): Component | Component[];
-  add(models: unknown, opt: AddComponentOptions = {}): unknown {
-    if (models == undefined) return;
-
+  /** @ts-ignore */
+  add(models: ComponentAdd, opt: AddOptions & { previousModels?: Component[]; keepIds?: string[] } = {}) {
     opt.keepIds = [...(opt.keepIds || []), ...getComponentIds(opt.previousModels)];
 
     if (isString(models)) {
       models = this.parseString(models, opt)!;
     } else if (isArray(models)) {
+      models = [...models];
       models.forEach((item: string, index: number) => {
         if (isString(item)) {
           const nodes = this.parseString(item, opt);
@@ -304,19 +262,21 @@ Component> {
       });
     }
 
-    const processedModels = (isArray(models) ? models : [models])
-      .filter(Boolean)
-      .map((model: any) => this.processDef(model));
+    const isMult = isArray(models);
+    // @ts-ignore
+    models = (isMult ? models : [models]).filter(Boolean).map((model: any) => this.processDef(model));
+    // @ts-ignore
+    models = isMult ? flatten(models as any, 1) : models[0];
 
-    models = isArray(models) ? flatten(processedModels as any, 1) : processedModels[0];
-
-    return super.add(models as any, opt);
+    const result = Collection.prototype.add.apply(this, [models as any, opt]);
+    this.__firstAdd = result;
+    return result;
   }
 
   /**
    * Process component definition.
    */
-  processDef(mdl: Component | ComponentDefinition | ComponentDefinitionDefined) {
+  processDef(mdl: any) {
     // Avoid processing Models
     if (mdl.cid && mdl.ccid) return mdl;
     const { em, config = {} } = this;
@@ -327,14 +287,12 @@ Component> {
       model = { ...model }; // Avoid 'Cannot delete property ...'
       const modelPr = processor(model);
       if (modelPr) {
-        //@ts-ignore
         each(model, (val, key) => delete model[key]);
         extend(model, modelPr);
       }
     }
 
     // React JSX preset
-    //@ts-ignore
     if (model.$$typeof && typeof model.props == 'object') {
       model = { ...model };
       model.props = { ...model.props };
@@ -343,7 +301,6 @@ Component> {
       const { parserHtml } = parser;
 
       each(model, (value, key) => {
-        //@ts-ignore
         if (!includes(['props', 'type'], key)) delete model[key];
       });
       const { props } = model;
@@ -375,7 +332,8 @@ Component> {
     const avoidInline = em && em.getConfig().avoidInlineStyle;
     domc && domc.Component.ensureInList(model);
 
-    if (!isEmpty(style) && !avoidInline && em && em.getConfig().forceClass && !opts.temporary) {
+    // @ts-ignore
+    if (!isEmpty(style) && !avoidInline && em && em.get && em.getConfig().forceClass && !opts.temporary) {
       const name = model.cid;
       em.Css.setClassRule(name, style);
       model.setStyle({});
@@ -383,17 +341,34 @@ Component> {
     }
 
     model.__postAdd({ recursive: true });
-
-    if (em && !opts.temporary) {
-      const triggerAdd = (model: Component) => {
-        em.trigger(ComponentsEvents.add, model, opts);
-        model.components().forEach((comp) => triggerAdd(comp));
-      };
-      triggerAdd(model);
-
-      if (domc && isSymbolInstance(model) && isSymbolRoot(model)) {
-        domc.symbols.__trgEvent(domc.events.symbolInstanceAdd, { component: model }, true);
-      }
-    }
+    // this.__onAddEnd();
   }
+
+  // __onAddEnd = debounce(function () {
+  //   // TODO to check symbols on load, probably this might be removed as symbols
+  //   // are always recovered from the model
+  //   // const { domc } = this;
+  //   // const allComp = (domc && domc.allById()) || {};
+  //   // const firstAdd = this.__firstAdd;
+  //   // const toCheck = isArray(firstAdd) ? firstAdd : [firstAdd];
+  //   // const silent = { silent: true };
+  //   // const onAll = comps => {
+  //   //   comps.forEach(comp => {
+  //   //     const symbol = comp.get(keySymbols);
+  //   //     const symbolOf = comp.get(keySymbol);
+  //   //     if (symbol && isArray(symbol) && isString(symbol[0])) {
+  //   //       comp.set(
+  //   //         keySymbols,
+  //   //         symbol.map(smb => allComp[smb]).filter(i => i),
+  //   //         silent
+  //   //       );
+  //   //     }
+  //   //     if (isString(symbolOf)) {
+  //   //       comp.set(keySymbol, allComp[symbolOf], silent);
+  //   //     }
+  //   //     onAll(comp.components());
+  //   //   });
+  //   // };
+  //   // onAll(toCheck);
+  // });
 }

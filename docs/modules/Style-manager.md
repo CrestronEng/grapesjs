@@ -34,6 +34,10 @@ const editor = grapesjs.init({
 
 Check the full list of available options here: [Style Manager Config](https://github.com/GrapesJS/grapesjs/blob/master/src/style_manager/config/config.ts)
 
+
+
+
+
 ## Initialization
 
 The Style Manager module is organized in sectors where each sector contains a list of properties to display. The default Style Manager configuration contains already a list of default common property styles and you can use them by simply skipping the `styleManagerConfig.sectors` option.
@@ -99,12 +103,11 @@ sectors: [
         // Additonal `number` options
         units: ['px', '%'], // Units (available only for the 'number' type)
         min: 0, // Min value (available only for the 'number' type)
-      },
+      }
     ],
   },
-];
+]
 ```
-
 This will render the number input UI and will change the `padding` CSS property on the selected component.
 
 The flexibility of the definition allows you to create easily different UI inputs for any possible CSS property. You're free to decide what will be the best UI for your users. If you take for example a numeric property like `font-size`, you can follow its CSS specification and define it as a `number`
@@ -118,7 +121,6 @@ The flexibility of the definition allows you to create easily different UI input
   min: 0,
 }
 ```
-
 or you can decide to show it as a `select` and make available only a defined set of values (eg. based on your Design System tokens).
 
 ```js
@@ -144,7 +146,7 @@ Let's see below the list of all available default types with their relative UI a
 Each **Model** describes more in detail available props and their usage.
 :::
 
-- `base` - The base type, renders as a simple text input field. **Model**: [Property](/api/property.html)
+* `base` - The base type, renders as a simple text input field. **Model**: [Property](/api/property.html)
 
   <img :src="$withBase('/sm-base-type.jpg')"/>
 
@@ -158,11 +160,11 @@ Each **Model** describes more in detail available props and their usage.
   },
   ```
 
-- `color` - Same props as `base` but the UI is a color picker. **Model**: [Property](/api/property.html)
+* `color` - Same props as `base` but the UI is a color picker. **Model**: [Property](/api/property.html)
 
   <img :src="$withBase('/sm-type-color.jpg')"/>
 
-- `number` - Number input field for numeric values. **Model**: [PropertyNumber](/api/property_number.html)
+* `number` - Number input field for numeric values. **Model**: [PropertyNumber](/api/property_number.html)
 
   <img :src="$withBase('/sm-type-number.jpg')"/>
 
@@ -179,12 +181,11 @@ Each **Model** describes more in detail available props and their usage.
     max: 100,
   },
   ```
-
-- `slider` - Same props as `number` but the UI is a slider. **Model**: [PropertyNumber](/api/property_number.html)
+* `slider` - Same props as `number` but the UI is a slider. **Model**: [PropertyNumber](/api/property_number.html)
 
   <img :src="$withBase('/sm-type-slider.jpg')"/>
 
-- `select` - Select input with options. **Model**: [PropertySelect](/api/property_select.html)
+* `select` - Select input with options. **Model**: [PropertySelect](/api/property_select.html)
 
   <img :src="$withBase('/sm-type-select.jpg')"/>
 
@@ -204,11 +205,11 @@ Each **Model** describes more in detail available props and their usage.
   },
   ```
 
-- `radio` - Same props as `select` but the UI is a radio button. **Model**: [PropertySelect](/api/property_select.html)
+* `radio` - Same props as `select` but the UI is a radio button. **Model**: [PropertySelect](/api/property_select.html)
 
   <img :src="$withBase('/sm-type-radio.jpg')"/>
 
-- `composite` - This type is great for CSS shorthand properties, where the final value is a composition of multiple sub properties. **Model**: [PropertyComposite](/api/property_composite.html)
+* `composite` - This type is great for CSS shorthand properties, where the final value is a composition of multiple sub properties. **Model**: [PropertyComposite](/api/property_composite.html)
 
   <img :src="$withBase('/sm-type-composite.jpg')"/>
 
@@ -227,8 +228,7 @@ Each **Model** describes more in detail available props and their usage.
     ]
   },
   ```
-
-- `stack` - This type is great for CSS multiple properties like `text-shadow`, `box-shadow`, `transform`, etc. **Model**: [PropertyStack](/api/property_stack.html)
+* `stack` - This type is great for CSS multiple properties like `text-shadow`, `box-shadow`, `transform`, etc. **Model**: [PropertyStack](/api/property_stack.html)
 
   <img :src="$withBase('/sm-type-stack.jpg')"/>
 
@@ -266,26 +266,26 @@ sectors: [
         units: ['px', '%'],
       },
       // If the property doesn't exist it will be converted to a base type
-      'unknown-property', // -> { type: 'base', property: 'unknown-property' }
+      'unknown-property' // -> { type: 'base', property: 'unknown-property' }
     ],
   },
-];
+]
 ```
 
 ::: tip
 You can check if the property is available by running
-
 ```js
 editor.StyleManager.getBuiltIn('property-name');
 ```
-
 or get the list of all available properties with
-
 ```js
 editor.StyleManager.getBuiltInAll();
 ```
-
 :::
+
+
+
+
 
 ## I18n
 
@@ -308,10 +308,10 @@ grapesjs.init({
             property: 'display',
             default: 'block',
             options: [
-              { id: 'block', label: 'Block' },
-              { id: 'inline', label: 'Inline' },
-              { id: 'none', label: 'None' },
-            ],
+              {id: 'block', label: 'Block'},
+              {id: 'inline', label: 'Inline'},
+              {id: 'none', label: 'None'},
+            ]
           },
         ],
       },
@@ -324,7 +324,7 @@ grapesjs.init({
       en: {
         styleManager: {
           sectors: {
-            'first-sector-id': 'First sector EN',
+            'first-sector-id': 'First sector EN'
           },
           properties: {
             width: 'Width EN',
@@ -335,18 +335,22 @@ grapesjs.init({
               block: 'Block EN',
               inline: 'Inline EN',
               none: 'None EN',
-            },
-          },
-        },
-      },
-    },
+            }
+          }
+        }
+      }
+    }
   },
 });
 ```
 
+
+
+
+
 ## Component constraints
 
-When you define custom components you can also indicate, via `stylable` and `unstylable` props, which CSS properties should be available for styling. In that case, the Style Manager will only show the available properties. If the sector doesn't contain any available property, it won't be shown.
+When you define custom components you can also indicate, via `stylable` and `unstylable` props,  which CSS properties should be available for styling. In that case, the Style Manager will only show the available properties. If the sector doesn't contain any available property, it won't be shown.
 
 ```js
 const customComponents = (editor) => {
@@ -355,18 +359,18 @@ const customComponents = (editor) => {
     model: {
       defaults: {
         // When this component is selected, the Style Manager will show only the following properties
-        stylable: ['width', 'height'],
-      },
-    },
+        stylable: ['width', 'height']
+      }
+    }
   });
   // Component B
   editor.Components.addType('cmp-b', {
     model: {
       defaults: {
         // When this component is selected, the Style Manager will hide the following properties
-        unstylable: ['color'],
-      },
-    },
+        unstylable: ['color']
+      }
+    }
   });
 };
 
@@ -381,23 +385,31 @@ grapesjs.init({
     sectors: [
       {
         name: 'First sector',
-        properties: ['width', 'min-width', 'height', 'min-height'],
+        properties: [
+          'width', 'min-width',
+          'height', 'min-height',
+        ],
       },
       {
         name: 'Second sector',
-        properties: ['color', 'font-size'],
+        properties: [
+          'color', 'font-size',
+        ],
       },
     ],
   },
 });
 ```
 
+
+
+
+
 ## Programmatic usage
 
 For a more advanced usage you can rely on the [Style Manager API] to perform different kind of actions related to the module.
 
-- Managing sectors/properties post-initialization.
-
+* Managing sectors/properties post-initialization.
   ```js
   // Get the module from the editor instance
   const sm = editor.StyleManager;
@@ -419,8 +431,7 @@ For a more advanced usage you can rely on the [Style Manager API] to perform dif
   sm.removeSector('sector-id');
   ```
 
-- Managing selected targets.
-
+* Managing selected targets.
   ```js
   // Select the first button in the current page
   const wrapperCmp = editor.Pages.getSelected().getMainComponent();
@@ -436,9 +447,7 @@ For a more advanced usage you can rely on the [Style Manager API] to perform dif
   // Update selected targets with a custom style
   sm.addStyleTargets({ color: 'red' });
   ```
-
-- Adding/extending built-in property definitions.
-
+* Adding/extending built-in property definitions.
   ```js
   const myPlugin = (editor) => {
     editor.StyleManager.addBuiltIn('new-prop', {
@@ -460,8 +469,11 @@ For a more advanced usage you can rely on the [Style Manager API] to perform dif
     },
   })
   ```
+* [Adding new types](#adding-new-types).
 
-- [Adding new types](#adding-new-types).
+
+
+
 
 ## Customization
 
@@ -530,18 +542,19 @@ All you have to do is to indicate the editor your intent to use a custom UI and 
 
 ```js
 const editor = grapesjs.init({
-  // ...
-  styleManager: {
-    custom: true,
     // ...
-  },
+    styleManager: {
+      custom: true,
+      // ...
+    },
 });
 
-editor.on('style:custom', (props) => {
-  // props.container (HTMLElement)
-  //    The default element where you can append your
-  //    custom UI in order to render it in the default position.
-  // Here you would put the logic to render/update your UI by relying on Style Manager API
+editor.on('style:custom', props => {
+    // props.container (HTMLElement)
+    //    The default element where you can append your
+    //    custom UI in order to render it in the default position.
+
+    // Here you would put the logic to render/update your UI by relying on Style Manager API
 });
 ```
 
@@ -844,10 +857,14 @@ sm.addStyleTargets({ color: 'red' });
 </script>
 -->
 
+
+
+
 ## Events
 
 For a complete list of available events, you can check it [here](/api/style_manager.html#available-events).
 
-[Components]: Components.html
-[I18n]: I18n.html
-[Style Manager API]: /api/style_manager.html
+
+[Components]: <Components.html>
+[I18n]: <I18n.html>
+[Style Manager API]: </api/style_manager.html>

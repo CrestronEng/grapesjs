@@ -19,31 +19,31 @@
 
 Get block id
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 ## getLabel
 
 Get block label
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 ## getMedia
 
 Get block media
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 ## getContent
 
 Get block content
 
-Returns **([Object][2] | [String][1] | [Array][6]<([Object][2] | [String][1])>)**&#x20;
+Returns **([Object][2] | [String][1] | [Array][6]<([Object][2] | [String][1])>)** 
 
 ## getCategoryLabel
 
 Get block category label
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 

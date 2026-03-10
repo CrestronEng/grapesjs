@@ -1,4 +1,4 @@
 import ComponentLabel from '../model/ComponentLabel';
-import ComponentLinkView from './ComponentLinkView';
+import ComponentView from './ComponentView';
 
-export default class ComponentLabelView extends ComponentLinkView<ComponentLabel> {}
+export default class ComponentLabelView extends ComponentView<ComponentLabel> {}

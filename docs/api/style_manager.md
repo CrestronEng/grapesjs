@@ -77,7 +77,7 @@ styleManager.addSector(...);
 
 Get configuration object
 
-Returns **[Object][22]**&#x20;
+Returns **[Object][22]** 
 
 ## addSector
 
@@ -119,7 +119,7 @@ Get sector by id.
 const sector = styleManager.getSector('mySector');
 ```
 
-Returns **([Sector] | null)**&#x20;
+Returns **([Sector] | null)** 
 
 ## getSectors
 
@@ -137,7 +137,7 @@ Get all sectors.
 const sectors = styleManager.getSectors();
 ```
 
-Returns **[Array][27]<[Sector]>**&#x20;
+Returns **[Array][27]<[Sector]>** 
 
 ## removeSector
 
@@ -199,7 +199,7 @@ Get the property.
 const property = styleManager.getProperty('mySector', 'min-height');
 ```
 
-Returns **([Property] | [undefined][29])**&#x20;
+Returns **([Property] | [undefined][29])** 
 
 ## getProperties
 
@@ -241,7 +241,7 @@ The target could be a Component, CSSRule, or a CSS selector string.
 
 ### Parameters
 
-*   `target` **([Component] | [CSSRule] | [String][23])**&#x20;
+*   `target` **([Component] | [CSSRule] | [String][23])** 
 *   `opts` **{stylable: [boolean][26]?, component: Component?}**  (optional, default `{}`)
 
 ### Examples
@@ -263,19 +263,19 @@ Returns **[Array][27]<([Component] | [CSSRule])>** Array containing selected Com
 Get the last selected target.
 By default, the Style Manager shows styles of the last selected target.
 
-Returns **([Component] | [CSSRule] | null)**&#x20;
+Returns **([Component] | [CSSRule] | null)** 
 
 ## getSelectedAll
 
 Get the array of selected targets.
 
-Returns **[Array][27]<([Component] | [CSSRule])>**&#x20;
+Returns **[Array][27]<([Component] | [CSSRule])>** 
 
 ## getSelectedParents
 
 Get parent rules of the last selected target.
 
-Returns **[Array][27]<[CSSRule]>**&#x20;
+Returns **[Array][27]<[CSSRule]>** 
 
 ## addStyleTargets
 
@@ -312,7 +312,7 @@ Returns **([Object][22] | null)** Property definition.
 
 Get all the available built-in property definitions.
 
-Returns **[Object][22]**&#x20;
+Returns **[Object][22]** 
 
 ## addBuiltIn
 
@@ -386,7 +386,7 @@ Returns **[Object][22]** Type definition
 
 Get all types
 
-Returns **[Array][27]**&#x20;
+Returns **[Array][27]** 
 
 [1]: https://github.com/GrapesJS/grapesjs/blob/master/src/style_manager/config/config.ts
 

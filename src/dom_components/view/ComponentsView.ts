@@ -5,7 +5,7 @@ import { DomComponentsConfig } from '../config/config';
 import EditorModel from '../../editor/model/Editor';
 import Component from '../model/Component';
 import ComponentView from './ComponentView';
-import FrameView from '../../canvas/view/FrameView';
+import FrameView from '../../overrides/canvas/view/FrameView';
 import Components from '../model/Components';
 
 export default class ComponentsView extends View {
@@ -27,7 +27,7 @@ export default class ComponentsView extends View {
   }
 
   removeChildren(removed: Component, coll: any, opts = {}) {
-    removed.views.forEach((view) => {
+    removed.views.forEach(view => {
       if (!view) return;
       const { childrenView, scriptContainer } = view;
       childrenView && childrenView.stopListening();
@@ -36,7 +36,7 @@ export default class ComponentsView extends View {
     });
 
     const inner = removed.components();
-    inner.forEach((it) => this.removeChildren(it, coll, opts));
+    inner.forEach(it => this.removeChildren(it, coll, opts));
   }
 
   /**
@@ -46,8 +46,18 @@ export default class ComponentsView extends View {
    * @param {Object} opts
    * @private
    * */
-  addTo(model: Component) {
-    this.addToCollection(model, null, this.collection.indexOf(model));
+  addTo(model: Component, coll: any = {}, opts: { temporary?: boolean } = {}) {
+    const { em } = this;
+    const i = this.collection.indexOf(model);
+    this.addToCollection(model, null, i);
+
+    if (em && !opts.temporary) {
+      const triggerAdd = (model: Component) => {
+        em.trigger('component:add', model);
+        model.components().forEach(comp => triggerAdd(comp));
+      };
+      triggerAdd(model);
+    }
   }
 
   /**
@@ -59,8 +69,10 @@ export default class ComponentsView extends View {
    * @return   {Object}   Object rendered
    * @private
    * */
-  addToCollection(model: Component, fragment?: DocumentFragment | null, index?: number) {
+  addToCollection(model: Component, fragmentEl?: DocumentFragment | null, index?: number) {
+    // if (!this.compView) this.compView = require('./ComponentView').default;
     const { config, opts, em } = this;
+    const fragment = fragmentEl || null;
     const { frameView } = config;
     const sameFrameView = frameView?.model && model.getView(frameView.model);
     const dt = opts.componentTypes || em?.Components.getTypes();
@@ -126,15 +138,15 @@ export default class ComponentsView extends View {
 
   resetChildren(models: Components, { previousModels = [] } = {}) {
     this.parentEl!.innerHTML = '';
-    previousModels.forEach((md) => this.removeChildren(md, this.collection));
-    models.each((model) => this.addToCollection(model));
+    previousModels.forEach(md => this.removeChildren(md, this.collection));
+    models.each(model => this.addToCollection(model));
   }
 
   render(parent?: HTMLElement) {
     const el = this.el;
     const frag = document.createDocumentFragment();
     this.parentEl = parent || this.el;
-    this.collection.each((model) => this.addToCollection(model, frag));
+    this.collection.each(model => this.addToCollection(model, frag));
     el.innerHTML = '';
     el.appendChild(frag);
     return this;

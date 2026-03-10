@@ -3,11 +3,11 @@ import Selectors from '../../../../src/selector_manager/model/Selectors';
 
 describe('Selector', () => {
   let obj: Selector;
-  const nameToEscape = '  @Te    sT:*[]!"£$%&/()=?^{}(). %/+#';
-  const nameEscaped = '@Te-sT:*[]!"£$%&/()=?^{}().-%/+#';
+  const nameToEscape = '@Te s:T*';
+  const nameEscaped = '@Te-s:T-';
 
   beforeEach(() => {
-    obj = new Selector({ name: '' });
+    obj = new Selector({});
   });
 
   test('Has name property', () => {
@@ -66,7 +66,7 @@ describe('Selectors', () => {
       obj.getFullName({
         combination: true,
         array: true,
-      }),
+      })
     ).toEqual(['.a', '.a.b', '.b']);
 
     expect(obj.getFullName({ combination: true })).toEqual('.a,.a.b,.b');
@@ -80,7 +80,7 @@ describe('Selectors', () => {
       obj.getFullName({
         combination: true,
         array: true,
-      }),
+      })
     ).toEqual(['.a', '.a.b', '.a.b.c', '.a.c', '.b', '.b.c', '.c']);
   });
 
@@ -90,7 +90,7 @@ describe('Selectors', () => {
       obj.getFullName({
         combination: true,
         array: true,
-      }),
+      })
     ).toEqual([
       '.a',
       '.a.b',

@@ -55,8 +55,7 @@
  * @module docsjs.Editor
  */
 import { IBaseModule } from '../abstract/Module';
-import AssetManager from '../asset_manager';
-import { AssetEvent } from '../asset_manager/types';
+import AssetManager, { AssetEvent } from '../asset_manager';
 import BlockManager, { BlockEvent } from '../block_manager';
 import CanvasModule, { CanvasEvent } from '../canvas';
 import CodeManagerModule from '../code_manager';
@@ -252,7 +251,7 @@ export default class Editor implements IBaseModule<EditorConfig> {
    */
   getConfig<
     P extends EditorConfigKeys | undefined = undefined,
-    R = P extends EditorConfigKeys ? EditorConfig[P] : EditorConfig,
+    R = P extends EditorConfigKeys ? EditorConfig[P] : EditorConfig
   >(prop?: P): R {
     return this.em.getConfig(prop);
   }

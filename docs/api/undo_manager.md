@@ -28,7 +28,7 @@ const um = editor.UndoManager;
 
 Get configuration object
 
-Returns **[Object][15]**&#x20;
+Returns **[Object][15]** 
 
 ## add
 
@@ -45,7 +45,7 @@ Note: New Components and CSSRules will be added automatically
 um.add(someModelOrCollection);
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## remove
 
@@ -61,7 +61,7 @@ Remove and stop tracking the entity (Model/Collection)
 um.remove(someModelOrCollection);
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## removeAll
 
@@ -73,7 +73,7 @@ Remove all entities
 um.removeAll();
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## start
 
@@ -85,7 +85,7 @@ Start/resume tracking changes
 um.start();
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## stop
 
@@ -97,7 +97,7 @@ Stop tracking changes
 um.stop();
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## undo
 
@@ -113,7 +113,7 @@ Undo last change
 um.undo();
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## undoAll
 
@@ -125,7 +125,7 @@ Undo all changes
 um.undoAll();
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## redo
 
@@ -141,7 +141,7 @@ Redo last change
 um.redo();
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## redoAll
 
@@ -153,7 +153,7 @@ Redo all changes
 um.redoAll();
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## hasUndo
 
@@ -165,7 +165,7 @@ Checks if exists an available undo
 um.hasUndo();
 ```
 
-Returns **[Boolean][16]**&#x20;
+Returns **[Boolean][16]** 
 
 ## hasRedo
 
@@ -177,7 +177,7 @@ Checks if exists an available redo
 um.hasRedo();
 ```
 
-Returns **[Boolean][16]**&#x20;
+Returns **[Boolean][16]** 
 
 ## isRegistered
 
@@ -186,10 +186,10 @@ Note: New Components and CSSRules will be added automatically
 
 ### Parameters
 
-*   `obj` **any**&#x20;
+*   `obj` **any** 
 *   `entity` **(Model | Collection)** Entity to track
 
-Returns **[Boolean][16]**&#x20;
+Returns **[Boolean][16]** 
 
 ## getStack
 
@@ -202,23 +202,7 @@ const stack = um.getStack();
 stack.each(item => ...);
 ```
 
-Returns **Collection**&#x20;
-
-## skip
-
-Execute the provided callback temporarily stopping tracking changes
-
-### Parameters
-
-*   `clb` **[Function][17]** The callback to execute with changes tracking stopped
-
-### Examples
-
-```javascript
-um.skip(() => {
- // Do stuff without tracking
-});
-```
+Returns **Collection** 
 
 ## clear
 
@@ -230,7 +214,7 @@ Clear the stack
 um.clear();
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 [1]: #getconfig
 
@@ -263,5 +247,3 @@ Returns **this**&#x20;
 [15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
 [16]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
-
-[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
