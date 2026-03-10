@@ -48,14 +48,20 @@ cmp.addType(...);
 ## Methods
 
 *   [getWrapper][2]
+
 *   [getComponents][3]
+
 *   [addComponent][4]
+
 *   [clear][5]
+
 *   [addType][6]
+
 *   [getType][7]
+
 *   [getTypes][8]
 
-[Component]: component.html
+*   [Component]: component.html
 
 ## getWrapper
 
@@ -153,7 +159,7 @@ Remove all components
 
 *   `opts`   (optional, default `{}`)
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## addType
 
@@ -165,7 +171,7 @@ Read more about this in [Define New Component][15]
 *   `type` **[string][12]** Component ID
 *   `methods` **[Object][10]** Component methods
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## getType
 
@@ -184,7 +190,7 @@ Remove component type
 
 ### Parameters
 
-*   `id` **[string][12]**&#x20;
+*   `id` **[string][12]** 
 *   `type` **[string][12]** Component ID
 
 Returns **([Object][10] | [undefined][16])** Removed component type, undefined otherwise
@@ -193,7 +199,7 @@ Returns **([Object][10] | [undefined][16])** Removed component type, undefined o
 
 Return the array of all types
 
-Returns **[Array][11]**&#x20;
+Returns **[Array][11]** 
 
 ## isComponent
 
@@ -201,7 +207,7 @@ Check if the object is a \[Component].
 
 ### Parameters
 
-*   `obj` **[Object][10]**&#x20;
+*   `obj` **[Object][10]** 
 
 ### Examples
 
@@ -210,78 +216,7 @@ cmp.isComponent(editor.getSelected()); // true
 cmp.isComponent({}); // false
 ```
 
-Returns **[Boolean][13]**&#x20;
-
-## addSymbol
-
-Add a new symbol from a component.
-If the passed component is not a symbol, it will be converted to an instance and will return the main symbol.
-If the passed component is already an instance, a new instance will be created and returned.
-If the passed component is the main symbol, a new instance will be created and returned.
-
-### Parameters
-
-*   `component` **[Component]** Component from which create a symbol.
-
-### Examples
-
-```javascript
-const symbol = cmp.addSymbol(editor.getSelected());
-// cmp.getSymbolInfo(symbol).isSymbol === true;
-```
-
-Returns **[Component]**&#x20;
-
-## getSymbols
-
-Get the array of main symbols.
-
-### Examples
-
-```javascript
-const symbols = cmp.getSymbols();
-// [Component, Component, ...]
-// Removing the main symbol will detach all the relative instances.
-symbols[0].remove();
-```
-
-Returns **[Array][11]<[Component]>**&#x20;
-
-## detachSymbol
-
-Detach symbol instance from the main one.
-The passed symbol instance will become a regular component.
-
-### Parameters
-
-*   `component` **[Component]** The component symbol to detach.
-
-### Examples
-
-```javascript
-const cmpInstance = editor.getSelected();
-// cmp.getSymbolInfo(cmpInstance).isInstance === true;
-cmp.detachSymbol(cmpInstance);
-// cmp.getSymbolInfo(cmpInstance).isInstance === false;
-```
-
-## getSymbolInfo
-
-Get info about the symbol.
-
-### Parameters
-
-*   `component` **[Component]** Component symbol from which to get the info.
-*   `opts` **{withChanges: [string][12]?}**  (optional, default `{}`)
-
-### Examples
-
-```javascript
-cmp.getSymbolInfo(editor.getSelected());
-// > { isSymbol: true, isMain: false, isInstance: true, ... }
-```
-
-Returns **[Object][10]** Object containing symbol info.
+Returns **[Boolean][13]** 
 
 ## canMove
 

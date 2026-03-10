@@ -66,13 +66,7 @@ editor.on('block:drag', (block) => { ... });
 editor.on('block:drag:stop', (component, block) => { ... });
 ```
 
-* `block:category:update` Block category updated.
-
-```javascript
-editor.on('block:category:update', ({ category, changes }) => { ... });
-```
-
-* `block:custom` Event to use in case of [custom Block Manager UI](https\://grapesjs.com/docs/modules/Blocks.html#customization).
+* `block:custom` Event to use in case of [custom Block Manager UI]\(https://grapesjs.com/docs/modules/Blocks.html#customization).
 
 ```javascript
 editor.on('block:custom', ({ container, blocks, ... }) => { ... });
@@ -84,8 +78,6 @@ editor.on('block:custom', ({ container, blocks, ... }) => { ... });
 editor.on('block', ({ event, model, ... }) => { ... });
 ```
 
-* BlocksEventCallback
-
 [Block]: block.html
 
 [Component]: component.html
@@ -94,7 +86,7 @@ editor.on('block', ({ event, model, ... }) => { ... });
 
 Get configuration object
 
-Returns **[Object][2]**&#x20;
+Returns **[Object][2]** 
 
 ## add
 
@@ -137,7 +129,7 @@ console.log(JSON.stringify(block));
 // {label: 'Heading', content: '<h1>Put your ...', ...}
 ```
 
-Returns **[Block]**&#x20;
+Returns **[Block]** 
 
 ## getAll
 
@@ -151,13 +143,13 @@ console.log(JSON.stringify(blocks));
 // [{label: 'Heading', content: '<h1>Put your ...'}, ...]
 ```
 
-Returns **Collection<[Block]>**&#x20;
+Returns **Collection<[Block]>** 
 
 ## getAllVisible
 
 Return the visible collection, which containes blocks actually rendered
 
-Returns **Collection<[Block]>**&#x20;
+Returns **Collection<[Block]>** 
 
 ## remove
 
@@ -184,44 +176,20 @@ Returns **[Block]** Removed block
 Get all available categories.
 It's possible to add categories only within blocks via 'add()' method
 
-Returns **([Array][4] | Collection)**&#x20;
+Returns **([Array][4] | Collection)** 
 
 ## getContainer
 
 Return the Blocks container element
 
-Returns **[HTMLElement][5]**&#x20;
+Returns **[HTMLElement][5]** 
 
 ## getDragBlock
 
 Returns currently dragging block.
 Updated when the drag starts and cleared once it's done.
 
-Returns **([Block] | [undefined][6])**&#x20;
-
-## getBlocksByCategory
-
-Get blocks by category.
-
-### Parameters
-
-*   `blocks` **[Array][4]\<Block>?**&#x20;
-
-### Examples
-
-```javascript
-blockManager.getBlocksByCategory();
-// Returns an array of items of this type
-// > { category?: Category; items: Block[] }
-
-// NOTE: The item without category is the one containing blocks without category.
-
-// You can also get the same output format by passing your own array of Blocks
-const myFilteredBlocks: Block[] = [...];
-blockManager.getBlocksByCategorymyFilteredBlocks
-```
-
-Returns **[Array][4]\<BlocksByCategory>**&#x20;
+Returns **([Block] | [undefined][6])** 
 
 ## render
 

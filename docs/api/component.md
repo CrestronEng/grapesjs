@@ -27,7 +27,7 @@ component.get('tagName');
 *   `name` **[String][1]?** Name of the component. Will be used, for example, in Layers and badges
 *   `removable` **[Boolean][3]?** When `true` the component is removable from the canvas, default: `true`
 *   `draggable` **([Boolean][3] | [String][1] | [Function][4])?** Indicates if it's possible to drag the component inside others.
-    You can also specify a query string to identify elements,
+    You can also specify a query string to indentify elements,
     eg. `'.some-class[title=Hello], [data-gjs-type=column]'` means you can drag the component only inside elements
     containing `some-class` class and `Hello` title, and `column` components. In the case of a function, target and destination components are passed as arguments, return a Boolean to indicate if the drag is possible. Default: `true`
 *   `droppable` **([Boolean][3] | [String][1] | [Function][4])?** Indicates if it's possible to drop other components inside. You can use
@@ -45,7 +45,7 @@ component.get('tagName');
 *   `layerable` **[Boolean][3]?** Set to `false` if you need to hide the component inside Layers. Default: `true`
 *   `selectable` **[Boolean][3]?** Allow component to be selected when clicked. Default: `true`
 *   `hoverable` **[Boolean][3]?** Shows a highlight outline when hovering on the element if `true`. Default: `true`
-*   `locked` **[Boolean][3]?** Disable the selection of the component and its children in the canvas. You can unlock a children by setting its locked property to `false`. Default: `undefined`
+*   `locked` **[Boolean][3]?** Disable the selection of the component and its children in the canvas. Default: `false`
 *   `void` **[Boolean][3]?** This property is used by the HTML exporter as void elements don't have closing tags, eg. `<br/>`, `<hr/>`, etc. Default: `false`
 *   `style` **[Object][2]?** Component default style, eg. `{ width: '100px', height: '100px', 'background-color': 'red' }`
 *   `styles` **[String][1]?** Component related styles, eg. `.my-component-class { color: red }`
@@ -97,19 +97,19 @@ component.is('image')
 // -> false
 ```
 
-Returns **[Boolean][3]**&#x20;
+Returns **[Boolean][3]** 
 
 ## props
 
 Return all the propeties
 
-Returns **[Object][2]**&#x20;
+Returns **[Object][2]** 
 
 ## index
 
 Get the index of the component in the parent collection.
 
-Returns **[Number][9]**&#x20;
+Returns **[Number][9]** 
 
 ## setDragMode
 
@@ -120,36 +120,13 @@ To get more about this feature read: [https://github.com/GrapesJS/grapesjs/issue
 
 *   `value` **[String][1]** Drag mode, options: `'absolute'` | `'translate'` | `''`
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## getDragMode
 
 Get the drag mode of the component.
 
 Returns **[String][1]** Drag mode value, options: `'absolute'` | `'translate'` | `''`
-
-## setSymbolOverride
-
-Set symbol override.
-By setting override to `true`, none of its property changes will be propagated to relative symbols.
-By setting override to specific properties, changes of those properties will be skipped from propagation.
-
-### Parameters
-
-*   `value` **([Boolean][3] | [String][1] | [Array][5]<[String][1]>)**&#x20;
-*   `options` **DataWatchersOptions**  (optional, default `{}`)
-
-### Examples
-
-```javascript
-component.setSymbolOverride(['children', 'classes']);
-```
-
-## getSymbolOverride
-
-Get symbol override value.
-
-Returns **([Boolean][3] | [Array][5]<[String][1]>)**&#x20;
 
 ## find
 
@@ -186,27 +163,7 @@ const allImages = component.findType('image');
 console.log(allImages[0]) // prints the first found component
 ```
 
-Returns **[Array][5]\<Component>**&#x20;
-
-## findFirstType
-
-Find the first inner component by component type.
-If no component is found, it returns `undefined`.
-
-### Parameters
-
-*   `type` **[String][1]** Component type
-
-### Examples
-
-```javascript
-const image = component.findFirstType('image');
-if (image) {
- console.log(image);
-}
-```
-
-Returns **(Component | [undefined][11])**&#x20;
+Returns **[Array][5]\<Component>** 
 
 ## closest
 
@@ -224,7 +181,7 @@ component.closest('div.some-class');
 // -> Component
 ```
 
-Returns **Component**&#x20;
+Returns **Component** 
 
 ## closestType
 
@@ -254,7 +211,7 @@ component is a descendant of a given component
 
 *   `component` **Component** Component to check
 
-Returns **[Boolean][3]**&#x20;
+Returns **[Boolean][3]** 
 
 ## replaceWith
 
@@ -281,7 +238,7 @@ Update attributes of the component
 ### Parameters
 
 *   `attrs` **[Object][2]** Key value attributes
-*   `opts` **SetAttrOptions**  (optional, default `{skipWatcherUpdates:false,fromDataSource:false}`)
+*   `opts` **SetOptions**  (optional, default `{}`)
 *   `options` **[Object][2]** Options for the model update
 
 ### Examples
@@ -290,7 +247,7 @@ Update attributes of the component
 component.setAttributes({ id: 'test', 'data-key': 'value' });
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## addAttributes
 
@@ -299,7 +256,7 @@ Add attributes to the component
 ### Parameters
 
 *   `attrs` **[Object][2]** Key value attributes
-*   `opts` **SetAttrOptions**  (optional, default `{}`)
+*   `opts` **SetOptions**  (optional, default `{}`)
 *   `options` **[Object][2]** Options for the model update
 
 ### Examples
@@ -308,7 +265,7 @@ Add attributes to the component
 component.addAttributes({ 'data-key': 'value' });
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## removeAttributes
 
@@ -327,7 +284,7 @@ component.removeAttributes('some-attr');
 component.removeAttributes(['some-attr1', 'some-attr2']);
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## getStyle
 
@@ -335,9 +292,10 @@ Get the style of the component
 
 ### Parameters
 
-*   `opts` **GetComponentStyleOpts?**&#x20;
+*   `options` **any**  (optional, default `{}`)
+*   `optsAdd` **any**  (optional, default `{}`)
 
-Returns **[Object][2]**&#x20;
+Returns **[Object][2]** 
 
 ## setStyle
 
@@ -346,7 +304,7 @@ Set the style on the component
 ### Parameters
 
 *   `prop` **[Object][2]** Key value style object (optional, default `{}`)
-*   `opts` **UpdateStyleOptions**  (optional, default `{}`)
+*   `opts` **any**  (optional, default `{}`)
 
 ### Examples
 
@@ -354,7 +312,7 @@ Set the style on the component
 component.setStyle({ color: 'red' });
 ```
 
-Returns **[Object][2]**&#x20;
+Returns **[Object][2]** 
 
 ## getAttributes
 
@@ -362,9 +320,9 @@ Return all component's attributes
 
 ### Parameters
 
-*   `opts` **{noClass: [boolean][3]?, noStyle: [boolean][3]?, skipResolve: [boolean][3]?}**  (optional, default `{}`)
+*   `opts` **{noClass: [boolean][3]?, noStyle: [boolean][3]?}**  (optional, default `{}`)
 
-Returns **[Object][2]**&#x20;
+Returns **[Object][2]** 
 
 ## addClass
 
@@ -427,7 +385,7 @@ Returns **[Array][5]** Array of removed selectors
 
 Returns component's classes as an array of strings
 
-Returns **[Array][5]**&#x20;
+Returns **[Array][5]** 
 
 ## append
 
@@ -475,7 +433,7 @@ console.log(collection.length);
 // -> 2
 ```
 
-Returns **(Collection | [Array][5]<[Component]>)**&#x20;
+Returns **(Collection | [Array][5]<[Component]>)** 
 
 ## getChildAt
 
@@ -494,7 +452,7 @@ component.getChildAt(0);
 component.getChildAt(1);
 ```
 
-Returns **([Component] | null)**&#x20;
+Returns **([Component] | null)** 
 
 ## getLastChild
 
@@ -506,7 +464,7 @@ If exists, returns the last child component.
 const lastChild = component.getLastChild();
 ```
 
-Returns **([Component] | null)**&#x20;
+Returns **([Component] | null)** 
 
 ## empty
 
@@ -533,13 +491,13 @@ component.parent();
 // -> Component
 ```
 
-Returns **(Component | null)**&#x20;
+Returns **(Component | null)** 
 
 ## parents
 
 Return all parents of the component.
 
-Returns **[Array][5]\<Component>**&#x20;
+Returns **[Array][5]\<Component>** 
 
 ## getTraits
 
@@ -553,7 +511,7 @@ console.log(traits);
 // [Trait, Trait, Trait, ...]
 ```
 
-Returns **[Array][5]\<Trait>**&#x20;
+Returns **[Array][5]\<Trait>** 
 
 ## setTraits
 
@@ -571,7 +529,7 @@ console.log(traits);
 // [Trait, ...]
 ```
 
-Returns **[Array][5]\<Trait>**&#x20;
+Returns **[Array][5]\<Trait>** 
 
 ## getTrait
 
@@ -608,7 +566,7 @@ component.updateTrait('title', {
 });
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## getTraitIndex
 
@@ -677,22 +635,13 @@ Get the name of the component.
 
     *   `opts.noCustom` **[Boolean][3]?** Avoid custom name assigned to the component.
 
-Returns **[String][1]**&#x20;
-
-## setName
-
-Update component name.
-
-### Parameters
-
-*   `name` **[String][1]** New name.
-*   `opts` **SetOptions**  (optional, default `{}`)
+Returns **[String][1]** 
 
 ## getIcon
 
 Get the icon string
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 ## toHTML
 
@@ -750,15 +699,15 @@ Return an object containing only changed props
 
 ### Parameters
 
-*   `res` **Partial\<ComponentDefinition>**&#x20;
+*   `res` **Partial\<ComponentDefinition>** 
 
-Returns **Partial\<ComponentDefinition>**&#x20;
+Returns **Partial\<ComponentDefinition>** 
 
 ## getId
 
 Return the component id
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 ## setId
 
@@ -766,10 +715,10 @@ Set new id on the component
 
 ### Parameters
 
-*   `id` **[String][1]**&#x20;
-*   `opts` **any?**&#x20;
+*   `id` **[String][1]** 
+*   `opts` **any?** 
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## getEl
 
@@ -780,7 +729,7 @@ This works only if the component is already rendered
 
 *   `frame` **Frame** Specific frame from which taking the element
 
-Returns **[HTMLElement][12]**&#x20;
+Returns **[HTMLElement][11]** 
 
 ## getView
 
@@ -791,7 +740,7 @@ This works only if the component is already rendered
 
 *   `frame` **Frame** Get View of a specific frame
 
-Returns **ComponentView**&#x20;
+Returns **ComponentView** 
 
 ## onAll
 
@@ -809,7 +758,7 @@ component.onAll(component => {
 })
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## forEachChild
 
@@ -835,7 +784,7 @@ Remove the component
 
 *   `opts` **any**  (optional, default `{}`)
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## move
 
@@ -854,7 +803,7 @@ const dest = editor.getWrapper();
 editor.getSelected().move(dest, { at: 0 });
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## isInstanceOf
 
@@ -875,7 +824,7 @@ newTextExt.isInstanceOf('text-ext'); // true
 newTextExt.isInstanceOf('text'); // true
 ```
 
-Returns **[Boolean][3]**&#x20;
+Returns **[Boolean][3]** 
 
 ## isChildOf
 
@@ -898,7 +847,7 @@ innerComponent.isChildOf(newTextComponent); // true
 innerComponent.isChildOf('text'); // true
 ```
 
-Returns **[Boolean][3]**&#x20;
+Returns **[Boolean][3]** 
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
@@ -910,7 +859,7 @@ Returns **[Boolean][3]**&#x20;
 
 [5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[6]: https://github.com/GrapesJS/grapesjs/blob/master/src/utils/Resizer.ts
+[6]: https://github.com/GrapesJS/grapesjs/blob/master/src/utils/Resizer.js
 
 [7]: /modules/Components-js.html
 
@@ -920,6 +869,4 @@ Returns **[Boolean][3]**&#x20;
 
 [10]: https://github.com/GrapesJS/grapesjs/issues/1936
 
-[11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined
-
-[12]: https://developer.mozilla.org/docs/Web/HTML/Element
+[11]: https://developer.mozilla.org/docs/Web/HTML/Element

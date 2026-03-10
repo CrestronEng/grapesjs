@@ -19,35 +19,12 @@ const deviceManager = editor.Devices;
 ```
 
 ## Available Events
-* `device:add` New device added to the collection. The `Device` is passed as an argument.
 
-```javascript
-editor.on('device:add', (device) => { ... });
-```
-
-* `device:remove` Device removed from the collection. The `Device` is passed as an argument.
-
-```javascript
-editor.on('device:remove', (device) => { ... });
-```
-
-* `device:select` A new device is selected. The `Device` is passed as an argument.
-
-```javascript
-editor.on('device:select', (device) => { ... });
-```
-
-* `device:update` Device updated. The `Device` and the object containing changes are passed as arguments.
-
-```javascript
-editor.on('device:update', (device) => { ... });
-```
-
-* `device` Catch-all event for all the events mentioned above.
-
-```javascript
-editor.on('device', ({ event, model, ... }) => { ... });
-```
+*   `device:add` - Added new device. The [Device] is passed as an argument to the callback
+*   `device:remove` - Device removed. The [Device] is passed as an argument to the callback
+*   `device:select` - New device selected. The newly selected [Device] and the previous one, are passed as arguments to the callback
+*   `device:update` - Device updated. The updated [Device] and the object containing changes are passed as arguments to the callback
+*   `device` - Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback
 
 ## Methods
 
@@ -105,7 +82,7 @@ console.log(JSON.stringify(device));
 // {name: 'Tablet', width: '900px'}
 ```
 
-Returns **([Device] | null)**&#x20;
+Returns **([Device] | null)** 
 
 ## remove
 
@@ -139,7 +116,7 @@ console.log(JSON.stringify(devices));
 // [{name: 'Desktop', width: ''}, ...]
 ```
 
-Returns **[Array][10]<[Device]>**&#x20;
+Returns **[Array][10]<[Device]>** 
 
 ## select
 
@@ -169,7 +146,7 @@ Get the selected device
 const selected = deviceManager.getSelected();
 ```
 
-Returns **[Device]**&#x20;
+Returns **[Device]** 
 
 [1]: https://github.com/GrapesJS/grapesjs/blob/master/src/device_manager/config/config.ts
 

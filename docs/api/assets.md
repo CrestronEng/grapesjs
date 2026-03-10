@@ -19,71 +19,18 @@ const assetManager = editor.AssetManager;
 ```
 
 ## Available Events
-* `asset:add` New asset added to the collection. The [Asset] is passed as an argument to the callback.
 
-```javascript
-editor.on('asset:add', (asset) => { ... });
-```
-
-* `asset:remove` Asset removed from the collection. The [Asset] is passed as an argument to the callback.
-
-```javascript
-editor.on('asset:remove', (asset) => { ... });
-```
-
-* `asset:update` Asset updated. The [Asset] and the object containing changes are passed as arguments to the callback.
-
-```javascript
-editor.on('asset:update', (asset, updatedProps) => { ... });
-```
-
-* `asset:open` Asset Manager opened.
-
-```javascript
-editor.on('asset:open', () => { ... });
-```
-
-* `asset:close` Asset Manager closed.
-
-```javascript
-editor.on('asset:close', () => { ... });
-```
-
-* `asset:upload:start` Asset upload start.
-
-```javascript
-editor.on('asset:upload:start', () => { ... });
-```
-
-* `asset:upload:end` Asset upload end.
-
-```javascript
-editor.on('asset:upload:end', (result) => { ... });
-```
-
-* `asset:upload:error` Asset upload error.
-
-```javascript
-editor.on('asset:upload:error', (error) => { ... });
-```
-
-* `asset:upload:response` Asset upload response.
-
-```javascript
-editor.on('asset:upload:response', (res) => { ... });
-```
-
-* `asset:custom` Event to use in case of [custom Asset Manager UI](https\://grapesjs.com/docs/modules/Assets.html#customization).
-
-```javascript
-editor.on('asset:custom', ({ container, assets, ... }) => { ... });
-```
-
-* `asset` Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback.
-
-```javascript
-editor.on('asset', ({ event, model, ... }) => { ... });
-```
+*   `asset:open` - Asset Manager opened.
+*   `asset:close` - Asset Manager closed.
+*   `asset:add` - Asset added. The [Asset] is passed as an argument to the callback.
+*   `asset:remove` - Asset removed. The [Asset] is passed as an argument to the callback.
+*   `asset:update` - Asset updated. The updated [Asset] and the object containing changes are passed as arguments to the callback.
+*   `asset:upload:start` - Before the upload is started.
+*   `asset:upload:end` - After the upload is ended.
+*   `asset:upload:error` - On any error in upload, passes the error as an argument.
+*   `asset:upload:response` - On upload response, passes the result as an argument.
+*   `asset` - Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback.
+*   `asset:custom` - Event for handling custom Asset Manager UI.
 
 ## Methods
 
@@ -148,7 +95,7 @@ Checks if the asset manager is open
 assetManager.isOpen(); // true | false
 ```
 
-Returns **[Boolean][15]**&#x20;
+Returns **[Boolean][15]** 
 
 ## add
 
@@ -176,7 +123,7 @@ width: 200,
 assetManager.add([{ src: 'img2.jpg' }, { src: 'img2.png' }]);
 ```
 
-Returns **[Asset]**&#x20;
+Returns **[Asset]** 
 
 ## get
 
@@ -192,19 +139,19 @@ Return asset by URL
 const asset = assetManager.get('http://img.jpg');
 ```
 
-Returns **([Asset] | null)**&#x20;
+Returns **([Asset] | null)** 
 
 ## getAll
 
 Return the global collection, containing all the assets
 
-Returns **Collection<[Asset]>**&#x20;
+Returns **Collection<[Asset]>** 
 
 ## getAllVisible
 
 Return the visible collection, which contains assets actually rendered
 
-Returns **Collection<[Asset]>**&#x20;
+Returns **Collection<[Asset]>** 
 
 ## remove
 
@@ -213,7 +160,7 @@ Remove asset
 ### Parameters
 
 *   `asset` **([String][13] | [Asset])** Asset or asset URL
-*   `opts` **RemoveOptions?**&#x20;
+*   `opts` **Record<[string][13], any>?** 
 
 ### Examples
 
@@ -230,7 +177,7 @@ Returns **[Asset]** Removed asset
 
 Return the Asset Manager Container
 
-Returns **[HTMLElement][16]**&#x20;
+Returns **[HTMLElement][16]** 
 
 [1]: https://github.com/GrapesJS/grapesjs/blob/master/src/asset_manager/config/config.ts
 

@@ -30,7 +30,7 @@ canvas.setCoords(...);
 
 * `canvas:dragend` When a drag operation is ended, `DataTransfer` instance passed as an argument.
 
-* `canvas:dragdata` On any dataTransfer parse, `DataTransfer` instance and the `result` are passed as arguments. By changing `result.content` you're able to customize what is dropped.
+* `canvas:dragdata` On any dataTransfer parse, `DataTransfer` instance and the `result` are passed as arguments.&#xA;By changing `result.content` you're able to customize what is dropped.
 
 * `canvas:drop` Something is dropped in canvas, `DataTransfer` instance and the dropped model are passed as arguments.
 
@@ -90,15 +90,7 @@ editor.on('canvas:pointer', () => {
 });
 ```
 
-* `canvas:refresh` Canvas was refreshed to update elements on top, like spots/tools (eg. via `editor.Canvas.refresh()` or on frame resize).
-
-```javascript
-editor.on('canvas:refresh', (canvasRefreshOptions) => {
- console.log('Canvas refreshed with options:', canvasRefreshOptions);
-});
-```
-
-* `canvas:frame:load` Frame loaded in canvas. The event is triggered right after iframe's `onload`.
+* `canvas:frame:load` Frame loaded in canvas.&#xA;The event is triggered right after iframe's `onload`.
 
 ```javascript
 editor.on('canvas:frame:load', ({ window }) => {
@@ -106,7 +98,7 @@ editor.on('canvas:frame:load', ({ window }) => {
 });
 ```
 
-* `canvas:frame:load:head` Frame head loaded in canvas. The event is triggered right after iframe's finished to load the head elements (eg. scripts)
+* `canvas:frame:load:head` Frame head loaded in canvas.&#xA;The event is triggered right after iframe's finished to load the head elemenets (eg. scripts)
 
 ```javascript
 editor.on('canvas:frame:load:head', ({ window }) => {
@@ -114,19 +106,11 @@ editor.on('canvas:frame:load:head', ({ window }) => {
 });
 ```
 
-* `canvas:frame:load:body` Frame body loaded in canvas. The event is triggered when the body is rendered with components.
+* `canvas:frame:load:body` Frame body loaded in canvas.&#xA;The event is triggered when the body is rendered with components.
 
 ```javascript
 editor.on('canvas:frame:load:body', ({ window }) => {
  console.log('Frame completed the body render', window);
-});
-```
-
-* `canvas:frame:unload` Frame is unloading from the canvas.
-
-```javascript
-editor.on('canvas:frame:unload', ({ frame }) => {
- console.log('Unloading frame', frame);
 });
 ```
 
@@ -140,37 +124,37 @@ editor.on('canvas:frame:unload', ({ frame }) => {
 
 Get configuration object
 
-Returns **[Object][2]**&#x20;
+Returns **[Object][2]** 
 
 ## getElement
 
 Get the canvas element
 
-Returns **[HTMLElement][3]**&#x20;
+Returns **[HTMLElement][3]** 
 
 ## getFrameEl
 
 Get the main frame element of the canvas
 
-Returns **[HTMLIFrameElement][4]**&#x20;
+Returns **[HTMLIFrameElement][4]** 
 
 ## getWindow
 
 Get the main frame window instance
 
-Returns **[Window][5]**&#x20;
+Returns **[Window][5]** 
 
 ## getDocument
 
 Get the main frame document element
 
-Returns **HTMLDocument**&#x20;
+Returns **HTMLDocument** 
 
 ## getBody
 
 Get the main frame body element
 
-Returns **[HTMLBodyElement][6]**&#x20;
+Returns **[HTMLBodyElement][6]** 
 
 ## setCustomBadgeLabel
 
@@ -178,7 +162,7 @@ Set custom badge naming strategy
 
 ### Parameters
 
-*   `f` **[Function][7]**&#x20;
+*   `f` **[Function][7]** 
 
 ### Examples
 
@@ -192,47 +176,13 @@ canvas.setCustomBadgeLabel(function(component){
 
 Get canvas rectangular data
 
-Returns **[Object][2]**&#x20;
-
-## startDrag
-
-Start custom drag-and-drop process.
-
-### Parameters
-
-*   `dragSource` **DragSource\<Component>** The source object for the drag operation, containing the component being dragged.
-
-### Examples
-
-```javascript
-// as component definition
-canvas.startDrag({
- content: { type: 'my-component' }
-});
-// as HTML
-canvas.startDrag({
- content: '<div>...</div>'
-});
-```
-
-## endDrag
-
-Ends the drag-and-drop process, resetting the drag source and clearing any drag results.
-This method can be used to finalize custom drag-and-drop content operations.
-
-### Examples
-
-```javascript
-canvas.startDrag({...});
-// ... drag finished ...
-canvas.endDrag();
-```
+Returns **[Object][2]** 
 
 ## hasFocus
 
 Check if the canvas is focused
 
-Returns **[Boolean][8]**&#x20;
+Returns **[Boolean][8]** 
 
 ## scrollTo
 
@@ -243,7 +193,7 @@ passed to it. For instance, you can scroll smoothly by using
 
 ### Parameters
 
-*   `el` **([HTMLElement][3] | [Component])**&#x20;
+*   `el` **([HTMLElement][3] | [Component])** 
 *   `opts` **[Object][2]** Options, same as options for `scrollIntoView` (optional, default `{}`)
 
     *   `opts.force` **[Boolean][8]** Force the scroll, even if the element is already visible (optional, default `false`)
@@ -254,7 +204,7 @@ passed to it. For instance, you can scroll smoothly by using
 const selected = editor.getSelected();
 // Scroll smoothly (this behavior can be polyfilled)
 canvas.scrollTo(selected, { behavior: 'smooth' });
-// Force the scroll, even if the element is already visible
+// Force the scroll, even if the element is alredy visible
 canvas.scrollTo(selected, { force: true });
 ```
 
@@ -265,7 +215,6 @@ Set canvas zoom value
 ### Parameters
 
 *   `value` **[Number][9]** The zoom value, from 0 to 100
-*   `opts` **SetZoomOptions**  (optional, default `{}`)
 
 ### Examples
 
@@ -273,7 +222,7 @@ Set canvas zoom value
 canvas.setZoom(50); // set zoom to 50%
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## getZoom
 
@@ -286,7 +235,7 @@ canvas.setZoom(50); // set zoom to 50%
 const zoom = canvas.getZoom(); // 50
 ```
 
-Returns **[Number][9]**&#x20;
+Returns **[Number][9]** 
 
 ## setCoords
 
@@ -304,7 +253,7 @@ Set canvas position coordinates
 canvas.setCoords(100, 100);
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## getCoords
 
@@ -324,7 +273,7 @@ Returns **[Object][2]** Object containing coordinates
 
 Get the last created Component from a drag & drop to the canvas.
 
-Returns **([Component] | [undefined][10])**&#x20;
+Returns **([Component] | [undefined][10])** 
 
 ## addSpot
 
@@ -356,7 +305,7 @@ canvas.addSpot({
 });
 ```
 
-Returns **[CanvasSpot]**&#x20;
+Returns **[CanvasSpot]** 
 
 ## getSpots
 
@@ -382,7 +331,7 @@ const allSelectSpots = canvas.getSpots({ type: 'select' });
 allSelectSpots.length; // 2
 ```
 
-Returns **[Array][11]<[CanvasSpot]>**&#x20;
+Returns **[Array][11]<[CanvasSpot]>** 
 
 ## removeSpots
 
@@ -410,7 +359,7 @@ canvas.removeSpots(filteredSpots);
 canvas.removeSpots();
 ```
 
-Returns **[Array][11]<[CanvasSpot]>**&#x20;
+Returns **[Array][11]<[CanvasSpot]>** 
 
 ## hasCustomSpot
 
@@ -435,7 +384,7 @@ canvas.hasCustomSpot('select'); // false
 canvas.hasCustomSpot('target'); // true
 ```
 
-Returns **[Boolean][8]**&#x20;
+Returns **[Boolean][8]** 
 
 ## getWorldRectToScreen
 
@@ -443,19 +392,9 @@ Transform a box rect from the world coordinate system to the screen one.
 
 ### Parameters
 
-*   `boxRect` **[Object][2]**&#x20;
+*   `boxRect` **[Object][2]** 
 
-Returns **[Object][2]**&#x20;
-
-## refresh
-
-Update canvas for spots/tools positioning.
-
-### Parameters
-
-*   `opts` **[Object][2]?** Options. (optional, default `{}`)
-
-    *   `opts.spots` **[Object][2]** Update the position of spots. (optional, default `false`)
+Returns **[Object][2]** 
 
 [1]: https://github.com/GrapesJS/grapesjs/blob/master/src/canvas/config/config.ts
 

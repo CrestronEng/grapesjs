@@ -19,23 +19,10 @@ const modal = editor.Modal;
 ```
 
 ## Available Events
-* `modal:open` Modal is opened
 
-```javascript
-editor.on('modal:open', () => { ... });
-```
-
-* `modal:close` Modal is closed
-
-```javascript
-editor.on('modal:close', () => { ... });
-```
-
-* `modal` Event triggered on any change related to the modal. An object containing all the available data about the triggered event is passed as an argument to the callback.
-
-```javascript
-editor.on('modal', ({ open, title, content, ... }) => { ... });
-```
+*   `modal:open` - Modal is opened
+*   `modal:close` - Modal is closed
+*   `modal` - Event triggered on any change related to the modal. An object containing all the available data about the triggered event is passed as an argument to the callback.
 
 ## Methods
 
@@ -71,7 +58,7 @@ modal.open({
 });
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## close
 
@@ -83,7 +70,7 @@ Close the modal window
 modal.close();
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## onceClose
 
@@ -102,7 +89,7 @@ modal.onceClose(() => {
 });
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## onceOpen
 
@@ -121,7 +108,7 @@ modal.onceOpen(() => {
 });
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## isOpen
 
@@ -133,7 +120,7 @@ Checks if the modal window is open
 modal.isOpen(); // true | false
 ```
 
-Returns **[Boolean][15]**&#x20;
+Returns **[Boolean][15]** 
 
 ## setTitle
 
@@ -154,7 +141,7 @@ el.innerText =  'New title';
 modal.setTitle(el);
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## getTitle
 
@@ -166,7 +153,7 @@ Returns the title of the modal window
 modal.getTitle();
 ```
 
-Returns **([string][12] | [HTMLElement][13])**&#x20;
+Returns **([string][12] | [HTMLElement][13])** 
 
 ## setContent
 
@@ -187,7 +174,7 @@ el.innerText =  'New content';
 modal.setContent(el);
 ```
 
-Returns **this**&#x20;
+Returns **this** 
 
 ## getContent
 
@@ -199,7 +186,7 @@ Get the content of the modal window
 modal.getContent();
 ```
 
-Returns **([string][12] | [HTMLElement][13])**&#x20;
+Returns **([string][12] | [HTMLElement][13])** 
 
 [1]: https://github.com/GrapesJS/grapesjs/blob/master/src/modal_dialog/config/config.ts
 

@@ -11,19 +11,19 @@
 *   `id` **[String][1]** Sector id, eg. `typography`
 *   `name` **[String][1]** Sector name, eg. `Typography`
 *   `open` **[Boolean][2]?** Indicates the open state.
-*   `properties` **[Array][3]<[Object][4]>?** Indicate an array of Property definitions.
+*   `properties` **[Array][3]<[Object][4]>?** Indicate an array of Property defintions.
 
 ### getId
 
 Get sector id.
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 ### getName
 
 Get sector name.
 
-Returns **[String][1]**&#x20;
+Returns **[String][1]** 
 
 ### setName
 
@@ -37,7 +37,7 @@ Update sector name.
 
 Check if the sector is open
 
-Returns **[Boolean][2]**&#x20;
+Returns **[Boolean][2]** 
 
 ### setOpen
 
@@ -45,13 +45,13 @@ Update Sector open state
 
 #### Parameters
 
-*   `value` **[Boolean][2]**&#x20;
+*   `value` **[Boolean][2]** 
 
 ### isVisible
 
 Check if the sector is visible
 
-Returns **[Boolean][2]**&#x20;
+Returns **[Boolean][2]** 
 
 ### getProperties
 
@@ -64,7 +64,7 @@ Get sector properties.
     *   `opts.withValue` **[Boolean][2]** Get only properties with value (optional, default `false`)
     *   `opts.withParentValue` **[Boolean][2]** Get only properties with parent value (optional, default `false`)
 
-Returns **[Array][3]<[Property]>**&#x20;
+Returns **[Array][3]<[Property]>** 
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 

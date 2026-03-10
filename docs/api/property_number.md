@@ -15,31 +15,31 @@
 
 Get property units.
 
-Returns **[Array][1]<[String][2]>**&#x20;
+Returns **[Array][1]<[String][2]>** 
 
 ### getUnit
 
 Get property unit value.
 
-Returns **[String][2]**&#x20;
+Returns **[String][2]** 
 
 ### getMin
 
 Get min value.
 
-Returns **[Number][3]**&#x20;
+Returns **[Number][3]** 
 
 ### getMax
 
 Get max value.
 
-Returns **[Number][3]**&#x20;
+Returns **[Number][3]** 
 
 ### getStep
 
 Get step value.
 
-Returns **[Number][3]**&#x20;
+Returns **[Number][3]** 
 
 ### upUnit
 
@@ -53,7 +53,7 @@ The change is also propagated to the selected targets.
 
     *   `opts.noTarget` **[Boolean][5]** If `true` the change won't be propagated to selected targets. (optional, default `false`)
 
-Returns **[String][2]**&#x20;
+Returns **[String][2]** 
 
 [1]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 

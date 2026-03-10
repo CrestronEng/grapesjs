@@ -15,30 +15,21 @@ const editor = grapesjs.init({
 })
 ```
 
-Once the editor is instantiated you can use its API. Before using these methods you should get the module from the instance.
+Once the editor is instantiated you can use its API and listen to its events. Before using these methods, you should get the module from the instance.
 
 ```js
+// Listen to events
+editor.on('rte:enable', () => { ... });
+
+// Use the API
 const rte = editor.RichTextEditor;
+rte.add(...);
 ```
 
 ## Available Events
-* `rte:enable` RTE enabled. The view, on which RTE is enabled, and the RTE instance are passed as arguments.
 
-```javascript
-editor.on('rte:enable', (view, rte) => { ... });
-```
-
-* `rte:disable` RTE disabled. The view, on which RTE is disabled, and the RTE instance are passed as arguments.
-
-```javascript
-editor.on('rte:disable', (view, rte) => { ... });
-```
-
-* `rte:custom` Custom RTE event. Object with enabled status, container, and actions is passed as an argument.
-
-```javascript
-editor.on('rte:custom', ({ enabled, container, actions }) => { ... });
-```
+*   `rte:enable` - RTE enabled. The view, on which RTE is enabled, is passed as an argument
+*   `rte:disable` - RTE disabled. The view, on which RTE is disabled, is passed as an argument
 
 ## Methods
 
@@ -53,7 +44,7 @@ editor.on('rte:custom', ({ enabled, container, actions }) => { ... });
 
 Get configuration object
 
-Returns **[Object][9]**&#x20;
+Returns **[Object][9]** 
 
 ## add
 
@@ -139,13 +130,13 @@ const action = rte.get('bold');
 // {name: 'bold', ...}
 ```
 
-Returns **[Object][9]**&#x20;
+Returns **[Object][9]** 
 
 ## getAll
 
 Get all actions
 
-Returns **[Array][11]**&#x20;
+Returns **[Array][11]** 
 
 ## remove
 
@@ -153,7 +144,7 @@ Remove the action from the toolbar
 
 ### Parameters
 
-*   `name` **[string][10]**&#x20;
+*   `name` **[string][10]** 
 
 ### Examples
 
@@ -183,7 +174,7 @@ rte.run(action) // or rte.run('bold')
 
 Get the toolbar element
 
-Returns **[HTMLElement][12]**&#x20;
+Returns **[HTMLElement][12]** 
 
 [1]: https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
 
