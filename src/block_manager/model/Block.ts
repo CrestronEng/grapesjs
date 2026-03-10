@@ -1,9 +1,8 @@
 import { Model } from '../../common';
 import { isFunction } from 'underscore';
 import Editor from '../../editor';
-import Category, { CategoryProperties } from '../../abstract/ModuleCategory';
+import { CategoryProperties } from '../../abstract/ModuleCategory';
 import { ComponentDefinition } from '../../dom_components/model/types';
-import Blocks from './Blocks';
 
 /** @private */
 export interface BlockProperties {
@@ -14,7 +13,7 @@ export interface BlockProperties {
   /**
    * The content of the block. Might be an HTML string or a [Component Defintion](/modules/Components.html#component-definition)
    */
-  content: string | ComponentDefinition | (string | ComponentDefinition)[];
+  content: string | ComponentDefinition;
   /**
    * HTML string for the media/icon of the block, eg. `<svg ...`, `<img ...`, etc.
    * @default ''
@@ -62,6 +61,8 @@ export interface BlockProperties {
    * @deprecated
    */
   activeOnRender?: boolean;
+
+  visible?: boolean;
 }
 
 /**
@@ -91,16 +92,8 @@ export default class Block extends Model<BlockProperties> {
       disable: false,
       onClick: undefined,
       attributes: {},
+      visible: true,
     };
-  }
-
-  get category(): Category | undefined {
-    const cat = this.get('category');
-    return cat instanceof Category ? cat : undefined;
-  }
-
-  get parent() {
-    return this.collection as unknown as Blocks;
   }
 
   /**

@@ -13,6 +13,7 @@ export default class ComponentComment extends ComponentTextNode {
   static isComponent(el: HTMLElement) {
     if (el.nodeType == 8) {
       return {
+        tagName: 'NULL',
         type: 'comment',
         content: el.textContent ?? '',
       };

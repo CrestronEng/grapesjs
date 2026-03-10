@@ -1,6 +1,3 @@
-import { OptionAsDocument } from '../../common';
-import { CssRuleJSON } from '../../css_composer/model/CssRule';
-import { ComponentDefinitionDefined } from '../../dom_components/model/types';
 import Editor from '../../editor';
 
 export interface ParsedCssRule {
@@ -14,20 +11,7 @@ export type CustomParserCss = (input: string, editor: Editor) => ParsedCssRule[]
 
 export type CustomParserHtml = (input: string, options: HTMLParserOptions) => HTMLElement;
 
-export interface HTMLParseResult {
-  html: ComponentDefinitionDefined | ComponentDefinitionDefined[];
-  css?: CssRuleJSON[];
-  doctype?: string;
-  root?: ComponentDefinitionDefined;
-  head?: ComponentDefinitionDefined;
-}
-
-export interface ParseNodeOptions extends HTMLParserOptions {
-  inSvg?: boolean;
-  skipChildren?: boolean;
-}
-
-export interface HTMLParserOptions extends OptionAsDocument {
+export interface HTMLParserOptions {
   /**
    * DOMParser mime type.
    * If you use the `text/html` parser, it will fix the invalid syntax automatically.
@@ -49,24 +33,10 @@ export interface HTMLParserOptions extends OptionAsDocument {
   allowUnsafeAttr?: boolean;
 
   /**
-   * Allow unsafe HTML attribute values (eg. `src="javascript:..."`).
-   * @default false
-   */
-  allowUnsafeAttrValue?: boolean;
-
-  /**
    * When false, removes empty text nodes when parsed, unless they contain a space.
    * @default false
    */
   keepEmptyTextNodes?: boolean;
-
-  /**
-   * Custom transformer to run before passing the input HTML to the parser.
-   * A common use case might be to sanitize the input string.
-   * @example
-   * preParser: htmlString => DOMPurify.sanitize(htmlString)
-   */
-  preParser?: (input: string, opts: { editor: Editor }) => string;
 }
 
 export interface ParserConfig {
@@ -75,12 +45,6 @@ export interface ParserConfig {
    * @default ['br', 'b', 'i', 'u', 'a', 'ul', 'ol']
    */
   textTags?: string[];
-
-  /**
-   * Let the editor know which Component types should be treated as part of the text component.
-   * @default ['text', 'textnode', 'comment']
-   */
-  textTypes?: string[];
 
   /**
    * Custom CSS parser.
@@ -107,14 +71,12 @@ export interface ParserConfig {
 
 const config: ParserConfig = {
   textTags: ['br', 'b', 'i', 'u', 'a', 'ul', 'ol'],
-  textTypes: ['text', 'textnode', 'comment'],
   parserCss: undefined,
   parserHtml: undefined,
   optionsHtml: {
     htmlType: 'text/html',
     allowScripts: false,
     allowUnsafeAttr: false,
-    allowUnsafeAttrValue: false,
     keepEmptyTextNodes: false,
   },
 };

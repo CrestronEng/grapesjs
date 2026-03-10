@@ -2,7 +2,6 @@ import { result } from 'underscore';
 import Component from './Component';
 import { toLowerCase, buildBase64UrlFromSvg, hasWin } from '../../utils/mixins';
 import { ObjectStrings } from '../../common';
-import { ComponentOptions, ComponentProperties } from './types';
 
 const svgAttrs =
   'xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 24 24" style="fill: rgba(0,0,0,0.15); transform: scale(0.75)"';
@@ -36,8 +35,8 @@ export default class ComponentImage extends Component {
     };
   }
 
-  constructor(props: ComponentProperties = {}, opt: ComponentOptions) {
-    super(props, opt);
+  initialize(props: any, opts: any) {
+    super.initialize(props, opts);
     const { src } = this.get('attributes')!;
     if (src && buildBase64UrlFromSvg(result(this, 'defaults').src) !== src) {
       this.set('src', src, { silent: true });

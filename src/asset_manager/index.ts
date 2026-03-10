@@ -14,7 +14,18 @@
  * const assetManager = editor.AssetManager;
  * ```
  *
- * {REPLACE_EVENTS}
+ * ## Available Events
+ * * `asset:open` - Asset Manager opened.
+ * * `asset:close` - Asset Manager closed.
+ * * `asset:add` - Asset added. The [Asset] is passed as an argument to the callback.
+ * * `asset:remove` - Asset removed. The [Asset] is passed as an argument to the callback.
+ * * `asset:update` - Asset updated. The updated [Asset] and the object containing changes are passed as arguments to the callback.
+ * * `asset:upload:start` - Before the upload is started.
+ * * `asset:upload:end` - After the upload is ended.
+ * * `asset:upload:error` - On any error in upload, passes the error as an argument.
+ * * `asset:upload:response` - On upload response, passes the result as an argument.
+ * * `asset` - Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback.
+ * * `asset:custom` - Event for handling custom Asset Manager UI.
  *
  * ## Methods
  * * [open](#open)
@@ -34,20 +45,67 @@
 
 import { debounce, isFunction } from 'underscore';
 import { ItemManagerModule } from '../abstract/Module';
-import { AddOptions, RemoveOptions } from '../common';
 import EditorModel from '../editor/model/Editor';
-import { ProjectData } from '../storage_manager';
 import defaults, { AssetManagerConfig } from './config/config';
 import Asset from './model/Asset';
 import Assets from './model/Assets';
-import AssetsEvents, { AssetOpenOptions } from './types';
 import AssetsView from './view/AssetsView';
 import FileUploaderView from './view/FileUploader';
+
+export type AssetEvent =
+  | 'asset'
+  | 'asset:open'
+  | 'asset:close'
+  | 'asset:add'
+  | 'asset:remove'
+  | 'asset:update'
+  | 'asset:custom'
+  | 'asset:upload:start'
+  | 'asset:upload:end'
+  | 'asset:upload:error'
+  | 'asset:upload:response';
+
+export const evAll = 'asset';
+export const evPfx = `${evAll}:`;
+export const evSelect = `${evPfx}select`;
+export const evUpdate = `${evPfx}update`;
+export const evAdd = `${evPfx}add`;
+export const evRemove = `${evPfx}remove`;
+export const evRemoveBefore = `${evRemove}:before`;
+export const evCustom = `${evPfx}custom`;
+export const evOpen = `${evPfx}open`;
+export const evClose = `${evPfx}close`;
+export const evUpload = `${evPfx}upload`;
+export const evUploadStart = `${evUpload}:start`;
+export const evUploadEnd = `${evUpload}:end`;
+export const evUploadError = `${evUpload}:error`;
+export const evUploadRes = `${evUpload}:response`;
+const assetCmd = 'open-assets';
+const assetEvents = {
+  all: evAll,
+  select: evSelect,
+  update: evUpdate,
+  add: evAdd,
+  remove: evRemove,
+  removeBefore: evRemoveBefore,
+  custom: evCustom,
+  open: evOpen,
+  close: evClose,
+  uploadStart: evUploadStart,
+  uploadEnd: evUploadEnd,
+  uploadError: evUploadError,
+  uploadResponse: evUploadRes,
+};
 
 // TODO
 type AssetProps = Record<string, any>;
 
-const assetCmd = 'open-assets';
+type OpenOptions = {
+  select?: (asset: Asset, complete: boolean) => void;
+  types?: string[];
+  accept?: string;
+  target?: any;
+};
 
 export default class AssetManager extends ItemManagerModule<AssetManagerConfig, Assets> {
   storageKey = 'assets';
@@ -57,7 +115,7 @@ export default class AssetManager extends ItemManagerModule<AssetManagerConfig, 
   am?: AssetsView;
   fu?: FileUploaderView;
   _bhv?: any;
-  events = AssetsEvents;
+  events!: typeof assetEvents;
 
   /**
    * Initialize module
@@ -66,10 +124,11 @@ export default class AssetManager extends ItemManagerModule<AssetManagerConfig, 
    */
   constructor(em: EditorModel) {
     // @ts-ignore
-    super(em, 'AssetManager', new Assets([], em), AssetsEvents, defaults);
+    super(em, 'AssetManager', new Assets([], em), assetEvents, defaults);
     const { all, config } = this;
     // @ts-ignore
     this.assetsVis = new Assets([]);
+    // @ts-ignore
     const ppfx = config.pStylePrefix;
     if (ppfx) {
       config.stylePrefix = `${ppfx}${config.stylePrefix}`;
@@ -82,6 +141,40 @@ export default class AssetManager extends ItemManagerModule<AssetManagerConfig, 
     this.__onAllEvent = debounce(() => this.__trgCustom(), 0);
 
     return this;
+  }
+
+  __propEv(ev: string, ...data: any[]) {
+    this.em.trigger(ev, ...data);
+    this.getAll().trigger(ev, ...data);
+  }
+
+  __trgCustom() {
+    const bhv = this.__getBehaviour();
+    const custom = this.getConfig().custom;
+
+    if (!bhv.container && !(custom as any).open) {
+      return;
+    }
+    this.em.trigger(this.events.custom, this.__customData());
+  }
+
+  __customData() {
+    const bhv = this.__getBehaviour();
+    return {
+      am: this as AssetManager,
+      open: this.isOpen(),
+      assets: this.getAll().models,
+      types: bhv.types || [],
+      container: bhv.container,
+      close: () => this.close(),
+      remove: (asset: string | Asset, opts?: Record<string, any>) => this.remove(asset, opts),
+      select: (asset: Asset, complete: boolean) => {
+        const res = this.add(asset);
+        isFunction(bhv.select) && bhv.select(res, complete);
+      },
+      // extra
+      options: bhv.options || {},
+    };
   }
 
   /**
@@ -104,7 +197,7 @@ export default class AssetManager extends ItemManagerModule<AssetManagerConfig, 
    * // with your custom types (you should have assets with those types declared)
    * assetManager.open({ types: ['doc'], ... });
    */
-  open(options: AssetOpenOptions = {}) {
+  open(options: OpenOptions = {}) {
     const cmd = this.em.Commands;
     cmd.run(assetCmd, {
       types: ['image'],
@@ -153,7 +246,7 @@ export default class AssetManager extends ItemManagerModule<AssetManagerConfig, 
    * });
    * assetManager.add([{ src: 'img2.jpg' }, { src: 'img2.png' }]);
    */
-  add(asset: string | AssetProps | (string | AssetProps)[], opts: AddOptions = {}) {
+  add(asset: string | AssetProps | (string | AssetProps)[], opts: Record<string, any> = {}) {
     // Put the model at the beginning
     if (typeof opts.at == 'undefined') {
       opts.at = 0;
@@ -199,7 +292,7 @@ export default class AssetManager extends ItemManagerModule<AssetManagerConfig, 
    * const asset = assetManager.get('http://img.jpg');
    * assetManager.remove(asset);
    */
-  remove(asset: string | Asset, opts?: RemoveOptions) {
+  remove(asset: string | Asset, opts?: Record<string, any>) {
     return this.__remove(asset, opts);
   }
 
@@ -207,7 +300,7 @@ export default class AssetManager extends ItemManagerModule<AssetManagerConfig, 
     return this.getProjectData();
   }
 
-  load(data: ProjectData) {
+  load(data: Record<string, any>) {
     return this.loadProjectData(data);
   }
 
@@ -323,8 +416,8 @@ export default class AssetManager extends ItemManagerModule<AssetManagerConfig, 
   onLoad() {
     this.getAll().reset(this.config.assets);
     const { em, events } = this;
-    em.Commands.__onRun(assetCmd, () => this.__propEv(events.open));
-    em.Commands.__onStop(assetCmd, () => this.__propEv(events.close));
+    em.on(`run:${assetCmd}`, () => this.__propEv(events.open));
+    em.on(`stop:${assetCmd}`, () => this.__propEv(events.close));
   }
 
   postRender(editorView: any) {
@@ -367,40 +460,6 @@ export default class AssetManager extends ItemManagerModule<AssetManagerConfig, 
   onDblClick(func: any) {
     // @ts-ignore
     this.config.onDblClick = func;
-  }
-
-  __propEv(ev: string, ...data: any[]) {
-    this.em.trigger(ev, ...data);
-    this.getAll().trigger(ev, ...data);
-  }
-
-  __trgCustom() {
-    const bhv = this.__getBehaviour();
-    const custom = this.getConfig().custom;
-
-    if (!bhv.container && !(custom as any).open) {
-      return;
-    }
-    this.em.trigger(this.events.custom, this.__customData());
-  }
-
-  __customData() {
-    const bhv = this.__getBehaviour();
-    return {
-      am: this as AssetManager,
-      open: this.isOpen(),
-      assets: this.getAll().models,
-      types: bhv.types || [],
-      container: bhv.container,
-      close: () => this.close(),
-      remove: (asset: string | Asset, opts?: Record<string, any>) => this.remove(asset, opts),
-      select: (asset: Asset, complete: boolean) => {
-        const res = this.add(asset);
-        isFunction(bhv.select) && bhv.select(res, complete);
-      },
-      // extra
-      options: bhv.options || {},
-    };
   }
 
   __behaviour(opts = {}) {

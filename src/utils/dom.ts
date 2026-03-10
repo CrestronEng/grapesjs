@@ -37,7 +37,7 @@ export const attrUp = (el?: HTMLElement, attrs: ObjectAny = {}) =>
   el && el.setAttribute && each(attrs, (value, key) => el.setAttribute(key, value));
 
 export const isVisible = (el?: HTMLElement) => {
-  return el && !!(el.offsetWidth || el.offsetHeight || el.getClientRects?.().length);
+  return el && !!(el.offsetWidth || el.offsetHeight || el.getClientRects().length);
 };
 
 export const empty = (node: HTMLElement) => {
@@ -100,7 +100,7 @@ export const createCustomEvent = (e: any, cls: any) => {
   oEvent._parentEvent = e;
   if (type.indexOf('key') === 0) {
     oEvent.keyCodeVal = e.keyCode;
-    ['keyCode', 'which'].forEach((prop) => {
+    ['keyCode', 'which'].forEach(prop => {
       Object.defineProperty(oEvent, prop, {
         get() {
           return this.keyCodeVal;
@@ -118,7 +118,7 @@ export const createCustomEvent = (e: any, cls: any) => {
  */
 export const appendVNodes = (node: HTMLElement, vNodes: vNode | vNode[] = []) => {
   const vNodesArr = Array.isArray(vNodes) ? vNodes : [vNodes];
-  vNodesArr.forEach((vnode) => {
+  vNodesArr.forEach(vnode => {
     const tag = vnode[KEY_TAG] || 'div';
     const attr = vnode[KEY_ATTR] || {};
     const el = document.createElement(tag);
@@ -205,32 +205,17 @@ export const hasCtrlKey = (ev: WheelEvent) => ev.ctrlKey;
 
 export const hasModifierKey = (ev: WheelEvent) => hasCtrlKey(ev) || ev.metaKey;
 
-// Ref: https://stackoverflow.com/a/10162353
-export const doctypeToString = (dt?: DocumentType | null) => {
-  if (!dt) return '';
-  const { name, publicId, systemId } = dt;
-  const pubId = publicId ? ` PUBLIC "${publicId}"` : '';
-  const sysId = !publicId && systemId ? ` SYSTEM "${systemId}"` : '';
-  return `<!DOCTYPE ${name}${pubId}${sysId}>`;
-};
-
-export const attrToString = (attrs: ObjectAny = {}) => {
-  const res: string[] = [];
-  each(attrs, (value, key) => res.push(`${key}="${value}"`));
-  return res.join(' ');
-};
-
 export const on = <E extends Event = Event>(
   el: EventTarget | EventTarget[],
   ev: string,
   fn: (ev: E) => void,
-  opts?: boolean | AddEventListenerOptions,
+  opts?: boolean | AddEventListenerOptions
 ) => {
   const evs = ev.split(/\s+/);
   const els = isArray(el) ? el : [el];
 
-  evs.forEach((ev) => {
-    els.forEach((el) => el?.addEventListener(ev, fn as EventListener, opts));
+  evs.forEach(ev => {
+    els.forEach(el => el?.addEventListener(ev, fn as EventListener, opts));
   });
 };
 
@@ -238,12 +223,12 @@ export const off = <E extends Event = Event>(
   el: EventTarget | EventTarget[],
   ev: string,
   fn: (ev: E) => void,
-  opts?: boolean | AddEventListenerOptions,
+  opts?: boolean | AddEventListenerOptions
 ) => {
   const evs = ev.split(/\s+/);
   const els = isArray(el) ? el : [el];
 
-  evs.forEach((ev) => {
-    els.forEach((el) => el?.removeEventListener(ev, fn as EventListener, opts));
+  evs.forEach(ev => {
+    els.forEach(el => el?.removeEventListener(ev, fn as EventListener, opts));
   });
 };

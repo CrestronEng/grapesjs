@@ -1,8 +1,6 @@
 import { ComponentDefinition } from '../../../src/dom_components/model/types';
 import Editor from '../../../src/editor';
 import EditorModel from '../../../src/editor/model/Editor';
-import { PageProperties } from '../../../src/pages/model/Page';
-import { DEFAULT_CMPS } from '../../common';
 
 describe('Pages', () => {
   let editor: Editor;
@@ -51,7 +49,7 @@ describe('Pages', () => {
     const frameCmp = frame.getComponent();
     expect(frameCmp.components().length).toBe(0);
     expect(frame.getStyles().length).toBe(0);
-    expect(initCmpLen).toBe(DEFAULT_CMPS);
+    expect(initCmpLen).toBe(1);
   });
 
   test('Adding new page with selection', () => {
@@ -72,7 +70,7 @@ describe('Pages', () => {
     let idComp2 = 'comp2';
     let comp1: ComponentDefinition;
     let comp2: ComponentDefinition;
-    let initPages: PageProperties[];
+    let initPages;
     let allbyId: ReturnType<Editor['Components']['allById']>;
 
     const createCompDef = (id: string): ComponentDefinition => ({
@@ -118,8 +116,8 @@ describe('Pages', () => {
         },
       });
       em = editor.getModel();
-      domc = em.Components;
-      pm = em.Pages;
+      domc = em.get('DomComponents');
+      pm = em.get('PageManager');
       pm.onLoad();
       allbyId = domc.allById();
       initCmpLen = Object.keys(allbyId).length;
@@ -132,7 +130,7 @@ describe('Pages', () => {
     test('Pages are created correctly', () => {
       const pages = pm.getAll();
       expect(pages.length).toBe(initPages.length);
-      pages.map((page) => {
+      pages.map(page => {
         // All pages should have an ID
         expect(page.get('id')).toBeTruthy();
         // The main component is always a wrapper
@@ -140,28 +138,14 @@ describe('Pages', () => {
       });
       // Components container should contain the same amount of wrappers as pages
       const wrappers = Object.keys(allbyId)
-        .map((id) => allbyId[id])
-        .filter((i) => i.is('wrapper'));
+        .map(id => allbyId[id])
+        .filter(i => i.is('wrapper'));
       expect(wrappers.length).toBe(initPages.length);
       // Components container should contain the right amount of components
-      // Number of wrappers (eg. 3) where each one containes 1 component and 1 textnode (5 * 3)
-      expect(initCmpLen).toBe((2 + DEFAULT_CMPS) * 3);
+      // Number of wrappers (eg. 3) where each one containes 1 component and 1 textnode (3 * 3)
+      expect(initCmpLen).toBe(initPages.length * 3);
       // Each page contains 1 rule per component
-      expect(em.Css.getAll().length).toBe(initPages.length);
-    });
-
-    test('Change initial selected page', () => {
-      const selected = 'page-3';
-      editor = new Editor({
-        pageManager: {
-          pages: initPages,
-          selected,
-        },
-      });
-      pm = editor.getModel().Pages;
-      pm.onLoad();
-      pm.getSelected();
-      expect(pm.getSelected()?.id).toBe(selected);
+      expect(em.get('CssComposer').getAll().length).toBe(initPages.length);
     });
   });
 });

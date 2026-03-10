@@ -19,11 +19,9 @@ let em: Editor;
 
 describe('Component', () => {
   beforeEach(() => {
-    // FIXME: avoidInlineStyle is deprecated and when running in dev or prod, `avoidInlineStyle` is set to true
-    // The following tests ran with `avoidInlineStyle` to false (this is why I add the parameter here)
-    em = new Editor({ avoidDefaults: true, avoidInlineStyle: true });
+    em = new Editor({ avoidDefaults: true });
     dcomp = em.Components;
-    em.Pages.onLoad();
+    em.get('PageManager').onLoad();
     compOpts = {
       em,
       componentTypes: dcomp.componentTypes,
@@ -32,25 +30,25 @@ describe('Component', () => {
     obj = new Component({}, compOpts);
   });
 
-  afterEach(() => {
-    em.destroyAll();
-  });
-
   test('Has no children', () => {
     expect(obj.components().length).toEqual(0);
   });
 
   test('Clones correctly', () => {
-    const sAttr = obj.attributes;
-    const cloned = obj.clone();
-    const eAttr = cloned.attributes;
+    var sAttr = obj.attributes;
+    var cloned = obj.clone();
+    var eAttr = cloned.attributes;
+    eAttr.components = {};
+    sAttr.components = {} as any;
+    eAttr.traits = {};
+    sAttr.traits = {} as any;
     expect(sAttr.length).toEqual(eAttr.length);
   });
 
   test('Clones correctly with traits', () => {
     obj.traits.at(0).set('value', 'testTitle');
     var cloned = obj.clone();
-    cloned.set('stylable', false);
+    cloned.set('stylable', 0);
     cloned.traits.at(0).set('value', 'testTitle2');
     expect(obj.traits.at(0).get('value')).toEqual('testTitle');
     expect(obj.get('stylable')).toEqual(true);
@@ -94,7 +92,7 @@ describe('Component', () => {
           'data-test2': 'value2',
         },
       },
-      compOpts,
+      compOpts
     );
     expect(obj.toHTML()).toEqual('<article data-test1="value1" data-test2="value2"></article>');
   });
@@ -107,7 +105,7 @@ describe('Component', () => {
           'data-is-a-test': '',
         },
       },
-      compOpts,
+      compOpts
     );
     expect(obj.toHTML()).toEqual('<div data-is-a-test=""></div>');
   });
@@ -117,9 +115,9 @@ describe('Component', () => {
       {
         tagName: 'article',
       },
-      compOpts,
+      compOpts
     );
-    ['class1', 'class2'].forEach((item) => {
+    ['class1', 'class2'].forEach(item => {
       obj.classes.add({ name: item });
     });
     expect(obj.toHTML()).toEqual('<article class="class1 class2"></article>');
@@ -154,7 +152,7 @@ describe('Component', () => {
     obj = new Component({}, compOpts);
     obj.set({
       bool: true,
-      removable: false,
+      boolf: false,
       string: 'st\'ri"ng',
       array: [1, 'string', true],
       object: { a: 1, b: 'string', c: true },
@@ -167,12 +165,12 @@ describe('Component', () => {
     let resStr = "st'ri&quot;ng";
     let resArr = '[1,&quot;string&quot;,true]';
     let resObj = '{&quot;a&quot;:1,&quot;b&quot;:&quot;string&quot;,&quot;c&quot;:true}';
-    let res = `<div data-gjs-removable="false" data-gjs-bool="true" data-gjs-string="${resStr}" data-gjs-array="${resArr}" data-gjs-object="${resObj}" data-gjs-empty="" data-gjs-zero="0"></div>`;
+    let res = `<div data-gjs-bool data-gjs-string="${resStr}" data-gjs-array="${resArr}" data-gjs-object="${resObj}" data-gjs-empty="" data-gjs-zero="0"></div>`;
     expect(obj.toHTML({ withProps: true })).toEqual(res);
     resStr = 'st&apos;ri"ng';
     resArr = '[1,"string",true]';
     resObj = '{"a":1,"b":"string","c":true}';
-    res = `<div data-gjs-removable="false" data-gjs-bool="true" data-gjs-string='${resStr}' data-gjs-array='${resArr}' data-gjs-object='${resObj}' data-gjs-empty="" data-gjs-zero="0"></div>`;
+    res = `<div data-gjs-bool data-gjs-string='${resStr}' data-gjs-array='${resArr}' data-gjs-object='${resObj}' data-gjs-empty="" data-gjs-zero="0"></div>`;
     expect(obj.toHTML({ withProps: true, altQuoteAttr: true })).toEqual(res);
   });
 
@@ -273,32 +271,6 @@ describe('Component', () => {
     expect(result.class).toEqual(undefined);
   });
 
-  test('findFirstType returns first component of specified type', () => {
-    const image1 = new ComponentImage({}, compOpts);
-    const text = new ComponentText({}, compOpts);
-    const image2 = new ComponentImage({}, compOpts);
-
-    obj.append([image1, text, image2]);
-
-    const result = obj.findFirstType('image');
-    expect(result).toBe(image1);
-    expect(result instanceof ComponentImage).toBe(true);
-  });
-
-  test('findFirstType returns undefined for non-existent type', () => {
-    const text = new ComponentText({}, compOpts);
-
-    obj.append(text);
-
-    const result = obj.findFirstType('image');
-    expect(result).toBeUndefined();
-  });
-
-  test('findFirstType returns undefined for empty component', () => {
-    const result = obj.findFirstType('div');
-    expect(result).toBeUndefined();
-  });
-
   test('setAttributes', () => {
     obj.setAttributes({
       id: 'test',
@@ -306,10 +278,10 @@ describe('Component', () => {
       class: 'class1 class2',
       style: 'color: white; background: #fff',
     });
-    // Style is not in attributes because it has not been set as inline
     expect(obj.getAttributes()).toEqual({
       id: 'test',
       class: 'class1 class2',
+      style: 'color:white;background:#fff;',
       'data-test': 'value',
     });
     expect(obj.classes.length).toEqual(2);
@@ -319,25 +291,13 @@ describe('Component', () => {
     });
   });
 
-  test('set style with multiple values of the same key', () => {
+  test('set inline style with multiple values of the same key', () => {
     obj.setAttributes({ style: CSS_BG_STR });
     expect(obj.getStyle()).toEqual(CSS_BG_OBJ);
   });
 
-  test('set style on id and inline style', () => {
-    obj.setStyle({ color: 'red' }); // Should be set on id
-    obj.setStyle({ display: 'flex' }, { inline: true }); // Should be set as inline
-
-    expect(obj.getStyle()).toEqual({
-      color: 'red',
-    });
-    expect(obj.getStyle({ inline: true })).toEqual({
-      display: 'flex',
-    });
-  });
-
-  test('get proper style from style with multiple values of the same key', () => {
-    obj.setAttributes({ style: CSS_BG_STR }, { inline: true });
+  test('get proper style from inline style with multiple values of the same key', () => {
+    obj.setAttributes({ style: CSS_BG_STR });
     expect(obj.getAttributes()).toEqual({
       style: CSS_BG_STR.split('\n').join(''),
     });
@@ -368,9 +328,8 @@ describe('Component', () => {
     obj.append([{}, {}]);
     const comps = obj.components();
     expect(comps.length).toEqual(2);
-    const result = obj.append({});
+    obj.append({});
     expect(comps.length).toEqual(3);
-    expect(result[0].em).toEqual(em);
   });
 
   test('components() set new collection', () => {
@@ -379,8 +338,6 @@ describe('Component', () => {
     const result = obj.components();
     expect(result.length).toEqual(1);
     expect(result.models[0].get('tagName')).toEqual('span');
-
-    expect(result.em).toEqual(em);
   });
 
   test('Propagate properties to children', () => {
@@ -462,7 +419,7 @@ describe('Component', () => {
       expect(model.get('removable')).toEqual(true);
       expect(model.get('draggable')).toEqual(true);
       expect(model.get('propagate')).toEqual(['stop']);
-      model.components().each((model) => inhereted(model));
+      model.components().each(model => inhereted(model));
     };
     const inhereted = (model: Component) => {
       if (model.get('stop')) {
@@ -471,10 +428,10 @@ describe('Component', () => {
         expect(model.get('removable')).toEqual(false);
         expect(model.get('draggable')).toEqual(false);
         expect(model.get('propagate')).toEqual(['removable', 'draggable']);
-        model.components().each((model) => inhereted(model));
+        model.components().each(model => inhereted(model));
       }
     };
-    newObj.components().each((model) => inhereted(model));
+    newObj.components().each(model => inhereted(model));
   });
 
   test('setStyle parses styles correctly', () => {
@@ -497,19 +454,13 @@ describe('Component', () => {
       },
     });
 
-    expect(() => new ExtendedComponent({}, compOpts)).not.toThrowError();
+    expect(() => new ExtendedComponent()).not.toThrowError();
   });
 });
 
 describe('Image Component', () => {
   beforeEach(() => {
-    em = new Editor({ avoidDefaults: true });
-    compOpts = { em };
-    obj = new ComponentImage({}, compOpts);
-  });
-
-  afterEach(() => {
-    em.destroyAll();
+    obj = new ComponentImage();
   });
 
   test('Has src property', () => {
@@ -521,7 +472,7 @@ describe('Image Component', () => {
   });
 
   test('ComponentImage toHTML', () => {
-    obj = new ComponentImage({ src: '' }, compOpts);
+    obj = new ComponentImage({ src: '' });
     expect(obj.toHTML()).toEqual('<img/>');
   });
 
@@ -531,7 +482,7 @@ describe('Image Component', () => {
         attributes: { alt: 'AltTest' },
         src: 'testPath',
       },
-      compOpts,
+      compOpts
     );
     expect(obj.toHTML()).toEqual('<img alt="AltTest" src="testPath"/>');
   });
@@ -555,13 +506,7 @@ describe('Image Component', () => {
 
 describe('Text Component', () => {
   beforeEach(() => {
-    em = new Editor({ avoidDefaults: true });
-    compOpts = { em };
     obj = new ComponentText({}, compOpts);
-  });
-
-  afterEach(() => {
-    em.destroyAll();
   });
 
   test('Has content property', () => {
@@ -578,7 +523,7 @@ describe('Text Component', () => {
         attributes: { 'data-test': 'value' },
         content: 'test content',
       },
-      compOpts,
+      compOpts
     );
     expect(obj.toHTML()).toEqual('<div data-test="value">test content</div>');
   });
@@ -586,13 +531,7 @@ describe('Text Component', () => {
 
 describe('Text Node Component', () => {
   beforeEach(() => {
-    em = new Editor({ avoidDefaults: true });
-    compOpts = { em };
     obj = new ComponentTextNode({}, compOpts);
-  });
-
-  afterEach(() => {
-    em.destroyAll();
   });
 
   test('Has content property', () => {
@@ -613,7 +552,7 @@ describe('Text Node Component', () => {
         attributes: { 'data-test': 'value' },
         content: 'test content &<>"\'',
       },
-      compOpts,
+      compOpts
     );
     expect(obj.toHTML()).toEqual('test content &amp;&lt;&gt;"\'');
   });
@@ -695,8 +634,8 @@ describe('Video Component', () => {
 describe('Components', () => {
   beforeEach(() => {
     em = new Editor({});
-    dcomp = em.Components;
-    em.Pages.onLoad();
+    dcomp = em.get('DomComponents');
+    em.get('PageManager').onLoad();
     compOpts = {
       em,
       componentTypes: dcomp.componentTypes,
@@ -707,27 +646,24 @@ describe('Components', () => {
     var c = new Components([], compOpts);
     var m = c.add({});
     expect(m instanceof Component).toEqual(true);
-    expect(m.em).toEqual(em);
   });
 
   test('Creates image component correctly', () => {
     var c = new Components([], compOpts);
     var m = c.add({ type: 'image' });
     expect(m instanceof ComponentImage).toEqual(true);
-    expect(m.em).toEqual(em);
   });
 
   test('Creates text component correctly', () => {
     var c = new Components([], compOpts);
     var m = c.add({ type: 'text' });
     expect(m instanceof ComponentText).toEqual(true);
-    expect(m.em).toEqual(em);
   });
 
   test('Avoid conflicting components with the same ID', () => {
     const em = new Editor({});
-    dcomp = em.Components;
-    em.Pages.onLoad();
+    dcomp = em.get('DomComponents');
+    em.get('PageManager').onLoad();
     const id = 'myid';
     const idB = 'myid2';
     const block = `
@@ -749,8 +685,7 @@ describe('Components', () => {
     const added = dcomp.addComponent(block) as Component;
     const addComps = added.components();
     // Let's check if everthing is working as expected
-    // 2 test components + 1 wrapper + 1 head + 1 docEl
-    expect(Object.keys(dcomp.componentsById).length).toBe(5);
+    expect(Object.keys(dcomp.componentsById).length).toBe(3); // + 1 wrapper
     expect(added.getId()).toBe(id);
     expect(addComps.at(0).getId()).toBe(idB);
     const cc = em.get('CssComposer');

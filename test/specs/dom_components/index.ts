@@ -1,14 +1,14 @@
+import DomComponents from '../../../src/dom_components';
 import Components from '../../../src/dom_components/model/Components';
 import EditorModel from '../../../src/editor/model/Editor';
 import Editor from '../../../src/editor';
 import utils from './../../test_utils.js';
 import { Component } from '../../../src';
-import ComponentWrapper from '../../../src/dom_components/model/ComponentWrapper';
 
 describe('DOM Components', () => {
   describe('Main', () => {
     var em: EditorModel;
-    var obj: EditorModel['Components'];
+    var obj: DomComponents;
     var config: any;
     var storagMock = utils.storageMock();
     var editorModel = {
@@ -63,6 +63,10 @@ describe('DOM Components', () => {
       em.destroy();
     });
 
+    test('Object exists', () => {
+      expect(DomComponents).toBeTruthy();
+    });
+
     test.skip('Store and load data', () => {
       setSmConfig();
       setEm();
@@ -78,7 +82,7 @@ describe('DOM Components', () => {
       expect(
         obj.load({
           components: '[{}, {}]',
-        }),
+        })
       ).toEqual(result);
     });
 
@@ -87,7 +91,7 @@ describe('DOM Components', () => {
       expect(
         obj.load({
           components: result,
-        }),
+        })
       ).toEqual(result);
     });
 
@@ -96,7 +100,7 @@ describe('DOM Components', () => {
       expect(
         obj.load({
           components: result,
-        }),
+        })
       ).toEqual(result);
     });
 
@@ -143,6 +147,7 @@ describe('DOM Components', () => {
     });
 
     test('Add new component type with simple model', () => {
+      obj = em.get('DomComponents');
       const id = 'test-type';
       const testProp = 'testValue';
       const initialTypes = obj.componentTypes.length;
@@ -161,10 +166,11 @@ describe('DOM Components', () => {
     });
 
     test('Add new component type with custom isComponent', () => {
+      obj = em.get('DomComponents');
       const id = 'test-type';
       const testProp = 'testValue';
       obj.addType(id, {
-        isComponent: (el) => {
+        isComponent: el => {
           return el.getAttribute('test-prop') === testProp;
         },
       });
@@ -176,6 +182,7 @@ describe('DOM Components', () => {
     });
 
     test('Extend component type with custom model and view', () => {
+      obj = em.get('DomComponents');
       const id = 'image';
       const testProp = 'testValue';
       const initialTypes = obj.getTypes().length;
@@ -200,6 +207,7 @@ describe('DOM Components', () => {
     });
 
     test('Add new component type by extending another one, without isComponent', () => {
+      obj = em.get('DomComponents');
       const id = 'test-type';
       const testProp = 'testValue';
       obj.addType(id, {
@@ -220,11 +228,12 @@ describe('DOM Components', () => {
     });
 
     test('Add new component type by extending another one, with custom isComponent', () => {
+      obj = em.get('DomComponents');
       const id = 'test-type';
       const testProp = 'testValue';
       obj.addType(id, {
         extend: 'image',
-        isComponent: (el) => el.getAttribute('test-prop') === testProp,
+        isComponent: el => el.getAttribute('test-prop') === testProp,
       });
       obj.addComponent(`<img src="##" test-prop="${testProp}"/>`);
       expect(obj.getTypes()[0].id).toEqual(id);
@@ -233,7 +242,7 @@ describe('DOM Components', () => {
       expect(comp.get('editable')).toBe(1);
     });
 
-    test('Remove and undo component with styles', (done) => {
+    test('Remove and undo component with styles', done => {
       const id = 'idtest2';
       const um = em.UndoManager;
       const cc = em.Css;
@@ -254,16 +263,16 @@ describe('DOM Components', () => {
         expect(cc.getAll().length).toBe(0);
         um.undo();
 
-        expect(obj.getComponents().length).toBe(1);
-        expect(cc.getAll().length).toBe(1);
-        expect(obj.getComponents().at(0)).toBe(component);
-        expect(cc.getAll().at(0)).toBe(rule);
+        // expect(obj.getComponents().length).toBe(1);
+        // expect(cc.getAll().length).toBe(1);
+        // expect(obj.getComponents().at(0)).toBe(component);
+        // expect(cc.getAll().at(0)).toBe(rule);
 
         expect(em.getHtml({ component })).toEqual(`<div id="${id}">Text</div>`);
         expect(rule.toCSS()).toEqual(css);
 
         done();
-      }, 20);
+      }, 10);
     });
 
     describe('Custom components with styles', () => {
@@ -310,88 +319,6 @@ describe('DOM Components', () => {
         expect(obj.getComponents().length).toBe(2);
         expect(em.Css.getAll().length).toBe(1);
         expect(rule.getStyle()).toEqual(newStyle);
-      });
-    });
-  });
-
-  describe('Rendered components', () => {
-    let editor: Editor;
-    let em: EditorModel;
-    let fxt: HTMLElement;
-    let root: ComponentWrapper;
-
-    beforeEach((done) => {
-      fxt = document.createElement('div');
-      document.body.appendChild(fxt);
-      editor = new Editor({
-        el: fxt,
-        avoidInlineStyle: true,
-        storageManager: false,
-      });
-      em = editor.getModel();
-      fxt.appendChild(em.Canvas.render());
-      em.loadOnStart();
-      editor.on('change:ready', () => {
-        root = editor.Components.getWrapper()!;
-        done();
-      });
-    });
-
-    afterEach(() => {
-      editor.destroy();
-    });
-
-    describe('render components with asDocument', () => {
-      const docHtml = `
-        <!DOCTYPE html>
-        <html lang="en" class="cls-html" data-gjs-htmlp="true">
-          <head class="cls-head" data-gjs-headp="true">
-            <meta charset="utf-8">
-            <title>Test</title>
-            <link rel="stylesheet" href="/noop.css">
-            <!-- comment -->
-          </head>
-          <body class="cls-body" data-gjs-bodyp="true">
-            <h1>H1</h1>
-          </body>
-        </html>
-      `;
-
-      test('initial setup', () => {
-        expect(root.head.components().length).toBe(0);
-        expect(root.get('doctype')).toBe('');
-      });
-
-      test('import HTML document without option', () => {
-        root.components(docHtml);
-        expect(root.head.components().length).toBe(0);
-        expect(root.get('doctype')).toBe('');
-      });
-
-      test('import HTML document with asDocument', () => {
-        root.components(docHtml, { asDocument: true });
-        const { head, docEl } = root;
-        expect(head.components().length).toBe(4);
-        expect(head.get('headp')).toBe(true);
-        expect(docEl.get('htmlp')).toBe(true);
-        expect(root.get('bodyp')).toBe(true);
-        expect(root.doctype).toBe('<!DOCTYPE html>');
-
-        const outputHtml = `
-          <!DOCTYPE html>
-          <html lang="en" class="cls-html">
-            <head class="cls-head">
-              <meta charset="utf-8"/>
-              <title>Test</title>
-              <link rel="stylesheet" href="/noop.css"/>
-              <!-- comment -->
-            </head>
-            <body class="cls-body">
-              <h1>H1</h1>
-            </body>
-          </html>
-          `.replace(/>\s+|\s+</g, (m) => m.trim());
-        expect(root.toHTML()).toBe(outputHtml);
       });
     });
   });

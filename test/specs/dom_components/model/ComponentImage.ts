@@ -12,7 +12,7 @@ describe('ComponentImage', () => {
   beforeEach(() => {
     em = new Editor({ avoidDefaults: true });
     dcomp = em.Components;
-    em.Pages.onLoad();
+    em.get('PageManager').onLoad();
     compOpts = {
       em,
       componentTypes: dcomp.componentTypes,
@@ -42,12 +42,12 @@ describe('ComponentImage', () => {
   });
 
   describe('.getAttrToHTML', () => {
-    let getSrcResultSpy: ReturnType<typeof jest.spyOn>;
+    let getSrcResultSpy: ReturnType<typeof spyOn>;
     const fakeAttributes = {};
 
     beforeEach(() => {
-      jest.spyOn(Component.prototype, 'getAttrToHTML').mockReturnValue(fakeAttributes);
-      getSrcResultSpy = jest.spyOn(componentImage, 'getSrcResult');
+      spyOn(Component.prototype, 'getAttrToHTML').and.returnValue(fakeAttributes);
+      getSrcResultSpy = spyOn(componentImage, 'getSrcResult');
     });
 
     test('it should fill the `src` property with the result of `getSrcResult` if defined', () => {
@@ -56,7 +56,7 @@ describe('ComponentImage', () => {
       expect(attributes).toEqual(fakeAttributes);
 
       let fakeSrcResult = 'fakeSrcResult';
-      getSrcResultSpy.mockReturnValue(fakeSrcResult);
+      getSrcResultSpy.and.returnValue(fakeSrcResult);
       attributes = componentImage.getAttrToHTML();
       expect(getSrcResultSpy).toHaveBeenCalledTimes(2);
       expect(attributes).toEqual({ src: fakeSrcResult });

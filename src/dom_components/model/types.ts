@@ -1,8 +1,8 @@
 import Frame from '../../canvas/model/Frame';
-import { AddOptions, Nullable, OptionAsDocument } from '../../common';
+import { Nullable } from '../../common';
 import EditorModel from '../../editor/model/Editor';
 import Selectors from '../../selector_manager/model/Selectors';
-import { TraitProperties } from '../../trait_manager/types';
+import { TraitProperties } from '../../trait_manager/model/Trait';
 import Traits from '../../trait_manager/model/Traits';
 import { ResizerOptions } from '../../utils/Resizer';
 import { DomComponentsConfig } from '../config/config';
@@ -10,23 +10,15 @@ import ComponentView from '../view/ComponentView';
 import Component from './Component';
 import Components from './Components';
 import { ToolbarButtonProps } from './ToolbarButton';
-import { ParseNodeOptions } from '../../parser/config/config';
 
 export type DragMode = 'translate' | 'absolute' | '';
 
 export type DraggableDroppableFn = (source: Component, target: Component, index?: number) => boolean | void;
 
-export interface AddComponentsOption extends AddOptions, OptionAsDocument {}
-
-interface ComponentWithCheck<C extends Component> {
-  new (props: any, opt: ComponentOptions): C;
-  isComponent(node: HTMLElement, opts?: ParseNodeOptions): ComponentDefinitionDefined | undefined | boolean;
-}
-
-export interface ComponentStackItem<C extends Component = Component, CV extends ComponentView<C> = ComponentView<C>> {
+export interface ComponentStackItem {
   id: string;
-  model: ComponentWithCheck<C>;
-  view: new (opt: any) => CV;
+  model: typeof Component;
+  view: typeof ComponentView<any>;
 }
 
 /**
@@ -65,14 +57,6 @@ export interface ComponentDelegateProps {
    * }
    */
   select?: (cmp: Component) => Component | Nullable;
-  /**
-   * Delegate another component as a layer in the LayerManager.
-   * @example
-   * delegate: {
-   *  layer: (cmp) => cmp.findType('other-type')[0],
-   * }
-   */
-  layer?: (cmp: Component) => Component | Nullable;
 }
 
 export interface ComponentProperties {
@@ -148,7 +132,7 @@ export interface ComponentProperties {
    */
   copyable?: boolean;
   /**
-   * Indicates if it's possible to resize the component. It's also possible to pass an object as [options for the Resizer](https://github.com/GrapesJS/grapesjs/blob/master/src/utils/Resizer.ts). Default: `false`
+   * Indicates if it's possible to resize the component. It's also possible to pass an object as [options for the Resizer](https://github.com/GrapesJS/grapesjs/blob/master/src/utils/Resizer.js). Default: `false`
    */
   resizable?: boolean | ResizerOptions;
   /**
@@ -276,11 +260,11 @@ export interface ComponentModelProperties extends ComponentProperties {
   [key: string]: any;
 }
 
-export type ComponentAddType = Component | ComponentDefinition | ComponentDefinitionDefined | string;
+type ComponentAddType = Component | ComponentDefinition | ComponentDefinitionDefined | string;
 
 export type ComponentAdd = ComponentAddType | ComponentAddType[];
 
-export interface ToHTMLOptions extends OptionAsDocument {
+export type ToHTMLOptions = {
   /**
    * Custom tagName.
    */
@@ -297,20 +281,15 @@ export interface ToHTMLOptions extends OptionAsDocument {
   altQuoteAttr?: boolean;
 
   /**
-   * Keep inline style set intentionally by users with `setStyle({}, { inline: true })`
-   */
-  keepInlineStyle?: boolean;
-
-  /**
    * You can pass an object of custom attributes to replace with the current ones
    * or you can even pass a function to generate attributes dynamically.
    */
   attributes?: Record<string, any> | ((component: Component, attr: Record<string, any>) => Record<string, any>);
-}
+};
 
 export interface ComponentOptions {
-  em: EditorModel;
-  config: DomComponentsConfig;
+  em?: EditorModel;
+  config?: DomComponentsConfig;
   frame?: Frame;
   temporary?: boolean;
   avoidChildren?: boolean;

@@ -48,11 +48,11 @@ export default class TraitView extends View<Trait> {
     const { type } = model.attributes;
     this.config = config;
     this.em = config.em;
-    this.pfx = config.stylePrefix || '';
     this.ppfx = config.pStylePrefix || '';
+    this.pfx = this.ppfx + config.stylePrefix || '';
     this.target = target;
-    this.className = this.pfx + 'trait';
-    this.clsField = `${this.ppfx}field ${this.ppfx}field-${type}`;
+    const { ppfx } = this;
+    this.clsField = `${ppfx}field ${ppfx}field-${type}`;
     const evToListen: [string, any][] = [
       ['change:value', this.onValueChange],
       ['remove', this.removeView],
@@ -65,7 +65,7 @@ export default class TraitView extends View<Trait> {
     this.listenTo(model, 'change:label', this.render);
     this.listenTo(model, 'change:placeholder', this.rerender);
     this.events = {};
-    eventCapture.forEach((event) => (this.events[event] = 'onChange'));
+    eventCapture.forEach(event => (this.events[event] = 'onChange'));
     this.delegateEvents();
     this.init();
   }
@@ -212,7 +212,19 @@ export default class TraitView extends View<Trait> {
   }
 
   getModelValue() {
-    return this.model.getValue();
+    let value;
+    const model = this.model;
+    const target = this.target;
+    const name = model.getName();
+
+    if (model.get('changeProp')) {
+      value = target.get(name);
+    } else {
+      const attrs = target.get('attributes')!;
+      value = model.get('value') || attrs[name];
+    }
+
+    return !isUndefined(value) ? value : '';
   }
 
   getElInput() {

@@ -251,7 +251,8 @@ describe('ParserCss', () => {
     expect(obj.parse(str)).toEqual([result]);
   });
 
-  test('Parse rule with a keyframes at-rule', () => {
+  // Can't test keyframes https://github.com/NV/CSSOM/issues/95
+  test.skip('Parse rule with a keyframes at-rule', () => {
     var str = `@keyframes {
       from {opacity: 0;}
       to {opacity: 1;}
@@ -410,7 +411,7 @@ describe('ParserCss', () => {
         atRule: 'font-face',
         selectors: '',
         style: style,
-      }),
+      })
     ).toEqual([
       {
         style: style,
@@ -429,7 +430,7 @@ describe('ParserCss', () => {
         params: 'name',
         selectors: 'from',
         style: style,
-      }),
+      })
     ).toEqual([
       {
         selectors: [],
@@ -449,7 +450,7 @@ describe('ParserCss', () => {
         params: 'screen and (min-width: 480px)',
         selectors: '.class-test.class2:hover, div > span ',
         style,
-      }),
+      })
     ).toEqual([
       {
         atRuleType: 'media',
@@ -468,7 +469,7 @@ describe('ParserCss', () => {
       obj.checkNode({
         selectors: '#main:hover',
         style,
-      }),
+      })
     ).toEqual([
       {
         selectors: ['#main'],
@@ -487,7 +488,7 @@ describe('ParserCss', () => {
       obj.checkNode({
         selectors: '.class1, .class1.class2:hover, div > .test:hover, span.test2',
         style,
-      }),
+      })
     ).toEqual([
       {
         selectors: ['class1'],
@@ -511,7 +512,7 @@ describe('ParserCss', () => {
       obj.checkNode({
         selectors: ':root',
         style,
-      }),
+      })
     ).toEqual([
       {
         selectors: [],

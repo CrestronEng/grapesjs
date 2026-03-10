@@ -54,6 +54,7 @@ export default class CategoryView extends View<Category> {
     this.iconClass = `${pfx}caret-icon`;
     this.activeClass = `${pfx}open`;
     this.className = `${pfx}${catName}-category`;
+    //this.events[`click .${pfx}title`] = 'toggle';
     this.listenTo(this.model, 'change:open', this.updateVisibility);
     this.model.view = this;
   }

@@ -98,14 +98,14 @@ export default class LayerView extends View<Layer> {
 
   updateLabel() {
     const { model } = this;
-    const label = model.getLabel();
-    this.getLabelEl().innerHTML = label;
+    // const label = model.getLabel();
+    this.getLabelEl().innerHTML = this.getLabelEl().innerText;
 
     if (model.hasPreview()) {
       const prvEl = this.getPreviewEl();
       const style = model.getStylePreview({ number: { min: -3, max: 3 } });
       const styleStr = keys(style)
-        .map((k) => `${k}:${style[k]}`)
+        .map(k => `${k}:${style[k]}`)
         .join(';');
       prvEl.setAttribute('style', styleStr);
     }

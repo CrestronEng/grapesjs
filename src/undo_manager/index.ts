@@ -59,11 +59,11 @@ export default class UndoManagerModule extends Module<UndoManagerConfig & { name
         if (hasUndo) {
           const undoExc = object.get('_undoexc');
           if (isArray(undoExc)) {
-            if (getChanged(object).some((chn) => undoExc.indexOf(chn) >= 0)) return false;
+            if (getChanged(object).some(chn => undoExc.indexOf(chn) >= 0)) return false;
           }
           if (isBoolean(hasUndo)) return true;
           if (isArray(hasUndo)) {
-            if (getChanged(object).some((chn) => hasUndo.indexOf(chn) >= 0)) return true;
+            if (getChanged(object).some(chn => hasUndo.indexOf(chn) >= 0)) return true;
           }
         }
         return false;
@@ -133,9 +133,10 @@ export default class UndoManagerModule extends Module<UndoManagerConfig & { name
     });
 
     this.um.on('undo redo', () => {
-      em.getSelectedAll().map((c) => c.trigger('rerender:layer'));
+      em.trigger('change:canvasOffset');
+      em.getSelectedAll().map(c => c.trigger('rerender:layer'));
     });
-    ['undo', 'redo'].forEach((ev) => this.um.on(ev, () => em.trigger(ev)));
+    ['undo', 'redo'].forEach(ev => this.um.on(ev, () => em.trigger(ev)));
   }
 
   postLoad() {
@@ -321,14 +322,6 @@ export default class UndoManagerModule extends Module<UndoManagerConfig & { name
     return result;
   }
 
-  /**
-   * Execute the provided callback temporarily stopping tracking changes
-   * @param clb The callback to execute with changes tracking stopped
-   * @example
-   * um.skip(() => {
-   *  // Do stuff without tracking
-   * });
-   */
   skip(clb: Function) {
     const isTracking = !!this.um.isTracking();
 
@@ -355,7 +348,7 @@ export default class UndoManagerModule extends Module<UndoManagerConfig & { name
       }
     });
 
-    return Object.keys(result).map((index) => {
+    return Object.keys(result).map(index => {
       const actions = result[index];
       return {
         index: actions[actions.length - 1].index,
@@ -365,7 +358,7 @@ export default class UndoManagerModule extends Module<UndoManagerConfig & { name
             const label = item.options?.action;
             label && res.push(label);
             return res;
-          }, []),
+          }, [])
         ),
       };
     });

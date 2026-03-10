@@ -17,7 +17,7 @@ import { getComponentView, getElement, getUiClass } from '../../utils/mixins';
 import Canvas from '../model/Canvas';
 import Frame from '../model/Frame';
 import { GetBoxRectOptions, ToWorldOption } from '../types';
-import FrameView from './FrameView';
+import FrameView from '../../overrides/canvas/view/FrameView';
 import FramesView from './FramesView';
 
 export interface MarginPaddingOffsets {
@@ -29,10 +29,6 @@ export interface MarginPaddingOffsets {
   paddingRight?: number;
   paddingBottom?: number;
   paddingLeft?: number;
-  borderTopWidth?: number;
-  borderRightWidth?: number;
-  borderBottomWidth?: number;
-  borderLeftWidth?: number;
 }
 
 export type ElementPosOpts = {
@@ -95,7 +91,7 @@ export default class CanvasView extends ModuleView<Canvas> {
     this.className = `${pfx}canvas ${ppfx}no-touch-actions${!em.config.customUI ? ` ${pfx}canvas-bg` : ''}`;
     this.clsUnscale = `${pfx}unscale`;
     this._initFrames();
-    this.listenTo(em, events.refresh, this.clearOff);
+    this.listenTo(em, 'change:canvasOffset', this.clearOff);
     this.listenTo(em, 'component:selected', this.checkSelected);
     this.listenTo(em, `${events.coords} ${events.zoom}`, this.updateFrames);
     this.listenTo(model, 'change:frames', this._onFramesUpdate);
@@ -118,7 +114,7 @@ export default class CanvasView extends ModuleView<Canvas> {
       {
         ...config,
         canvasView: this,
-      },
+      }
     );
   }
 
@@ -127,7 +123,7 @@ export default class CanvasView extends ModuleView<Canvas> {
     const currFrame = this.em.getCurrentFrame();
 
     scroll &&
-      component.views?.forEach((view) => {
+      component.views?.forEach(view => {
         view.frameView === currFrame && view.scrollIntoView(scroll);
       });
   }
@@ -520,12 +516,8 @@ export default class CanvasView extends ModuleView<Canvas> {
       'paddingRight',
       'paddingBottom',
       'paddingLeft',
-      'borderTopWidth',
-      'borderRightWidth',
-      'borderBottomWidth',
-      'borderLeftWidth',
     ];
-    marginPaddingOffsets.forEach((offset) => {
+    marginPaddingOffsets.forEach(offset => {
       result[offset] = parseFloat(styles[offset]) * zoom;
     });
 

@@ -2,8 +2,7 @@ import { extend, isString } from 'underscore';
 import { AddOptions, Collection, Model } from '../../common';
 import EditorModel from '../../editor/model/Editor';
 import Properties from './Properties';
-import Property from './Property';
-import { PropertyTypes } from '..';
+import Property, { PropertyProps } from './Property';
 
 /** @private */
 export interface SectorProperties {
@@ -13,7 +12,7 @@ export interface SectorProperties {
   visible?: boolean;
   buildProps?: string[];
   extendBuilded?: boolean;
-  properties?: PropertyTypes[];
+  properties?: PropertyProps[];
 }
 
 /**
@@ -55,13 +54,13 @@ export default class Sector extends Model<SectorProperties> {
 
     if (!builded) {
       props = this.get('properties')!
-        .map((prop) => (isString(prop) ? this.buildProperties(prop)[0] : prop))
+        .map(prop => (isString(prop) ? this.buildProperties(prop)[0] : prop))
         .filter(Boolean);
     } else {
       props = this.extendProperties(builded);
     }
 
-    props = props.map((prop) => this.checkExtend(prop));
+    props = props.map(prop => this.checkExtend(prop));
 
     const propsModel = new Properties(props, { em });
     propsModel.sector = this;
@@ -129,9 +128,9 @@ export default class Sector extends Model<SectorProperties> {
    * @returns {Array<[Property]>}
    */
   getProperties(opts: { withValue?: boolean; withParentValue?: boolean } = {}) {
-    const props = this.properties;
+    const props = this.get('properties') as any;
     const res = (props.models ? [...props.models] : props) as Property[];
-    return res.filter((prop) => {
+    return res.filter(prop => {
       let result = true;
 
       if (opts.withValue) {
@@ -148,11 +147,12 @@ export default class Sector extends Model<SectorProperties> {
   }
 
   getProperty(id: string): Property | undefined {
-    return this.getProperties().filter((prop) => prop.get('id') === id)[0] || undefined;
+    return this.getProperties().filter(prop => prop.get('id') === id)[0] || undefined;
   }
 
-  addProperty(property: PropertyTypes, opts: AddOptions) {
-    return this.properties.add(this.checkExtend(property), opts);
+  addProperty(property: PropertyProps, opts: AddOptions) {
+    // @ts-ignore
+    return this.get('properties')!.add(this.checkExtend(property), opts);
   }
 
   /**
@@ -163,7 +163,7 @@ export default class Sector extends Model<SectorProperties> {
    * @return {Array<Object>} Final props
    * @private
    */
-  extendProperties(props: PropertyTypes[], moProps?: PropertyTypes[], ex = false) {
+  extendProperties(props: PropertyProps[], moProps?: PropertyProps[], ex = false) {
     var pLen = props.length;
     var mProps = moProps || this.get('properties')!;
     var ext = this.get('extendBuilded');
@@ -195,10 +195,10 @@ export default class Sector extends Model<SectorProperties> {
       }
     }
 
-    return ex ? isolated.filter((i) => i) : props;
+    return ex ? isolated.filter(i => i) : props;
   }
 
-  checkExtend(prop: any): PropertyTypes {
+  checkExtend(prop: any): PropertyProps {
     const { extend, ...rest } = (isString(prop) ? { extend: prop } : prop) || {};
     if (extend) {
       return {
@@ -216,12 +216,12 @@ export default class Sector extends Model<SectorProperties> {
    * @return {Array<Object>}
    * @private
    */
-  buildProperties(props: string | string[]): PropertyTypes[] {
+  buildProperties(props: string | string[]): PropertyProps[] {
     const buildP = props || [];
 
     if (!buildP.length) return [];
 
-    const builtIn = this.em?.Styles.builtIn;
+    const builtIn = this.em?.get('StyleManager').builtIn;
 
     return builtIn?.build(buildP);
   }

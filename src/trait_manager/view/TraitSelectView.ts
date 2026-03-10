@@ -31,7 +31,7 @@ export default class TraitSelectView extends TraitView {
       const values: string[] = [];
       let input = '<select>';
 
-      opts.forEach((el) => {
+      opts.forEach(el => {
         let attrs = '';
         let name, value, style;
 
@@ -41,7 +41,7 @@ export default class TraitSelectView extends TraitView {
         } else {
           name = el.name || el.label || el.value;
           value = `${isUndefined(el.value) ? el.id : el.value}`.replace(/"/g, '&quot;');
-          style = el.style ? (el.style as string).replace(/"/g, '&quot;') : '';
+          style = el.style ? el.style.replace(/"/g, '&quot;') : '';
           attrs += style ? ` style="${style}"` : '';
         }
         const resultName = em.t(`traitManager.traits.options.${propName}.${value}`) || name;

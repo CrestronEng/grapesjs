@@ -46,8 +46,7 @@ import Component from '../dom_components/model/Component';
 import EditorModel from '../editor/model/Editor';
 import { hasWin, isComponent, isDef } from '../utils/mixins';
 import defaults, { LayerManagerConfig } from './config/config';
-import View from './view/ItemView';
-import { ComponentsEvents } from '../dom_components/types';
+import View from '../overrides/navigator/view/ItemView';
 
 interface LayerData {
   name: string;
@@ -75,7 +74,7 @@ const events = {
 const styleOpts = { mediaText: '' };
 
 const propsToListen = ['open', 'status', 'locked', 'custom-name', 'components', 'classes']
-  .map((p) => `${ComponentsEvents.update}:${p}`)
+  .map(p => `component:update:${p}`)
   .join(' ');
 
 const isStyleHidden = (style: any = {}) => {
@@ -127,10 +126,9 @@ export default class LayerManager extends Module<LayerManagerConfig> {
       root = wrapper.find(component)[0] || wrapper;
     }
 
-    const result = this.__getLayerFromComponent(root);
-    this.model.set('root', result);
+    this.model.set('root', root);
 
-    return result;
+    return root;
   }
 
   /**
@@ -153,10 +151,7 @@ export default class LayerManager extends Module<LayerManagerConfig> {
    * console.log(components);
    */
   getComponents(component: Component): Component[] {
-    return component
-      .components()
-      .map((cmp) => this.__getLayerFromComponent(cmp))
-      .filter((cmp: any) => this.__isLayerable(cmp));
+    return component.components().filter((cmp: any) => this.__isLayerable(cmp));
   }
 
   /**
@@ -200,7 +195,7 @@ export default class LayerManager extends Module<LayerManagerConfig> {
       style.display = 'none';
     }
 
-    component.setStyle(style, styleOpts as any);
+    component.setStyle(style, styleOpts);
     this.updateLayer(component);
     this.em.trigger('component:toggled'); // Updates Style Manager #2938
   }
@@ -329,6 +324,7 @@ export default class LayerManager extends Module<LayerManagerConfig> {
     }
 
     if (selected && scrollLayers) {
+      // @ts-ignore
       const el = selected.viewLayer?.el;
       el?.scrollIntoView(scrollLayers);
     }
@@ -364,18 +360,14 @@ export default class LayerManager extends Module<LayerManagerConfig> {
     this.__trgCustom();
   }
 
-  __getLayerFromComponent(cmp: Component) {
-    return cmp.delegate?.layer?.(cmp) || cmp;
-  }
-
   __onComponent(component: Component) {
     this.updateLayer(component);
   }
 
   __isLayerable(cmp: Component): boolean {
-    const tag = cmp.tagName;
+    const tag = cmp.get('tagName');
     const hideText = this.config.hideTextnode;
-    const isValid = !hideText || (!cmp.isInstanceOf('textnode') && tag !== 'br');
+    const isValid = !hideText || (!cmp.is('textnode') && tag !== 'br');
 
     return isValid && cmp.get('layerable')!;
   }

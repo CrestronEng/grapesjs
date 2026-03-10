@@ -21,7 +21,22 @@
  * const pageManager = editor.Pages;
  * ```
  *
- * {REPLACE_EVENTS}
+ * ## Available Events
+ * * `page:add` - Added new page. The page is passed as an argument to the callback
+ * * `page:remove` - Page removed. The page is passed as an argument to the callback
+ * * `page:select` - New page selected. The newly selected page and the previous one, are passed as arguments to the callback
+ * * `page:update` - Page updated. The updated page and the object containing changes are passed as arguments to the callback
+ * * `page` - Catch-all event for all the events mentioned above. An object containing all the available data about the triggered event is passed as an argument to the callback
+ *
+ * ## Methods
+ * * [add](#add)
+ * * [get](#get)
+ * * [getAll](#getall)
+ * * [getAllWrappers](#getallwrappers)
+ * * [getMain](#getmain)
+ * * [remove](#remove)
+ * * [select](#select)
+ * * [getSelected](#getselected)
  *
  * [Page]: page.html
  * [Component]: component.html
@@ -32,19 +47,52 @@
 import { isString, bindAll, unique, flatten } from 'underscore';
 import { createId } from '../utils/mixins';
 import { ModuleModel } from '../abstract';
-import { ItemManagerModule } from '../abstract/Module';
+import { ItemManagerModule, ModuleConfig } from '../abstract/Module';
 import Pages from './model/Pages';
 import Page, { PageProperties } from './model/Page';
 import EditorModel from '../editor/model/Editor';
 import ComponentWrapper from '../dom_components/model/ComponentWrapper';
 import { AddOptions, RemoveOptions, SetOptions } from '../common';
-import PagesEvents, { AbortOption, PageManagerConfig, SelectableOption } from './types';
 
+interface SelectableOption {
+  /**
+   * Select the page.
+   */
+  select?: boolean;
+}
+
+interface AbortOption {
+  abort?: boolean;
+}
+
+export const evAll = 'page';
+export const evPfx = `${evAll}:`;
+export const evPageSelect = `${evPfx}select`;
+export const evPageSelectBefore = `${evPageSelect}:before`;
+export const evPageUpdate = `${evPfx}update`;
+export const evPageAdd = `${evPfx}add`;
+export const evPageAddBefore = `${evPageAdd}:before`;
+export const evPageRemove = `${evPfx}remove`;
+export const evPageRemoveBefore = `${evPageRemove}:before`;
 const chnSel = 'change:selected';
 const typeMain = 'main';
+const pageEvents = {
+  all: evAll,
+  select: evPageSelect,
+  selectBefore: evPageSelectBefore,
+  update: evPageUpdate,
+  add: evPageAdd,
+  addBefore: evPageAddBefore,
+  remove: evPageRemove,
+  removeBefore: evPageRemoveBefore,
+};
+
+export interface PageManagerConfig extends ModuleConfig {
+  pages?: any[];
+}
 
 export default class PageManager extends ItemManagerModule<PageManagerConfig, Pages> {
-  events = PagesEvents;
+  events!: typeof pageEvents;
   storageKey = 'pages';
 
   get pages() {
@@ -73,36 +121,35 @@ export default class PageManager extends ItemManagerModule<PageManagerConfig, Pa
    * @param {Object} config Configurations
    */
   constructor(em: EditorModel) {
-    super(em, 'PageManager', new Pages([], em), PagesEvents);
+    super(em, 'PageManager', new Pages([], em), pageEvents);
     bindAll(this, '_onPageChange');
     const model = new ModuleModel({ _undo: true } as any);
     this.model = model;
-    this.pages.on('reset', (coll) => coll.at(0) && this.select(coll.at(0)));
+    this.pages.on('reset', coll => coll.at(0) && this.select(coll.at(0)));
     this.pages.on('all', this.__onChange, this);
     model.on(chnSel, this._onPageChange);
   }
 
   __onChange(event: string, page: Page, coll: Pages, opts?: any) {
-    const { em, events } = this;
     const options = opts || coll;
-    em.trigger(events.all, { event, page, options });
+    this.em.trigger(evAll, { event, page, options });
   }
 
   onLoad() {
     const { pages, config, em } = this;
     const opt = { silent: true };
-    const configPages = config.pages?.map((page) => new Page(page, { em, config })) || [];
+    const configPages = config.pages?.map(page => new Page(page, { em, config })) || [];
     pages.add(configPages, opt);
-    const mainPage = !pages.length ? this.add({ type: typeMain }, opt) : this._initPage();
+    const mainPage = !pages.length ? this.add({ type: typeMain }, opt) : this.getMain();
     mainPage && this.select(mainPage, opt);
   }
 
   _onPageChange(m: any, page: Page, opts: any) {
-    const { em, events } = this;
+    const { em } = this;
     const lm = em.Layers;
     const mainComp = page.getMainComponent();
-    lm && mainComp && lm.setRoot(mainComp);
-    em.trigger(events.select, page, m.previous('selected'));
+    lm && mainComp && lm.setRoot(mainComp as any);
+    em.trigger(evPageSelect, page, m.previous('selected'));
     this.__onChange(chnSel, page, opts);
   }
 
@@ -127,14 +174,14 @@ export default class PageManager extends ItemManagerModule<PageManagerConfig, Pa
    * });
    */
   add(props: PageProperties, opts: AddOptions & SelectableOption & AbortOption = {}) {
-    const { em, events } = this;
+    const { em } = this;
     props.id = props.id || this._createId();
     const add = () => {
       const page = this.pages.add(new Page(props, { em: this.em, config: this.config }), opts);
       opts.select && this.select(page);
       return page;
     };
-    !opts.silent && em.trigger(events.addBefore, props, add, opts);
+    !opts.silent && em.trigger(evPageAddBefore, props, add, opts);
     return !opts.abort ? add() : undefined;
   }
 
@@ -149,13 +196,13 @@ export default class PageManager extends ItemManagerModule<PageManagerConfig, Pa
    * pageManager.remove(somePage);
    */
   remove(page: string | Page, opts: RemoveOptions & AbortOption = {}) {
-    const { em, events } = this;
+    const { em } = this;
     const pg = isString(page) ? this.get(page) : page;
     const rm = () => {
       pg && this.pages.remove(pg, opts);
       return pg;
     };
-    !opts.silent && em.trigger(events.removeBefore, pg, rm, opts);
+    !opts.silent && em.trigger(evPageRemoveBefore, pg, rm, opts);
     return !opts.abort && rm();
   }
 
@@ -167,7 +214,7 @@ export default class PageManager extends ItemManagerModule<PageManagerConfig, Pa
    * const somePage = pageManager.get('page-id');
    */
   get(id: string): Page | undefined {
-    return this.pages.filter((p) => p.get(p.idAttribute) === id)[0];
+    return this.pages.filter(p => p.get(p.idAttribute) === id)[0];
   }
 
   /**
@@ -178,7 +225,7 @@ export default class PageManager extends ItemManagerModule<PageManagerConfig, Pa
    */
   getMain() {
     const { pages } = this;
-    return pages.filter((p) => p.get('type') === typeMain)[0] || pages.at(0);
+    return pages.filter(p => p.get('type') === typeMain)[0] || pages.at(0);
   }
 
   /**
@@ -191,7 +238,7 @@ export default class PageManager extends ItemManagerModule<PageManagerConfig, Pa
    */
   getAllWrappers(): ComponentWrapper[] {
     const pages = this.getAll();
-    return unique(flatten(pages.map((page) => page.getAllFrames().map((frame) => frame.getComponent()))));
+    return unique(flatten(pages.map(page => page.getAllFrames().map(frame => frame.getComponent()))));
   }
 
   /**
@@ -205,11 +252,10 @@ export default class PageManager extends ItemManagerModule<PageManagerConfig, Pa
    * pageManager.select(somePage);
    */
   select(page: string | Page, opts: SetOptions = {}) {
-    const { em, model, events } = this;
     const pg = isString(page) ? this.get(page) : page;
     if (pg) {
-      em.trigger(events.selectBefore, pg, opts);
-      model.set('selected', pg, opts);
+      this.em.trigger(evPageSelectBefore, pg, opts);
+      this.model.set('selected', pg, opts);
     }
     return this;
   }
@@ -229,7 +275,7 @@ export default class PageManager extends ItemManagerModule<PageManagerConfig, Pa
     this.model.stopListening();
     this.model.clear({ silent: true });
     //@ts-ignore
-    ['selected', 'model'].map((i) => (this[i] = 0));
+    ['selected', 'model'].map(i => (this[i] = 0));
   }
 
   store() {
@@ -238,12 +284,8 @@ export default class PageManager extends ItemManagerModule<PageManagerConfig, Pa
 
   load(data: any) {
     const result = this.loadProjectData(data, { all: this.pages, reset: true });
-    this.pages.forEach((page) => page.getFrames().initRefs());
+    this.pages.forEach(page => page.getFrames().initRefs());
     return result;
-  }
-
-  _initPage() {
-    return this.get(this.config.selected!) || this.getMain();
   }
 
   _createId() {

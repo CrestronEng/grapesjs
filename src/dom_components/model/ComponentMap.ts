@@ -1,6 +1,5 @@
 import ComponentImage from './ComponentImage';
 import { toLowerCase } from '../../utils/mixins';
-import { ComponentOptions, ComponentProperties } from './types';
 
 export default class ComponentMap extends ComponentImage {
   /** @ts-ignore */
@@ -34,8 +33,8 @@ export default class ComponentMap extends ComponentImage {
           name: 'mapType',
           changeProp: true,
           options: [
-            { id: 'q', label: 'Roadmap' },
-            { id: 'w', label: 'Satellite' },
+            { value: 'q', name: 'Roadmap' },
+            { value: 'w', name: 'Satellite' },
           ],
         },
         {
@@ -50,11 +49,10 @@ export default class ComponentMap extends ComponentImage {
     };
   }
 
-  constructor(props: ComponentProperties = {}, opt: ComponentOptions) {
-    super(props, opt);
+  initialize(props: any, opts: any) {
     if (this.get('src')) this.parseFromSrc();
     else this.updateSrc();
-
+    super.initialize(props, opts);
     this.listenTo(this, 'change:address change:zoom change:mapType', this.updateSrc);
   }
 

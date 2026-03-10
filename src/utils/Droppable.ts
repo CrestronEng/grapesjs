@@ -31,12 +31,12 @@ export default class Droppable {
   constructor(em: EditorModel, rootEl?: HTMLElement) {
     this.em = em;
     this.canvas = em.Canvas;
-    const el = rootEl || this.canvas.getFrames().map((frame) => frame.getComponent().getEl()!);
+    const el = rootEl || this.canvas.getFrames().map(frame => frame.getComponent().getEl()!);
     const els = Array.isArray(el) ? el : [el];
     this.el = els[0];
     this.counter = 0;
     bindAll(this, 'handleDragEnter', 'handleDragOver', 'handleDrop', 'handleDragLeave');
-    els.forEach((el) => this.toggleEffects(el, true));
+    els.forEach(el => this.toggleEffects(el, true));
   }
 
   toggleEffects(el: HTMLElement, enable: boolean) {
@@ -215,6 +215,7 @@ export default class Droppable {
     const { dragContent } = this;
     const dt = (ev as DragEvent).dataTransfer;
     const content = this.getContentByData(dt).content;
+    (ev.target as HTMLElement).style.border = '';
     content && dragContent && dragContent(content);
     this.endDrop(!content, ev);
   }

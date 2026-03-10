@@ -1,7 +1,7 @@
 import PanelManager from '..';
 import { ModuleModel } from '../../abstract';
 import { ObjectAny } from '../../common';
-import { ResizerOptions } from '../../utils/Resizer';
+import { ResizerOptions } from '../../overrides/utils/Resizer';
 import Buttons from './Buttons';
 
 /** @private */

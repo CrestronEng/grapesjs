@@ -19,7 +19,10 @@
  * const i18n = editor.I18n;
  * ```
  *
- * {REPLACE_EVENTS}
+ * ### Events
+ * * `i18n:add` - New set of messages is added
+ * * `i18n:update` - The set of messages is updated
+ * * `i18n:locale` - Locale changed
  *
  * @module I18n
  */
@@ -28,11 +31,10 @@ import { Module } from '../abstract';
 import EditorModel from '../editor/model/Editor';
 import { hasWin, deepMerge } from '../utils/mixins';
 import defaults, { I18nConfig } from './config';
-import I18nEvents, { Messages } from './types';
+
+type Messages = Required<I18nConfig>['messages'];
 
 export default class I18nModule extends Module<I18nConfig & { stylePrefix?: string }> {
-  events = I18nEvents;
-
   /**
    * Initialize module
    * @param {Object} config Configurations
@@ -63,8 +65,9 @@ export default class I18nModule extends Module<I18nConfig & { stylePrefix?: stri
    * i18n.setLocale('it');
    */
   setLocale(locale: string) {
-    const { em, config, events } = this;
-    em.trigger(events.locale, { value: locale, valuePrev: config.locale });
+    const { em, config } = this;
+    const evObj = { value: locale, valuePrev: config.locale };
+    em && em.trigger('i18n:locale', evObj);
     config.locale = locale;
     return this;
   }
@@ -74,7 +77,7 @@ export default class I18nModule extends Module<I18nConfig & { stylePrefix?: stri
    * @returns {String} Current locale value
    */
   getLocale() {
-    return this.config.locale!;
+    return this.config.locale;
   }
 
   /**
@@ -89,7 +92,7 @@ export default class I18nModule extends Module<I18nConfig & { stylePrefix?: stri
    * i18n.getMessages('en');
    * // -> { hello: '...' }
    */
-  getMessages(lang?: string, opts = {}) {
+  getMessages(lang: string, opts = {}) {
     const messages = this.config.messages!;
     lang && !messages[lang] && this._debug(`'${lang}' i18n lang not found`, opts);
     return lang ? messages[lang] : messages;
@@ -108,9 +111,9 @@ export default class I18nModule extends Module<I18nConfig & { stylePrefix?: stri
    * // -> { en: { msg2: 'Msg 2 up', msg3: 'Msg 3', } }
    */
   setMessages(msg: Messages) {
-    const { em, config, events } = this;
+    const { em, config } = this;
     config.messages = msg;
-    em.trigger(events.update, msg);
+    em && em.trigger('i18n:update', msg);
     return this;
   }
 
@@ -127,9 +130,9 @@ export default class I18nModule extends Module<I18nConfig & { stylePrefix?: stri
    * // -> { en: { msg1: 'Msg 1', msg2: 'Msg 2 up', msg3: 'Msg 3', } }
    */
   addMessages(msg: Messages) {
-    const { em, events, config } = this;
-    const { messages } = config;
-    em.trigger(events.add, msg);
+    const { em } = this;
+    const { messages } = this.config;
+    em && em.trigger('i18n:add', msg);
     this.setMessages(deepMerge(messages!, msg));
 
     return this;

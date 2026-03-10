@@ -5,10 +5,9 @@
 .idea
 npm-debug.log*
 yarn-error.log
-package-lock.json
+yarn.lock
 style/.sass-cache/
 stats.json
-.npmrc
 
 img/
 images/
@@ -21,4 +20,3 @@ bower_components/
 grapesjs-*.tgz
 _index.html
 docs/.vuepress/dist
-dist/

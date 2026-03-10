@@ -9,7 +9,6 @@ import Component from '../../dom_components/model/Component';
 import Selector from '../model/Selector';
 import Selectors from '../model/Selectors';
 import CssRule from '../../css_composer/model/CssRule';
-import { ComponentsEvents } from '../../dom_components/types';
 
 export default class ClassTagsView extends View<Selector> {
   template({ labelInfo, labelHead, iconSync, iconAdd, pfx, ppfx }: any) {
@@ -84,10 +83,8 @@ export default class ClassTagsView extends View<Selector> {
     this.em = em;
     this.componentChanged = debounce(this.componentChanged.bind(this), 0);
     this.checkSync = debounce(this.checkSync.bind(this), 0);
-    const eventCmpUpdate = ComponentsEvents.update;
-    const evClsUp = `${eventCmpUpdate}:classes`;
-    const toList = `component:toggled ${evClsUp}`;
-    const toListCls = `${evClsUp} ${eventCmpUpdate}:attributes:id change:state`;
+    const toList = 'component:toggled component:update:classes';
+    const toListCls = 'component:update:classes change:state';
     this.listenTo(em, toList, this.componentChanged);
     this.listenTo(em, 'styleManager:update', this.componentChanged);
     this.listenTo(em, toListCls, this.__handleStateChange);
@@ -98,7 +95,7 @@ export default class ClassTagsView extends View<Selector> {
     this.listenTo(
       md.getAll(),
       md.events.state,
-      debounce(() => this.renderStates(), 0),
+      debounce(() => this.renderStates(), 0)
     );
     this.delegateEvents();
   }
@@ -115,7 +112,7 @@ export default class ClassTagsView extends View<Selector> {
     const rule = cssC.get(selectors, state, mediaText) || cssC.add(selectors, state, mediaText);
     let style;
 
-    this.getTargets().forEach((target) => {
+    this.getTargets().forEach(target => {
       const ruleComponent = cssC.getIdRule(target.getId(), {
         state,
         mediaText,
@@ -279,7 +276,7 @@ export default class ClassTagsView extends View<Selector> {
     let trgs = targets || this.getTargets();
     trgs = isArray(trgs) ? trgs : [trgs];
 
-    trgs.forEach((target) => result.push(this.__getName(target)));
+    trgs.forEach(target => result.push(this.__getName(target)));
     elSel && (elSel.innerHTML = result.join(', '));
     this.checkStates();
   }
@@ -364,7 +361,7 @@ export default class ClassTagsView extends View<Selector> {
     const frag = document.createDocumentFragment();
     const classes = this.getClasses();
     classes.empty();
-    this.collection.each((model) => this.addToClasses(model, frag));
+    this.collection.each(model => this.addToClasses(model, frag));
     classes.append(frag);
   }
 
@@ -405,7 +402,7 @@ export default class ClassTagsView extends View<Selector> {
     const labelStates = em.t('selectorManager.emptyState');
     const options = module
       .getStates()
-      .map((state) => {
+      .map(state => {
         const label = em.t(`selectorManager.states.${state.id}`) || state.getLabel() || state.id;
         return `<option value="${state.id}">${label}</option>`;
       })

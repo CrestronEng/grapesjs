@@ -39,7 +39,7 @@ describe('ComponentTextView', () => {
 
   test('Component empty', () => {
     expect(fixtures.innerHTML).toEqual(
-      `<div data-gjs-highlightable="true" id="${el.id}" data-gjs-type="default"></div>`,
+      `<div data-gjs-highlightable="true" id="${el.id}" data-gjs-type="default"></div>`
     );
   });
 
@@ -60,7 +60,7 @@ describe('ComponentTextView', () => {
   describe('.getContent', () => {
     let fakeRte: CustomRTE<any>;
     let fakeRteContent = '';
-    let fakeChildContainer: any;
+    let fakeChildContainer: InnerHTML;
 
     beforeEach(() => {
       fakeRteContent = 'fakeRteContent';
@@ -75,7 +75,7 @@ describe('ComponentTextView', () => {
         innerHTML: 'fakeChildInnerHTML',
       };
 
-      jest.spyOn(view, 'getChildrenContainer').mockReturnValue(fakeChildContainer);
+      spyOn(view, 'getChildrenContainer').and.returnValue(fakeChildContainer);
       em.RichTextEditor.customRte = fakeRte;
     });
 

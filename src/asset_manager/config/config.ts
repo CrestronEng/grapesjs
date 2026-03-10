@@ -46,15 +46,10 @@ export interface AssetManagerConfig {
    */
   credentials?: RequestCredentials;
   /**
-   * Allow uploading multiple files per request. If disabled filename will not have the 'multiUploadSuffix' appended.
+   * Allow uploading multiple files per request. If disabled filename will not have '[]' appended.
    * @default true
    */
   multiUpload?: boolean;
-  /**
-   * The suffix to append to 'uploadName' when 'multiUpload' is true.
-   * @default '[]'
-   */
-  multiUploadSuffix?: string;
   /**
    * If true, tries to add automatically uploaded assets. To make it work the server should respond with a JSON containing assets in a data key, eg:
    * { data: [ 'https://.../image.png', {src: 'https://.../image2.png'} ]
@@ -151,7 +146,6 @@ const config: AssetManagerConfig = {
   params: {},
   credentials: 'include',
   multiUpload: true,
-  multiUploadSuffix: '[]',
   autoAdd: true,
   customFetch: undefined,
   uploadFile: undefined,

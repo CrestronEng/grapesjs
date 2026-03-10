@@ -1,18 +1,15 @@
 import ComponentImageView from '../../../../src/dom_components/view/ComponentImageView';
 import Component from '../../../../src/dom_components/model/ComponentImage';
-import Editor from '../../../../src/editor/model/Editor';
 
 describe('ComponentImageView', () => {
-  let em: Editor;
   let model: Component;
   let view: ComponentImageView;
 
   beforeEach(() => {
-    em = new Editor();
-    model = new Component({}, { em, config: em.Components.config });
+    model = new Component();
     const cmpViewOpts = {
       model,
-      config: { em },
+      config: {},
     };
     view = new ComponentImageView(cmpViewOpts);
     document.body.innerHTML = '<div id="fixtures"></div>';
@@ -20,7 +17,7 @@ describe('ComponentImageView', () => {
   });
 
   afterEach(() => {
-    em.destroy();
+    view.remove();
   });
 
   test('Component empty', () => {

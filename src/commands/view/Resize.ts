@@ -1,4 +1,4 @@
-import Resizer, { ResizerOptions } from '../../utils/Resizer';
+import Resizer, { ResizerOptions } from '../../overrides/utils/Resizer';
 import { CommandObject } from './CommandAbstract';
 
 export default {

@@ -32,9 +32,7 @@ editor.on('storage:start', (type) => {
 });
 ```
 
-`storage:start:store` Storage store request start.
-The project JSON object to store is passed as an argument (which you can edit).
--------------------------------------------------------------------------------
+* `storage:start:store` Storage store request start.&#xA;The project JSON object to store is passed as an argument (which you can edit).
 
 ```javascript
 editor.on('storage:start:store', (data) => {
@@ -50,9 +48,7 @@ editor.on('storage:start:load', () => {
 });
 ```
 
-`storage:load` Storage loaded the project.
-The loaded project is passed as an argument.
---------------------------------------------
+* `storage:load` Storage loaded the project.&#xA;The loaded project is passed as an argument.
 
 ```javascript
 editor.on('storage:load', (data, res) => {
@@ -60,9 +56,7 @@ editor.on('storage:load', (data, res) => {
 });
 ```
 
-`storage:store` Storage stored the project.
-The stored project is passed as an argument.
---------------------------------------------
+* `storage:store` Storage stored the project.&#xA;The stored project is passed as an argument.
 
 ```javascript
 editor.on('storage:store', (data, res) => {
@@ -70,9 +64,7 @@ editor.on('storage:store', (data, res) => {
 });
 ```
 
-`storage:after` Storage request completed.
-Triggered right after `storage:load`/`storage:store`.
----------------------------------------------------------
+* `storage:after` Storage request completed.&#xA;Triggered right after `storage:load`/`storage:store`.
 
 ```javascript
 editor.on('storage:after', (type) => {
@@ -80,9 +72,7 @@ editor.on('storage:after', (type) => {
 });
 ```
 
-`storage:end` Storage request ended.
-This event triggers also in case of errors.
--------------------------------------------
+* `storage:end` Storage request ended.&#xA;This event triggers also in case of errors.
 
 ```javascript
 editor.on('storage:end', (type) => {
@@ -90,9 +80,7 @@ editor.on('storage:end', (type) => {
 });
 ```
 
-`storage:end:store` Storage store request ended.
-This event triggers also in case of errors.
--------------------------------------------
+* `storage:end:store` Storage store request ended.&#xA;This event triggers also in case of errors.
 
 ```javascript
 editor.on('storage:end:store', () => {
@@ -100,9 +88,7 @@ editor.on('storage:end:store', () => {
 });
 ```
 
-`storage:end:load` Storage load request ended.
-This event triggers also in case of errors.
--------------------------------------------
+* `storage:end:load` Storage load request ended.&#xA;This event triggers also in case of errors.
 
 ```javascript
 editor.on('storage:end:load', () => {
@@ -155,13 +141,13 @@ editor.on('storage:error:load', (err) => {
 
 Get configuration object
 
-Returns **[Object][16]**&#x20;
+Returns **[Object][16]** 
 
 ## isAutosave
 
 Check if autosave is enabled.
 
-Returns **[Boolean][17]**&#x20;
+Returns **[Boolean][17]** 
 
 ## setAutosave
 
@@ -169,13 +155,13 @@ Set autosave value.
 
 ### Parameters
 
-*   `value` **[Boolean][17]**&#x20;
+*   `value` **[Boolean][17]** 
 
 ## getStepsBeforeSave
 
 Returns number of steps required before trigger autosave.
 
-Returns **[Number][18]**&#x20;
+Returns **[Number][18]** 
 
 ## setStepsBeforeSave
 
@@ -183,7 +169,7 @@ Set steps required before trigger autosave.
 
 ### Parameters
 
-*   `value` **[Number][18]**&#x20;
+*   `value` **[Number][18]** 
 
 ## add
 
@@ -218,19 +204,19 @@ Return storage by type.
 
 *   `type` **[String][19]** Storage type
 
-Returns **([Object][16] | null)**&#x20;
+Returns **([Object][16] | null)** 
 
 ## getStorages
 
 Get all storages.
 
-Returns **[Object][16]**&#x20;
+Returns **[Object][16]** 
 
 ## getCurrent
 
 Get current storage type.
 
-Returns **[String][19]**&#x20;
+Returns **[String][19]** 
 
 ## setCurrent
 
@@ -248,7 +234,7 @@ Get storage options by type.
 
 *   `type` **[String][19]** Storage type
 
-Returns **[Object][16]**&#x20;
+Returns **[Object][16]** 
 
 ## store
 

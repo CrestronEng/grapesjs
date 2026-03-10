@@ -1,6 +1,6 @@
 import Dragger from './Dragger';
 import Sorter from './Sorter';
-import Resizer from './Resizer';
+import Resizer from '../overrides/utils/Resizer';
 import * as mixins from './mixins';
 import { Module } from '../abstract';
 import EditorModel from '../editor/model/Editor';

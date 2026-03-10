@@ -3,7 +3,7 @@ import { $ } from '../../common';
 import Component from '../../dom_components/model/Component';
 import { off, on } from '../../utils/dom';
 import { CommandObject } from './CommandAbstract';
-import SelectComponent from './SelectComponent';
+import SelectComponent from '../../overrides/commands/view/SelectComponent';
 import SelectPosition from './SelectPosition';
 
 export default extend({}, SelectPosition, SelectComponent, {

@@ -8,6 +8,7 @@
   }
 
   &label {
+
     &-wrp {
       width: 30%;
       min-width: 30%;
@@ -15,35 +16,9 @@
   }
 
   &field {
+
     &-wrp {
       flex-grow: 1;
-    }
-  }
-
-  &traits-c,
-  &traits-cs {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &trait-categories {
-    display: flex;
-    flex-direction: column;
-  }
-
-  &trait-category {
-    width: 100%;
-
-    &.#{$app-prefix}open {
-      @extend .#{$app-prefix}category-open;
-    }
-
-    .#{$app-prefix}title {
-      @extend .#{$app-prefix}category-title;
-    }
-
-    .#{$app-prefix}caret-icon {
-      margin-right: 5px;
     }
   }
 }
@@ -60,7 +35,6 @@
   font-weight: lighter;
   align-items: center;
   text-align: left;
-  gap: 5px;
 
   &s {
     font-size: var(--gjs-font-size);

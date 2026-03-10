@@ -6,8 +6,7 @@ import { isDoc, isTaggableNode, isVisible, off, on } from '../../utils/dom';
 import { getComponentModel, getComponentView, getUnitFromValue, getViewEl, hasWin, isObject } from '../../utils/mixins';
 import { CommandObject } from './CommandAbstract';
 import { CanvasSpotBuiltInTypes } from '../../canvas/model/CanvasSpot';
-import { ResizerOptions } from '../../utils/Resizer';
-import { ComponentsEvents } from '../../dom_components/types';
+import { ResizerOptions } from '../../overrides/utils/Resizer';
 
 let showOffsets: boolean;
 /**
@@ -31,8 +30,6 @@ let showOffsets: boolean;
  *
  */
 export default {
-  activeResizer: false,
-
   init() {
     this.onSelect = debounce(this.onSelect, 0);
     bindAll(
@@ -43,7 +40,7 @@ export default {
       'onFrameScroll',
       'onFrameResize',
       'onFrameUpdated',
-      'onContainerChange',
+      'onContainerChange'
     );
   },
 
@@ -80,7 +77,6 @@ export default {
     const { parentNode } = em.getContainer()!;
     const method = enable ? 'on' : 'off';
     const methods = { on, off };
-    const eventCmpUpdate = ComponentsEvents.update;
     !listenToEl.length && parentNode && listenToEl.push(parentNode as HTMLElement);
     const trigger = (win: Window, body: HTMLBodyElement) => {
       methods[method](body, 'mouseover', this.onHover);
@@ -91,14 +87,14 @@ export default {
     };
     methods[method](window, 'resize', this.onFrameUpdated);
     methods[method](listenToEl, 'scroll', this.onContainerChange);
-    em[method](`component:toggled ${eventCmpUpdate} undo redo`, this.onSelect, this);
+    em[method]('component:toggled component:update undo redo', this.onSelect, this);
     em[method]('change:componentHovered', this.onHovered, this);
     em[method]('component:resize styleable:change component:input', this.updateGlobalPos, this);
-    em[method](`${eventCmpUpdate}:toolbar`, this._upToolbar, this);
+    em[method]('component:update:toolbar', this._upToolbar, this);
+    em[method]('change:canvasOffset', this.updateAttached, this);
     em[method]('frame:updated', this.onFrameUpdated, this);
     em[method]('canvas:updateTools', this.onFrameUpdated, this);
-    em[method](em.Canvas.events.refresh, this.updateAttached, this);
-    em.Canvas.getFrames().forEach((frame) => {
+    em.Canvas.getFrames().forEach(frame => {
       const { view } = frame;
       const win = view?.getWindow();
       win && trigger(win, view?.getBody()!);
@@ -141,7 +137,7 @@ export default {
     let result = {};
 
     if (component) {
-      component.views?.forEach((view) => {
+      component.views?.forEach(view => {
         const el = view.el;
         const pos = this.getElementPos(el);
         result = { el, pos, component, view: getViewEl(el) };
@@ -156,7 +152,7 @@ export default {
       this.currentDoc = null;
       this.elHovered = 0;
       this.updateToolsLocal();
-      this.canvas.getFrames().forEach((frame) => {
+      this.canvas.getFrames().forEach(frame => {
         const { view } = frame;
         const el = view && view.getToolsEl();
         el && this.toggleToolsEl(0, 0, { el });
@@ -292,30 +288,23 @@ export default {
     if (em.get('_cmpDrag')) return em.set('_cmpDrag');
 
     const el = ev.target as HTMLElement;
-    let cmp = getComponentModel(el);
+    let model = getComponentModel(el);
 
-    if (!cmp) {
+    if (!model) {
       let parentEl = el.parentNode;
 
-      while (!cmp && parentEl && !isDoc(parentEl)) {
-        cmp = getComponentModel(parentEl);
+      while (!model && parentEl && !isDoc(parentEl)) {
+        model = getComponentModel(parentEl);
         parentEl = parentEl.parentNode;
       }
     }
 
-    if (cmp) {
-      if (
-        em.isEditing() &&
-        // Avoid selection of inner text components during editing
-        ((!cmp.get('textable') && cmp.isChildOf('text')) ||
-          // Prevents selecting another component if the pointer was pressed and
-          // dragged outside of the editing component
-          em.getEditing() !== cmp)
-      ) {
+    if (model) {
+      // Avoid selection of inner text components during editing
+      if (em.isEditing() && !model.get('textable') && model.isChildOf('text')) {
         return;
       }
-
-      this.select(cmp, ev);
+      this.select(model, ev);
     }
   },
 
@@ -399,25 +388,13 @@ export default {
     if (model && resizable) {
       canvas.addSpot({ type: spotTypeResize, component: model });
       const el = isElement(elem) ? elem : model.getEl();
-      const {
-        onStart = () => {},
-        onMove = () => {},
-        onEnd = () => {},
-        updateTarget = () => {},
-        ...resizableOpts
-      } = isObject(resizable) ? resizable : {};
 
-      if (hasCustomResize || !el || this.activeResizer) return;
+      if (hasCustomResize || !el) return;
 
       let modelToStyle: any;
       const { config } = em;
       const pfx = config.stylePrefix || '';
       const resizeClass = `${pfx}resizing`;
-      const self = this;
-      const resizeEventOpts = {
-        component: model,
-        el,
-      };
 
       const toggleBodyClass = (method: string, e: any, opts: any) => {
         const docs = opts.docs;
@@ -431,11 +408,10 @@ export default {
 
       const options: ResizerOptions = {
         // Here the resizer is updated with the current element height and width
-        onStart(ev, opts) {
-          onStart(ev, opts);
+        onStart(e: Event, opts: any = {}) {
           const { el, config, resizer } = opts;
           const { keyHeight, keyWidth, currentUnit, keepAutoHeight, keepAutoWidth } = config;
-          toggleBodyClass('add', ev, opts);
+          toggleBodyClass('add', e, opts);
           modelToStyle = em.Styles.getModelToStyle(model);
           canvas.toggleFramesEvents(false);
           const computedStyle = getComputedStyle(el);
@@ -453,53 +429,47 @@ export default {
             currentHeight = computedStyle[keyHeight];
           }
 
-          resizer.startDim!.w = parseFloat(currentWidth);
-          resizer.startDim!.h = parseFloat(currentHeight);
+          resizer.startDim.w = parseFloat(currentWidth);
+          resizer.startDim.h = parseFloat(currentHeight);
           showOffsets = false;
 
           if (currentUnit) {
             config.unitHeight = getUnitFromValue(currentHeight);
             config.unitWidth = getUnitFromValue(currentWidth);
           }
-          self.activeResizer = true;
-          editor.trigger('component:resize', { ...resizeEventOpts, type: 'start' });
         },
 
         // Update all positioned elements (eg. component toolbar)
-        onMove(ev) {
-          onMove(ev);
-          editor.trigger('component:resize', { ...resizeEventOpts, type: 'move' });
+        onMove() {
+          editor.trigger('component:resize');
         },
 
-        onEnd(ev, opts) {
-          onEnd(ev, opts);
-          toggleBodyClass('remove', ev, opts);
-          editor.trigger('component:resize', { ...resizeEventOpts, type: 'end' });
+        onEnd(e: Event, opts: any) {
+          toggleBodyClass('remove', e, opts);
+          editor.trigger('component:resize');
           canvas.toggleFramesEvents(true);
           showOffsets = true;
-          self.activeResizer = false;
         },
 
-        updateTarget(el, rect, options) {
-          updateTarget(el, rect, options);
+        updateTarget(el: any, rect: any, options: any = {}) {
           if (!modelToStyle) {
             return;
           }
 
           const { store, selectedHandler, config } = options;
           const { keyHeight, keyWidth, autoHeight, autoWidth, unitWidth, unitHeight } = config;
-          const onlyHeight = ['tc', 'bc'].indexOf(selectedHandler!) >= 0;
-          const onlyWidth = ['cl', 'cr'].indexOf(selectedHandler!) >= 0;
+          const onlyHeight = ['tc', 'bc'].indexOf(selectedHandler) >= 0;
+          const onlyWidth = ['cl', 'cr'].indexOf(selectedHandler) >= 0;
           const style: any = {};
 
           if (!onlyHeight) {
             const bodyw = canvas.getBody().offsetWidth;
             const width = rect.w < bodyw ? rect.w : bodyw;
-            style[keyWidth!] = autoWidth ? 'auto' : `${width}${unitWidth}`;
+            style[keyWidth] = autoWidth ? 'auto' : `${width}${unitWidth}`;
           }
 
           if (!onlyWidth) {
-            style[keyHeight!] = autoHeight ? 'auto' : `${rect.h}${unitHeight}`;
+            style[keyHeight] = autoHeight ? 'auto' : `${rect.h}${unitHeight}`;
           }
 
           if (em.getDragMode(model)) {
@@ -515,7 +485,7 @@ export default {
           modelToStyle.addStyle(finalStyle, { avoidStore: !store });
           em.Styles.__emitCmpStyleUpdate(finalStyle, { components: em.getSelected() });
         },
-        ...resizableOpts,
+        ...(isObject(resizable) ? resizable : {}),
       };
 
       this.resizer = editor.runCommand('resize', { el, options, force: 1 });
@@ -599,7 +569,7 @@ export default {
   },
 
   onFrameResize() {
-    this.canvas.refresh({ all: true });
+    this.canvas.refreshSpots();
   },
 
   updateTools() {

@@ -116,3 +116,15 @@ describe('Panel', () => {
     expect(obj.get('buttons').length).toEqual(1);
   });
 });
+
+describe('Panels', () => {
+  var obj;
+
+  beforeEach(() => {
+    obj = new Panel();
+  });
+
+  afterEach(() => {
+    obj = null;
+  });
+});

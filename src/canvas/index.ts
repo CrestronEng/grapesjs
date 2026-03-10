@@ -40,9 +40,9 @@ import Canvas from './model/Canvas';
 import CanvasSpot, { CanvasSpotBuiltInTypes, CanvasSpotProps } from './model/CanvasSpot';
 import CanvasSpots from './model/CanvasSpots';
 import Frame from './model/Frame';
-import { CanvasEvents, CanvasRefreshOptions, ToWorldOption } from './types';
+import { CanvasEvents, ToWorldOption } from './types';
 import CanvasView, { FitViewportOptions } from './view/CanvasView';
-import FrameView from './view/FrameView';
+import FrameView from '../overrides/canvas/view/FrameView';
 
 export type CanvasEvent = `${CanvasEvents}`;
 
@@ -528,7 +528,7 @@ export default class CanvasModule extends Module<CanvasConfig> {
     const docActive = frame && document.activeElement === frame;
     const focused = docActive ? doc && doc.activeElement : document.activeElement;
 
-    return focused && !toIgnore.some((item) => focused.matches(item));
+    return focused && !toIgnore.some(item => focused.matches(item));
   }
 
   /**
@@ -670,7 +670,7 @@ export default class CanvasModule extends Module<CanvasConfig> {
   }
 
   getFrames() {
-    return this.canvas.frames.map((item) => item);
+    return this.canvas.frames.map(item => item);
   }
 
   /**
@@ -834,24 +834,6 @@ export default class CanvasModule extends Module<CanvasConfig> {
     return this.canvasView?.getRectToScreen(boxRect);
   }
 
-  /**
-   * Update canvas for spots/tools positioning.
-   * @param {Object} [opts] Options.
-   * @param {Object} [opts.spots=false] Update the position of spots.
-   */
-  refresh(opts: CanvasRefreshOptions = {}) {
-    const { em, events, canvasView } = this;
-    canvasView?.clearOff();
-
-    if (opts.spots || opts.all) {
-      this.refreshSpots();
-      em.trigger('canvas:updateTools'); // this should be deprecated
-    }
-
-    em.set('canvasOffset', this.getOffset()); // this should be deprecated
-    em.trigger(events.refresh, opts);
-  }
-
   refreshSpots() {
     this.spots.refresh();
   }
@@ -861,6 +843,6 @@ export default class CanvasModule extends Module<CanvasConfig> {
     this.canvasView?.remove();
     //[this.canvas, this.canvasView].forEach(i => (i = {}));
     //@ts-ignore
-    ['model', 'droppable'].forEach((i) => (this[i] = {}));
+    ['model', 'droppable'].forEach(i => (this[i] = {}));
   }
 }

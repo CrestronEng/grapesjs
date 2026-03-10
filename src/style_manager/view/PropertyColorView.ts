@@ -1,5 +1,5 @@
+import InputColor from '../../overrides/domain_abstract/ui/InputColor';
 import PropertyNumberView from './PropertyNumberView';
-import InputColor from '../../domain_abstract/ui/InputColor';
 
 export default class PropertyColorView extends PropertyNumberView {
   setValue(value: string) {
@@ -14,7 +14,7 @@ export default class PropertyColorView extends PropertyNumberView {
     const inp = this.inputInst;
     inp && inp.remove && inp.remove();
     // @ts-ignore
-    ['inputInst', '$color'].forEach((i) => (this[i] = null));
+    ['inputInst', '$color'].forEach(i => (this[i] = null));
     return this;
   }
 

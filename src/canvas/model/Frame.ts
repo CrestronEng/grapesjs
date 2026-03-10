@@ -5,7 +5,7 @@ import { BoxRect, PrevToNewIdMap } from '../../common';
 import ComponentWrapper from '../../dom_components/model/ComponentWrapper';
 import Page from '../../pages/model/Page';
 import { createId, isComponent, isObject } from '../../utils/mixins';
-import FrameView from '../view/FrameView';
+import FrameView from '../../overrides/canvas/view/FrameView';
 import Frames from './Frames';
 import { CssRuleJSON } from '../../css_composer/model/CssRule';
 
@@ -179,9 +179,7 @@ export default class Frame extends ModuleModel<CanvasModule> {
   }
 
   getHeadByAttr(attr: string, value: any, tag: string) {
-    return this.head.filter(
-      (item) => item.attributes && item.attributes[attr] == value && (!tag || tag === item.tag),
-    )[0];
+    return this.head.filter(item => item.attributes && item.attributes[attr] == value && (!tag || tag === item.tag))[0];
   }
 
   removeHeadByAttr(attr: string, value: any, tag: string) {
@@ -264,7 +262,7 @@ export default class Frame extends ModuleModel<CanvasModule> {
       if (obj[key] === value) delete obj[key];
     });
 
-    forEach(['attributes', 'head'], (prop) => {
+    forEach(['attributes', 'head'], prop => {
       if (isEmpty(obj[prop])) delete obj[prop];
     });
 
