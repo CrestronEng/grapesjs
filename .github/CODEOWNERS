@@ -3,5 +3,4 @@
 
 # https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
 
-/pipelines/ @CrestronEngineering/omnidevops
-/.github/ @CrestronEngineering/omnidevops
+/.github/ @CrestronEng/ccide-bre
